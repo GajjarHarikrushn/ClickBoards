@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+          "name": "Starting Point for Configuration",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/../Core/include",
+                "${workspaceFolder}/../E51-pack/include",
+                "${workspaceFolder}/../E51-pack/include/**"
+            ],
+            "defines": ["__SAME51J20A__"],
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
