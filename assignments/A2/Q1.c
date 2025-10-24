@@ -60,9 +60,9 @@ void drawBox() {
 
     //draw new lines
     for (int i = 0; i < DISPLAY_SIZE; i++) {
-        displayDrawPixel(i, CENTER+currSize-1, WHITE);
+        displayDrawPixel(i, CENTER+currSize-1, BLUE);
         displayDrawPixel(i, CENTER-currSize, WHITE);
-        displayDrawPixel(CENTER-currSize, i, WHITE);
+        displayDrawPixel(CENTER-currSize, i, BLUE);
         displayDrawPixel(CENTER+currSize-1, i, WHITE);
     }
 }
@@ -76,7 +76,7 @@ void ADC_Hall_Init() {
     PORT_REGS->GROUP[0].PORT_OUTSET = PORT_PA06;
 
     MCLK_REGS->MCLK_APBDMASK |= MCLK_APBDMASK_ADC0_Msk;
-    GCLK_REGS->GCLK_GENCTRL[0] = GCLK_GENCTRL_GENEN_Msk | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_DIV(5);
+    GCLK_REGS->GCLK_GENCTRL[0] = GCLK_GENCTRL_GENEN_Msk | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_DIV(8);
     while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK0) == GCLK_SYNCBUSY_GENCTRL_GCLK0);
     GCLK_REGS->GCLK_PCHCTRL[ADC0_GCLK_ID] = GCLK_PCHCTRL_CHEN_Msk | GCLK_PCHCTRL_GEN_GCLK0;
 

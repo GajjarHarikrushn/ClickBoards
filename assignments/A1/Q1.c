@@ -62,7 +62,7 @@ void EIC_ENABLE() {
 
 int main() {
     displayInit();
-    // TC0_ENABLE();
+    TC0_ENABLE();
     EIC_ENABLE();
     __enable_irq();
     while(1){
