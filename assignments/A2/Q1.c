@@ -3,10 +3,15 @@
 #include "../display.h"
 
 #define FILTER_LEN 100
-#define THRESHOLD 50
+#define THRESHOLD 500
 #define CENTER DISPLAY_SIZE/2
+#define SAMP_SIZE 10
 
 volatile uint32_t msTicks = 0;
+int samples[SAMP_SIZE];
+int sampleIndex = 0;
+int sampleSize = 0;
+int sum = 0;
 int max = 0;
 int min = 10000;
 int drop = 0;
@@ -24,21 +29,31 @@ int getADC() {
     return val;
 }
 
-int getAverageSample() {
-    int sum = 0;
-    for (int i = 0; i < FILTER_LEN; i++)
-        sum += getADC();
-    return sum / FILTER_LEN;
+void getSample() {
+    int value = getADC();
+    
+    if(sampleSize < SAMP_SIZE) {
+        sum += value;
+        sampleSize++;
+    }
+    else {
+        sum = (sum - samples[sampleIndex]) + value;
+    }
+
+    samples[sampleIndex] = value;
+    sampleIndex = (sampleIndex+1) % SAMP_SIZE;
 }
 
-void setMin(int val) {
+void setMin() {
+    int val = sum/sampleSize;
     if(min > val) {
         min = val;
         drop = (max-min)/DISPLAY_SIZE;
     }
 }
 
-int calculateBoxSize(int val) {
+int calculateBoxSize() {
+    int val = sum/SAMP_SIZE;
     val = (val-min)/drop;
     if(val < 0) {
         val = 0;
@@ -94,20 +109,19 @@ int main() {
     ADC_Hall_Init();
     SysTick_Config(48000);
 
-    int prev_val = 0;
-    int val = 0;
+    int prevSum = 0;
+    getSample();
+    max = sum;
 
-    max = getAverageSample();
-    val = max;
 
     while (1) {
-        if (val > prev_val + THRESHOLD || val + THRESHOLD < prev_val) {
-            setMin(val);
-            currSize = calculateBoxSize(val);
+        if (sum > prevSum + THRESHOLD || sum + THRESHOLD < prevSum) {
+            setMin();
+            currSize = calculateBoxSize();
             drawBox();
-            prev_val = val;
+            prevSum = sum;
             prevSize = currSize;
         }
-        val = getAverageSample();
+        getSample();
     }
 }
