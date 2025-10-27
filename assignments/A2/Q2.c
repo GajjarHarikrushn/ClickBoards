@@ -11,7 +11,7 @@
 #define FLASH_PARAMS_ADDR 0x000FE000
 #define BUTTON_PRESSED(port_in, mask) (port_in & mask)
 
-volatile int fanSpeed = 5; // this represents percentage
+volatile int fanSpeed = 100; // this represents percentage
 volatile uint32_t msCount = 0;
 
 typedef struct BUTTON {
