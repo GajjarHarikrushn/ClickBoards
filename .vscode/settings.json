@@ -1,0 +1,24 @@
+{
+  "C_Cpp.default.compilerPath": "/opt/homebrew/bin/arm-none-eabi-gcc",
+  "makefile.configurations": [
+    {
+      "name": "all"
+    },
+    {
+      "name": "install",
+      "makeArgs": ["main-install"]
+    },
+    {
+      "name": "clean",
+      "makeArgs": ["clean"]
+    }
+  ],
+  "files.associations": {
+    "logger.h": "c",
+    "display.h": "c",
+    "tc.h": "c",
+    "sam.h": "c",
+    "same51j20a.h": "c",
+    "dcc_stdio.h": "c"
+  }
+}
