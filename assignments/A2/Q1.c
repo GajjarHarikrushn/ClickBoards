@@ -6,15 +6,15 @@
 #define THRESHOLD 500
 #define CENTER DISPLAY_SIZE/2
 #define SAMP_SIZE 10
+#define MAX 2700
+#define MIN 15
 
 volatile uint32_t msTicks = 0;
 int samples[SAMP_SIZE];
 int sampleIndex = 0;
 int sampleSize = 0;
 int sum = 0;
-int max = 0;
-int min = 10000;
-int drop = 0;
+int drop = (MAX-MIN)/DISPLAY_SIZE;
 int currSize = 0;
 int prevSize = 0;
 
@@ -44,17 +44,9 @@ void getSample() {
     sampleIndex = (sampleIndex+1) % SAMP_SIZE;
 }
 
-void setMin() {
-    int val = sum/sampleSize;
-    if(min > val) {
-        min = val;
-        drop = (max-min)/DISPLAY_SIZE;
-    }
-}
-
 int calculateBoxSize() {
     int val = sum/SAMP_SIZE;
-    val = (val-min)/drop;
+    val = (val-MIN)/drop;
     if(val < 0) {
         val = 0;
     }
@@ -110,13 +102,9 @@ int main() {
     SysTick_Config(48000);
 
     int prevSum = 0;
-    getSample();
-    max = sum;
-
 
     while (1) {
         if (sum > prevSum + THRESHOLD || sum + THRESHOLD < prevSum) {
-            setMin();
             currSize = calculateBoxSize();
             drawBox();
             prevSum = sum;
