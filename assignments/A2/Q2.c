@@ -8,6 +8,7 @@
 #define BUTTON2_MASK PORT_PA07
 #define FAN_SPEED_CHANGE 5
 #define HYST_ON_LIMIT 0
+#define FLASH_PARAMS_ADDR 0x000FE000
 #define BUTTON_PRESSED(port_in, mask) (port_in & mask)
 
 volatile int fanSpeed = 5; // this represents percentage
@@ -190,6 +191,7 @@ int main(void)
     __enable_irq();
 
     int rate = 50;
+    int *parameter = (int*)FLASH_PARAMS_ADDR;
 
     while (1) {
         __WFI();
