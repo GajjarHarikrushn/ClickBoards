@@ -21,6 +21,7 @@
     "same51j20a.h": "c",
     "dcc_stdio.h": "c",
     "compare": "c",
-    "type_traits": "c"
+    "type_traits": "c",
+    "stdbool.h": "c"
   }
 }

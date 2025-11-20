@@ -2,23 +2,52 @@
 #include <stdbool.h>
 #include "../display.h"
 
-#define GCLK_DIV 48000
+#define GCLK_DIV 4800
 
-#define START_BYTE 255/10
-#define DOT_BYTE 255/50
-#define DASH_BYTE 255/75
-#define END_BYTE 255/25
+#define START_BYTE 50
+#define DOT_BYTE 150
+#define DASH_BYTE 200
+#define END_BYTE 100
+#define EMPTY_BYTE 250
+#define WAIT_BEFORE_DESPLAY 250
+#define WAIT_BEFORE_TRANSFER 50
+#define DASH_LED 1000
+#define DOT_LED 250
 
 
 uint32_t msCount = 0;
+uint8_t prevSample = 0;
 bool sendData = false;
+
+//click variables
 bool clicked = false;
 uint32_t clicked_at = 0;
 uint32_t released_at = 0;
-uint16_t displayBits = 0;
 
-void updateOutput(uint16_t dutyCycle) {
-  TC1_REGS->COUNT16.TC_CC[1] = dutyCycle;
+//receive variables
+uint16_t rvPos = 0;
+uint16_t rvLen = 0;
+uint16_t rvBits = 0;
+bool receiving = false;
+bool receiveEmpty = false;
+
+//transmit variables
+uint16_t txBits = 0;
+uint16_t txLen  = 0;
+uint16_t txPos = 0;
+int lastTx = 0;
+bool transmitting = false;
+bool sendEmpty = false;
+
+//display variables
+int dash = 0;
+bool on = false;
+bool delayOn = false;
+int delayCount = 0;
+uint16_t bit;
+
+void updateOutput(uint8_t dutyCycle) {
+  TC1_REGS->COUNT8.TC_CC[1] = dutyCycle;
 }
 
 void TCC0_OTHER_Handler() {
@@ -29,14 +58,36 @@ void TCC0_OTHER_Handler() {
 }
 
 void TCC0_MC0_Handler() {
-  nextSample = TCC0_REGS->TCC_CC[0] + (ovFlaw*256);
-  uint32_t value = nextSample-prevSample;
-  sFlaw++;
-  displayDrawDigit(DISPLAY_SIZE/2 - FONT_SIZE/2, (DISPLAY_SIZE/2) - 20, BLUE, sFlaw/1000);
-  displayDrawDigit(DISPLAY_SIZE/2 - FONT_SIZE/2, (DISPLAY_SIZE/2) - 8, BLUE, (sFlaw/100)%10);
-  displayDrawDigit(DISPLAY_SIZE/2 - FONT_SIZE/2, (DISPLAY_SIZE/2) + 4, BLUE, (sFlaw/10)%10);
-  displayDrawDigit(DISPLAY_SIZE/2 - FONT_SIZE/2, (DISPLAY_SIZE/2) + 16, BLUE, sFlaw%10);
-  prevSample = nextSample;
+  while (TCC0_REGS->TCC_SYNCBUSY & TCC_SYNCBUSY_CC0_Msk);
+  uint8_t now = TCC0_REGS->TCC_CC[0];
+  uint8_t duration = now - prevSample;
+
+  // Display or use duration to detect dot/dash/start/end
+  if(prevSample != 0) {// this if statment ensures that the first time something is sent, we don't look at it since it doesn't tell us the duration from rise to fall.
+    if(duration == START_BYTE) {
+      receiving = true;
+    }
+    else if(receiving) {
+      if(duration == END_BYTE) {
+        receiving = false;
+      }
+      else if(duration == EMPTY_BYTE) {
+        receiveEmpty = false;
+      }
+      else if(!receiveEmpty) {
+
+        if(duration == DOT_BYTE) rvBits = (rvBits << 1) | 0;
+        else if(duration == DASH_BYTE) rvBits = (rvBits << 1) | 1;
+
+        rvLen++;
+        receiveEmpty = true;
+      }
+    }
+    prevSample = 0;
+  }
+  else {
+    prevSample = now;
+  }
 }
 
 void SysTick_Handler() {
@@ -48,21 +99,50 @@ void PB14_init() {
   PORT_REGS->GROUP[1].PORT_PINCFG[14] = PORT_PINCFG_PMUXEN_Msk | PORT_PINCFG_PULLEN_Msk;
   PORT_REGS->GROUP[1].PORT_OUTSET = PORT_PB14;
   PORT_REGS->GROUP[1].PORT_PMUX[7] = PORT_PMUX_PMUXE_A;
+}
 
+void PA11_init() {
+  PORT_REGS->GROUP[0].PORT_DIRSET = PORT_PA11;
+  PORT_REGS->GROUP[0].PORT_OUTSET = PORT_PA11;
+  PORT_REGS->GROUP[0].PORT_PINCFG[11] |= PORT_PINCFG_PMUXEN_Msk;
+  PORT_REGS->GROUP[0].PORT_PMUX[5] |= PORT_PMUX_PMUXO_E;
+}
+
+void GCLK_init() {
+  GCLK_REGS->GCLK_GENCTRL[1] = GCLK_GENCTRL_DIV(GCLK_DIV) | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_GENEN_Msk;
+  while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK1) == GCLK_SYNCBUSY_GENCTRL_GCLK1);
+
+  GCLK_REGS->GCLK_PCHCTRL[TC1_GCLK_ID] = GCLK_PCHCTRL_GEN(1) | GCLK_PCHCTRL_CHEN_Msk;
+  while ((GCLK_REGS->GCLK_PCHCTRL[TC1_GCLK_ID] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk);
+
+  GCLK_REGS->GCLK_PCHCTRL[TCC0_GCLK_ID] = GCLK_PCHCTRL_GEN(1) | GCLK_PCHCTRL_CHEN_Msk;
+  while ((GCLK_REGS->GCLK_PCHCTRL[TCC0_GCLK_ID] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk);
+
+  GCLK_REGS->GCLK_PCHCTRL[EIC_GCLK_ID] = GCLK_PCHCTRL_GEN(1) | GCLK_PCHCTRL_CHEN_Msk;
+  while ((GCLK_REGS->GCLK_PCHCTRL[EIC_GCLK_ID] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk);
+}
+
+void EVSYS_init() {
   MCLK_REGS->MCLK_APBBMASK |= MCLK_APBBMASK_EVSYS_Msk;
   EVSYS_REGS->EVSYS_USER[EVENT_ID_USER_TCC0_MC_0] = 0x01;
   EVSYS_REGS->CHANNEL[0].EVSYS_CHANNEL = EVSYS_CHANNEL_EVGEN(0x20) | EVSYS_CHANNEL_PATH_ASYNCHRONOUS;
+}
 
+void EIC_init() {
   EIC_REGS->EIC_CONFIG[1] = EIC_CONFIG_SENSE6_BOTH;
   EIC_REGS->EIC_EVCTRL = PORT_PB14;
-  EIC_REGS->EIC_CTRLA = EIC_CTRLA_CKSEL_CLK_ULP32K | EIC_CTRLA_ENABLE_Msk;
+  EIC_REGS->EIC_CTRLA = EIC_CTRLA_ENABLE_Msk;
+}
 
-  GCLK_REGS->GCLK_GENCTRL[0] = GCLK_GENCTRL_DIV(GCLK_DIV) | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_GENEN_Msk;
-  while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK0) == GCLK_SYNCBUSY_GENCTRL_GCLK0);
+void TC1_init() {
+  MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_TC1_Msk;
 
-  GCLK_REGS->GCLK_PCHCTRL[TCC0_GCLK_ID] = GCLK_PCHCTRL_GEN(0) | GCLK_PCHCTRL_CHEN_Msk;
-  while ((GCLK_REGS->GCLK_PCHCTRL[TCC0_GCLK_ID] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk);
+  TC1_REGS->COUNT8.TC_CTRLA = TC_CTRLA_MODE_COUNT8;
+  TC1_REGS->COUNT8.TC_WAVE = TC_WAVE_WAVEGEN_NPWM;
+  TC1_REGS->COUNT8.TC_CTRLA |= TC_CTRLA_ENABLE_Msk;
+}
 
+void TCC0_init() {
   MCLK_REGS->MCLK_APBBMASK |= MCLK_APBBMASK_TCC0_Msk;
 
   TCC0_REGS->TCC_PER = 0xFF;
@@ -74,25 +154,6 @@ void PB14_init() {
   NVIC_EnableIRQ(TCC0_OTHER_IRQn);
 }
 
-void PA11_init() {
-  PORT_REGS->GROUP[0].PORT_DIRSET = PORT_PA11;
-  PORT_REGS->GROUP[0].PORT_OUTSET = PORT_PA11;
-  PORT_REGS->GROUP[0].PORT_PINCFG[11] |= PORT_PINCFG_PMUXEN_Msk;
-  PORT_REGS->GROUP[0].PORT_PMUX[5] |= PORT_PMUX_PMUXO_E;
-
-  GCLK_REGS->GCLK_GENCTRL[1] = GCLK_GENCTRL_DIV(GCLK_DIV) | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_GENEN_Msk;
-  while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK1) == GCLK_SYNCBUSY_GENCTRL_GCLK1);
-
-  GCLK_REGS->GCLK_PCHCTRL[TC1_GCLK_ID] = GCLK_PCHCTRL_GEN(1) | GCLK_PCHCTRL_CHEN_Msk;
-  while ((GCLK_REGS->GCLK_PCHCTRL[9] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk);
-
-  MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_TC1_Msk;
-
-  TC1_REGS->COUNT16.TC_CTRLA = TC_CTRLA_MODE_COUNT16;
-  TC1_REGS->COUNT16.TC_WAVE = TC_WAVE_WAVEGEN_NPWM;
-  TC1_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_ENABLE_Msk;
-}
-
 void PA15_init() {
   PORT_REGS->GROUP[0].PORT_DIRCLR = PORT_PA15;
   PORT_REGS->GROUP[0].PORT_PINCFG[15] |= PORT_PINCFG_PMUXEN_Msk | PORT_PINCFG_PULLEN_Msk;
@@ -100,22 +161,109 @@ void PA15_init() {
 }
 
 void logic() {
-  if((PORT_REGS->GROUP[0].PORT_IN & PORT_PA15) && !clicked) {// if button is pressed but clicked is false
-    clicked_at = msCount;
+  bool pressed = !(PORT_REGS->GROUP[0].PORT_IN & PORT_PA15);
+
+  if (pressed && !clicked) {
     clicked = true;
+    clicked_at = msCount;
   }
 
-  if(!(PORT_REGS->GROUP[0].PORT_IN & PORT_PA15) && clicked) {// if button is no longer but clicked is true
-    released_at = msCount;
+  if (!pressed && clicked) {
     clicked = false;
+    released_at = msCount;
+
+    uint32_t duration = released_at - clicked_at;
+
+    if (duration <= 250) {
+      if (txLen < 16) {
+        txBits = (txBits << 1) | 0;   // dot
+        txLen++;
+      }
+    } else {
+      if (txLen < 16) {
+        txBits = (txBits << 1) | 1;   // dash
+        txLen++;
+      }
+    }
   }
 
-  if(released_at-clicked_at >= 1000 && !sendData) {// send start byte since we are now sending data
-    sendData = true;
-    updateOutput(START_BYTE);
-  }
+  if (txLen > 0 && !transmitting) {
+    if (msCount - released_at >= 1000) {
+      transmitting = true;
+      txPos = 0;
+      updateOutput(START_BYTE);
+      lastTx = msCount;
+    }
+  } else if (transmitting) {
+    if(msCount - lastTx >= WAIT_BEFORE_TRANSFER) {
+      lastTx = msCount;
 
-  
+      if(sendEmpty) {// send an empty byte after each transmit to let the capture know that that was the end of the last transmit
+        updateOutput(EMPTY_BYTE);
+        sendEmpty = false;
+      }
+      else {
+        if (txPos < txLen) {
+          uint16_t bit = (txBits >> (txLen - txPos - 1)) & 1;
+          updateOutput(bit ? DASH_BYTE : DOT_BYTE);
+          txPos++;
+          sendEmpty = true;
+        } else if (txPos == txLen) {
+          updateOutput(END_BYTE);
+          txPos++;
+        } else {
+          updateOutput(0);
+          txBits = 0;
+          txLen = 0;
+          transmitting = false;
+        }
+      }
+    }
+  }
+}
+
+void led_logic() {
+  if(delayOn) {
+    if(msCount-delayCount == WAIT_BEFORE_DESPLAY)
+      delayOn = false;
+  }
+  else {
+    if(!on) {
+      if (rvPos < rvLen) {
+        dash = msCount;
+        bit = (rvBits >> (rvLen - rvPos - 1)) & 1;
+        if(bit) {
+          if ((msCount - dash) < DASH_LED && !on) {
+            PORT_REGS->GROUP[0].PORT_OUTTGL = PORT_PA14;  // turn ON
+            on = true;
+            rvPos++;
+          }
+        }
+        else {
+          if ((msCount - dash) < DOT_LED && !on) {
+            PORT_REGS->GROUP[0].PORT_OUTTGL = PORT_PA14;  // turn ON
+            on = true;
+            rvPos++;
+          }
+        }
+      }
+    }
+
+    if ((msCount - dash) >= DASH_LED && on && bit) {
+      PORT_REGS->GROUP[0].PORT_OUTTGL = PORT_PA14;  // turn OFF
+      on = false;
+      delayOn = true;
+      delayCount = msCount;
+    }
+
+
+    if ((msCount - dash) >= DOT_LED && on && !bit) {
+      PORT_REGS->GROUP[0].PORT_OUTTGL = PORT_PA14;  // turn OFF
+      on = false;
+      delayOn = true;
+      delayCount = msCount;
+    }
+  }
 }
 
 int main() {
@@ -125,14 +273,20 @@ int main() {
 
   PA11_init();
   PB14_init();
-
-  updateOutput(0);
+  GCLK_init();
+  TC1_init();
+  TCC0_init();
+  EVSYS_init();
+  EIC_init();
+  PA15_init();
 
   __enable_irq();
 
-  displayErase();
+  PORT_REGS->GROUP[0].PORT_DIRSET = PORT_PA14;
+  PORT_REGS->GROUP[0].PORT_OUTSET = PORT_PA14;
   while(1) {
     __WFI();
     logic();
+    led_logic();
   }
 }
