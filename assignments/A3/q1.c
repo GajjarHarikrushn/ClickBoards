@@ -57,7 +57,7 @@ void TCC0_OTHER_Handler() {
   }
 }
 
-void TCC0_MC0_Handler() {
+void TCC0_MC0_Handler() {cd
   while (TCC0_REGS->TCC_SYNCBUSY & TCC_SYNCBUSY_CC0_Msk);
   uint8_t now = TCC0_REGS->TCC_CC[0];
   uint8_t duration = now - prevSample;
