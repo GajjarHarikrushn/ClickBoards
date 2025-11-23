@@ -11,6 +11,7 @@
 #define EMPTY_BYTE 250
 #define WAIT_BEFORE_DESPLAY 250
 #define WAIT_BEFORE_TRANSFER 50
+#define ERROR_RATE 25
 #define DASH_LED 1000
 #define DOT_LED 250
 
@@ -62,22 +63,21 @@ void TCC0_MC0_Handler() {
   uint8_t now = TCC0_REGS->TCC_CC[0];
   uint8_t duration = now - prevSample;
 
-  // Display or use duration to detect dot/dash/start/end
   if(prevSample != 0) {// this if statment ensures that the first time something is sent, we don't look at it since it doesn't tell us the duration from rise to fall.
     if(duration == START_BYTE) {
       receiving = true;
     }
     else if(receiving) {
-      if(duration == END_BYTE) {
+      if(duration == END_BYTE && (END_BYTE-ERROR_RATE <= duration && END_BYTE+ERROR_RATE >= duration)) {
         receiving = false;
       }
-      else if(duration == EMPTY_BYTE) {
+      else if(duration == EMPTY_BYTE && (EMPTY_BYTE-ERROR_RATE <= duration && EMPTY_BYTE+ERROR_RATE >= duration)) {
         receiveEmpty = false;
       }
       else if(!receiveEmpty) {
 
-        if(duration == DOT_BYTE) rvBits = (rvBits << 1) | 0;
-        else if(duration == DASH_BYTE) rvBits = (rvBits << 1) | 1;
+        if(duration == DOT_BYTE && (DOT_BYTE-ERROR_RATE <= duration && DOT_BYTE+ERROR_RATE >= duration)) rvBits = (rvBits << 1) | 0;
+        else if(duration == DASH_BYTE && (DASH_BYTE-ERROR_RATE <= duration && DASH_BYTE+ERROR_RATE >= duration)) rvBits = (rvBits << 1) | 1;
 
         rvLen++;
         receiveEmpty = true;
@@ -145,7 +145,6 @@ void TC1_init() {
 void TCC0_init() {
   MCLK_REGS->MCLK_APBBMASK |= MCLK_APBBMASK_TCC0_Msk;
 
-  TCC0_REGS->TCC_PER = 0xFF;
   TCC0_REGS->TCC_EVCTRL = TCC_EVCTRL_MCEI0_Msk;
   TCC0_REGS->TCC_INTENSET = TCC_INTENSET_MC0_Msk | TCC_INTENSET_OVF_Msk;
   TCC0_REGS->TCC_CTRLA = TCC_CTRLA_CPTEN0_Msk | TCC_CTRLA_ENABLE_Msk;
@@ -269,7 +268,6 @@ void led_logic() {
 int main() {
   NVIC_EnableIRQ(SysTick_IRQn);
   SysTick_Config(48000);
-  displayInit();
 
   PA11_init();
   PB14_init();
