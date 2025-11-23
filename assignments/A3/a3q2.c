@@ -2,22 +2,22 @@
 #include <stdbool.h>
 #include "../display.h"
 
-#define GCLK_DIV 4800
+#define GCLK_DIV_TC 48
+#define GCLK_DIV_TCC_EIC 48
 
-#define START_BYTE 50
-#define DOT_BYTE 150
-#define DASH_BYTE 200
-#define END_BYTE 100
-#define EMPTY_BYTE 250
+#define START_BYTE 5000
+#define DOT_BYTE 15000
+#define DASH_BYTE 20000
+#define END_BYTE 10000
+#define EMPTY_BYTE 25000
 #define WAIT_BEFORE_DESPLAY 250
 #define WAIT_BEFORE_TRANSFER 50
-#define ERROR_RATE 10
+#define ERROR_RATE 1000
 #define DASH_LED 1000
 #define DOT_LED 250
 
 
 uint32_t msCount = 0;
-uint8_t prevSample = 0;
 bool sendData = false;
 
 //click variables
@@ -36,9 +36,8 @@ bool receiveEmpty = false;
 uint16_t txBits = 0;
 uint16_t txLen  = 0;
 uint16_t txPos = 0;
-int lastTx = 0;
 bool transmitting = false;
-bool sendEmpty = false;
+int sendStart = 0;
 
 //display variables
 int dash = 0;
@@ -47,8 +46,36 @@ bool delayOn = false;
 int delayCount = 0;
 uint16_t bit;
 
-void updateOutput(uint8_t dutyCycle) {
-  TC1_REGS->COUNT8.TC_CC[1] = dutyCycle;
+void TC1_Handler() {
+  if (TC1_REGS->COUNT16.TC_INTFLAG & TC_INTFLAG_OVF_Msk) {
+    TC1_REGS->COUNT16.TC_INTFLAG = TC_INTFLAG_OVF_Msk;
+
+    if (transmitting) {
+      uint16_t next;
+      if (txPos == 0 && sendStart < 2) {
+        next = START_BYTE;
+        sendStart++;
+      }           // Start pulse
+      else if (txPos < txLen) {                     // Data bits
+        next = ((txBits >> (txLen - txPos - 1)) & 1) ? DASH_BYTE : DOT_BYTE;
+        txPos++;
+      }
+      else if (txPos == txLen){
+        next = END_BYTE; // End pulse
+        txPos++;
+      } else {
+        transmitting = false;
+        txBits = 0;
+        txLen = 0;
+        next = 0;
+        sendStart = 0;
+      }
+
+      TC1_REGS->COUNT16.TC_CC[1] = next;
+      TC1_REGS->COUNT16.TC_CTRLBSET = TC_CTRLBSET_CMD_UPDATE;
+
+    }
+  }
 }
 
 void TCC0_OTHER_Handler() {
@@ -58,36 +85,24 @@ void TCC0_OTHER_Handler() {
   }
 }
 
-void TCC0_MC0_Handler() {
-  while (TCC0_REGS->TCC_SYNCBUSY & TCC_SYNCBUSY_CC0_Msk);
-  uint8_t now = TCC0_REGS->TCC_CC[0];
-  uint8_t duration = now - prevSample;
+void TCC0_MC0_Handler(void) {
+    while (TCC0_REGS->TCC_SYNCBUSY & TCC_SYNCBUSY_CC0_Msk);
+    uint16_t duration = TCC0_REGS->TCC_CC[0];
 
-  if(prevSample != 0) {// this if statment ensures that the first time something is sent, we don't look at it since it doesn't tell us the duration from rise to fall.
-    if(START_BYTE-ERROR_RATE <= duration && START_BYTE+ERROR_RATE >= duration) {
-      receiving = true;
-    }
-    else if(receiving) {
-      if(END_BYTE-ERROR_RATE <= duration && END_BYTE+ERROR_RATE >= duration) {
+    if (duration >= START_BYTE - ERROR_RATE && duration <= START_BYTE + ERROR_RATE) {
+        receiving = true;
+    } else if (duration >= END_BYTE - ERROR_RATE && duration <= END_BYTE + ERROR_RATE) {
         receiving = false;
-      }
-      else if(EMPTY_BYTE-ERROR_RATE <= duration && EMPTY_BYTE+ERROR_RATE >= duration) {
-        receiveEmpty = false;
-      }
-      else if(!receiveEmpty) {
-
-        if(DOT_BYTE-ERROR_RATE <= duration && DOT_BYTE+ERROR_RATE >= duration) rvBits = (rvBits << 1) | 0;
-        else if(DASH_BYTE-ERROR_RATE <= duration && DASH_BYTE+ERROR_RATE >= duration) rvBits = (rvBits << 1) | 1;
-
-        rvLen++;
-        receiveEmpty = true;
-      }
+    } else if (receiving) {
+        if (duration >= DOT_BYTE - ERROR_RATE && duration <= DOT_BYTE + ERROR_RATE) {
+          rvBits = (rvBits << 1) | 0;
+          rvLen++;
+        }
+        else if (duration >= DASH_BYTE - ERROR_RATE && duration <= DASH_BYTE + ERROR_RATE) {
+          rvBits = (rvBits << 1) | 1;
+          rvLen++;
+        }
     }
-    prevSample = 0;
-  }
-  else {
-    prevSample = now;
-  }
 }
 
 void SysTick_Handler() {
@@ -109,7 +124,7 @@ void PA11_init() {
 }
 
 void GCLK_init() {
-  GCLK_REGS->GCLK_GENCTRL[1] = GCLK_GENCTRL_DIV(GCLK_DIV) | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_GENEN_Msk;
+  GCLK_REGS->GCLK_GENCTRL[1] = GCLK_GENCTRL_DIV(GCLK_DIV_TC) | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_GENEN_Msk;
   while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK1) == GCLK_SYNCBUSY_GENCTRL_GCLK1);
 
   GCLK_REGS->GCLK_PCHCTRL[TC1_GCLK_ID] = GCLK_PCHCTRL_GEN(1) | GCLK_PCHCTRL_CHEN_Msk;
@@ -137,9 +152,13 @@ void EIC_init() {
 void TC1_init() {
   MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_TC1_Msk;
 
-  TC1_REGS->COUNT8.TC_CTRLA = TC_CTRLA_MODE_COUNT8;
-  TC1_REGS->COUNT8.TC_WAVE = TC_WAVE_WAVEGEN_NPWM;
-  TC1_REGS->COUNT8.TC_CTRLA |= TC_CTRLA_ENABLE_Msk;
+  TC1_REGS->COUNT16.TC_CTRLA = TC_CTRLA_MODE_COUNT16;
+  TC1_REGS->COUNT16.TC_WAVE = TC_WAVE_WAVEGEN_NPWM;
+  TC1_REGS->COUNT16.TC_CTRLBSET = TC_CTRLBSET_LUPD_Msk;
+  TC1_REGS->COUNT16.TC_INTENSET = TC_INTENSET_OVF_Msk;
+  TC1_REGS->COUNT16.TC_CTRLA |= TC_CTRLA_ENABLE_Msk;
+
+  NVIC_EnableIRQ(TC1_IRQn);
 }
 
 void TCC0_init() {
@@ -190,33 +209,6 @@ void logic() {
     if (msCount - released_at >= 1000) {
       transmitting = true;
       txPos = 0;
-      updateOutput(START_BYTE);
-      lastTx = msCount;
-    }
-  } else if (transmitting) {
-    if(msCount - lastTx >= WAIT_BEFORE_TRANSFER) {
-      lastTx = msCount;
-
-      if(sendEmpty) {// send an empty byte after each transmit to let the capture know that that was the end of the last transmit
-        updateOutput(EMPTY_BYTE);
-        sendEmpty = false;
-      }
-      else {
-        if (txPos < txLen) {
-          uint16_t bit = (txBits >> (txLen - txPos - 1)) & 1;
-          updateOutput(bit ? DASH_BYTE : DOT_BYTE);
-          txPos++;
-          sendEmpty = true;
-        } else if (txPos == txLen) {
-          updateOutput(END_BYTE);
-          txPos++;
-        } else {
-          updateOutput(0);
-          txBits = 0;
-          txLen = 0;
-          transmitting = false;
-        }
-      }
     }
   }
 }
@@ -283,7 +275,6 @@ int main() {
   PORT_REGS->GROUP[0].PORT_DIRSET = PORT_PA14;
   PORT_REGS->GROUP[0].PORT_OUTSET = PORT_PA14;
   while(1) {
-    __WFI();
     logic();
     led_logic();
   }
