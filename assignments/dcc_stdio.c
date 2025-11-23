@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #include "sam.h"
-#include "../dcc_stdio.h"
+#include "dcc_stdio.h"
 
 #define TARGET_REQ_TRACEMSG					0x00
 #define TARGET_REQ_DEBUGMSG_ASCII			0x01

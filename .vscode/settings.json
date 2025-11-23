@@ -19,6 +19,6 @@
     "tc.h": "c",
     "sam.h": "c",
     "same51j20a.h": "c",
-    "dcc_stdio.h": "c"
+    "dcc_stdio.h": "c",
   }
 }

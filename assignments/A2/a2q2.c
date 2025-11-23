@@ -1,0 +1,405 @@
+#include "sam.h"
+#include "../display.h"
+#include "../dcc_stdio.h"
+#include <assert.h>
+#include <stdbool.h>
+
+// flash location where we start writing parameter bytes
+#define PARAMETER_ADDR 0x000fe000UL
+
+// setup our heartbeat to be 1ms: so we overflow at 1ms intervals with a 48MHz clock
+#define MS_TICKS 48000UL
+
+// conversion factor for our RPM calculations, with a clock running at a fraction of our heartbeat
+// running at 12MHz to ensure that we have enough time to capture slowest RPM
+#define RPM_CLOCK_DIV 4
+#define RPM_MS_FACTOR (MS_TICKS/RPM_CLOCK_DIV)
+
+// see fan data sheet for pulses to capture for accurate RPM calculations
+#define START_PULSE 1
+#define END_PULSE 3
+
+#define MAX_SAMPLES 128
+
+#define EXTINT14_MASK 0x4000
+
+// sample inputs and process the FSM every 50ms, or 20x/s
+#define PROCESS_MS  50
+
+// blink the LED 2x/s
+#define BLINK_MS 500
+
+// update the RPM display 2x/s
+#define REFRESH_MS  500
+
+// our FSM increments timestamps every 50ms, so that's our baseline for determining how long something takes
+// we repeat 10x a second
+#define KEY_REPEAT   2
+
+// input ports
+#define KEY1 PORT_PA02
+#define KEY2 PORT_PA07
+
+#define NUM_KEYS 2
+
+enum STATES
+{
+  NONE,
+  KEY1_ON,
+  KEY1_OFF,
+  KEY2_ON,
+  KEY2_OFF,
+  NUM_STATES
+};
+
+typedef enum STATES State;
+
+
+// function pointer for defining our state machine lookup table
+// note: not required in submitted solutions, just showing how it's done
+typedef State(*getNextState)(bool *keyState, uint8_t *timestamp, uint8_t *currDuty);
+
+// NOTE: this overflows every ~50 days, so I'm not going to care here...
+volatile uint32_t msCount = 0;
+
+// values updated inside an interrupt and needed outside 
+volatile uint16_t fanRPM = 0;
+
+/*
+  My values for these parameters are:
+    cycleStep = 4
+    numSamples = 16
+    clockDivisor = 4
+*/
+static uint8_t cycleStep = 4;
+static uint8_t numSamples = 16;
+static uint8_t clockDivisor = 4096;
+
+void parametersInit()
+{
+  uint8_t *parms = (uint8_t *)PARAMETER_ADDR;
+
+  cycleStep = parms[0];
+  numSamples = parms[1];
+  clockDivisor = parms[2];
+}
+
+void heartInit()
+{
+  // have to enable the interrupt line in the system level REG
+  NVIC_EnableIRQ(SysTick_IRQn);
+
+  SysTick_Config(MS_TICKS);
+}
+
+// Fires every 1ms
+void SysTick_Handler()
+{
+  msCount++;
+}
+
+void buttonInit()
+{
+  PORT_REGS->GROUP[0].PORT_DIRCLR = (KEY1 | KEY2);
+  PORT_REGS->GROUP[0].PORT_PINCFG[2] = PORT_PINCFG_INEN_Msk;
+  PORT_REGS->GROUP[0].PORT_PINCFG[7] = PORT_PINCFG_INEN_Msk;
+}
+
+// no need for hysteresis with the click inputs, but let's keep the nice abstraction
+void sampleInputs(bool *keyState)
+{
+ keyState[0] = (PORT_REGS->GROUP[0].PORT_IN & KEY1) == KEY1;
+ keyState[1] = (PORT_REGS->GROUP[0].PORT_IN & KEY2) == KEY2;
+}
+
+void updateOutput(uint8_t dutyCycle)
+{
+  TC1_REGS->COUNT8.TC_CC[1] = dutyCycle;
+}
+
+void fanInit()
+{
+  // setup the output control pin
+  PORT_REGS->GROUP[0].PORT_DIRSET = PORT_PA11;
+  PORT_REGS->GROUP[0].PORT_OUTSET = PORT_PA11;
+  PORT_REGS->GROUP[0].PORT_PINCFG[11] |= PORT_PINCFG_PMUXEN_Msk;
+  PORT_REGS->GROUP[0].PORT_PMUX[5] |= PORT_PMUX_PMUXO_E;
+ 
+  // use generic clock 4 as our clock for this device, slowing the clock to make the duty cycle changes noticeable
+  // this is set in conjunction with the pre-scaler (below) to give a frequency in kHz
+  // students will experiment and report on their findings; the value selected is good but students can have different values based on experimentation
+  GCLK_REGS->GCLK_GENCTRL[4] = GCLK_GENCTRL_DIV(clockDivisor) | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_GENEN_Msk;
+  while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK4) == GCLK_SYNCBUSY_GENCTRL_GCLK4)
+    ;/* Wait for synchronization */
+
+  // have to enable the peripheral clocks I need via the generic and main clocks
+  // see page 156 of data sheet for GCLK array offsets
+  GCLK_REGS->GCLK_PCHCTRL[9] = GCLK_PCHCTRL_GEN(4) | GCLK_PCHCTRL_CHEN_Msk;
+  while ((GCLK_REGS->GCLK_PCHCTRL[9] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk)
+    ;/* Wait for synchronization */
+
+  MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_TC1_Msk;
+
+  // this is the pre-scaler I chose so I can demonstrate "stiction"
+  // values (and clocking) used in submissions will be discussed in their write-up
+  TC1_REGS->COUNT8.TC_CTRLA = TC_CTRLA_MODE_COUNT8 | TC_CTRLA_PRESCALER_DIV256;
+
+  TC1_REGS->COUNT8.TC_WAVE = TC_WAVE_WAVEGEN_NPWM;
+
+  // start the timer
+  TC1_REGS->COUNT8.TC_CTRLA |= TC_CTRLA_ENABLE_Msk;
+}
+
+void rpmInit()
+{
+  // RPM input, with a pull-up (using internal but we should use an external 1K for a less glitchy signal)
+  PORT_REGS->GROUP[1].PORT_DIRCLR = PORT_PB14;
+  PORT_REGS->GROUP[1].PORT_PINCFG[14] = PORT_PINCFG_PMUXEN_Msk | PORT_PINCFG_PULLEN_Msk;
+  PORT_REGS->GROUP[1].PORT_OUTSET = PORT_PB14;
+
+  //setup the event system
+  MCLK_REGS->MCLK_APBBMASK |= MCLK_APBBMASK_EVSYS_Msk;
+  // see data sheet page 798 for indices (TCC0 MC0 used here) and page 799 for channel selection (channel 0, generated by ext int 14 as set below)
+  EVSYS_REGS->EVSYS_USER[19] = 0x01;
+  // see data sheet page 792 for event generator values (Ext Int 14 used here)
+  EVSYS_REGS->CHANNEL[0].EVSYS_CHANNEL = EVSYS_CHANNEL_EVGEN(0x20) | EVSYS_CHANNEL_PATH_ASYNCHRONOUS;
+
+  // RPM input goes to an external interrupt, with events being generated for each rising edge
+  PORT_REGS->GROUP[1].PORT_PMUX[7] = PORT_PMUX_PMUXE_A;
+  EIC_REGS->EIC_CONFIG[1] = EIC_CONFIG_SENSE6_RISE;
+  EIC_REGS->EIC_EVCTRL = EXTINT14_MASK;
+  EIC_REGS->EIC_CTRLA = EIC_CTRLA_CKSEL_CLK_ULP32K | EIC_CTRLA_ENABLE_Msk;
+
+  // input events are then captured using TCC0
+
+  // use generic clock 5 as our clock for this device
+  GCLK_REGS->GCLK_GENCTRL[5] = GCLK_GENCTRL_DIV(RPM_CLOCK_DIV) | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_GENEN_Msk;
+  while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK5) == GCLK_SYNCBUSY_GENCTRL_GCLK5)
+    ;/* Wait for synchronization */
+
+  // have to enable the peripheral clocks I need via the generic and main clocks
+  // see page 156 of data sheet for GCLK array offsets
+  GCLK_REGS->GCLK_PCHCTRL[25] = GCLK_PCHCTRL_GEN(5) | GCLK_PCHCTRL_CHEN_Msk;
+  while ((GCLK_REGS->GCLK_PCHCTRL[25] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk)
+    ;/* Wait for synchronization */
+
+  MCLK_REGS->MCLK_APBBMASK |= MCLK_APBBMASK_TCC0_Msk;
+
+  TCC0_REGS->TCC_EVCTRL = TCC_EVCTRL_MCEI0_Msk;
+  TCC0_REGS->TCC_INTENSET = TCC_INTENSET_MC0_Msk | TCC_INTENSET_OVF_Msk;
+  TCC0_REGS->TCC_CTRLA = TCC_CTRLA_CPTEN0_Msk | TCC_CTRLA_ENABLE_Msk;
+
+  NVIC_EnableIRQ(TCC0_MC0_IRQn);
+  NVIC_EnableIRQ(TCC0_OTHER_IRQn);
+}
+
+// clock is setup to ensure that it never overflows within our RPM range; an overflow indicates no pulse, or that the fan has stopped
+void TCC0_OTHER_Handler()
+{
+  if ((TCC0_REGS->TCC_INTFLAG & TCC_INTFLAG_OVF_Msk) == TCC_INTFLAG_OVF_Msk)
+  {
+    fanRPM = 0;
+    // clear the interrupt!
+    TCC0_REGS->TCC_INTFLAG |= TCC_INTFLAG_OVF_Msk;
+  }
+}
+
+// we do need averaging as there is some jitter in the feedback from the fan
+// ISR for match capture events
+void TCC0_MC0_Handler()
+{
+  static uint8_t  pulseCount = 0;
+  static uint32_t samples[MAX_SAMPLES] = {0};
+  static uint16_t sampleIndex = 0;
+  static uint16_t sampleCount = 0;
+  static uint32_t sampleAvg = 0;
+  uint32_t nextSample = 0;
+
+  // reading the capture register resets the interrupt, rounded to the nearest millisecond (we don't need greater accuracy!)
+  nextSample = (TCC0_REGS->TCC_CC[0] + (RPM_MS_FACTOR/2))/RPM_MS_FACTOR;
+ 
+  pulseCount++;
+  // on first pulse, start our count
+  if (pulseCount == START_PULSE)
+  {
+    TCC0_REGS->TCC_COUNT = 0;
+  }
+  // on every third count we have another sample to record
+  if (pulseCount == END_PULSE)
+  {
+    // replace oldest value with newest for the running averaging
+    sampleAvg -= samples[sampleIndex];
+    // fan data sheet indicates this is the conversion to perform after every 3 positive edges
+    samples[sampleIndex] = 60000/nextSample;
+    sampleAvg += samples[sampleIndex];
+    sampleIndex = (sampleIndex+1)%numSamples;
+  
+    // stop counting after we have full history
+    if (sampleCount < numSamples)
+      sampleCount++;
+
+    fanRPM = sampleAvg/sampleCount;
+
+    // now we can use the last edge as the first for our next sample!
+    pulseCount = START_PULSE;
+    TCC0_REGS->TCC_COUNT = 0;
+  }
+}
+
+///////////////////////////////////////////////
+// Handlers for processing state machine states
+// note: not required in submitted solutions, just showing how it's done
+
+State currStateNone(bool *keyState, uint8_t *timestamp, uint8_t *currDuty)
+{
+  State nextState = NONE;
+
+  // start at the repeat so we detect single hits
+  *timestamp = KEY_REPEAT;
+  if ( keyState[0] )
+  {
+    nextState = KEY1_ON;
+  }
+  
+  else if ( keyState[1] )
+  {
+    nextState = KEY2_ON;
+  }
+
+  return nextState;
+}
+
+State currStateKey1On(bool *keyState, unsigned char *timestamp, uint8_t *currDuty)
+{
+  State nextState = KEY1_ON; 
+
+  (*timestamp)++;
+  if ( !keyState[0] )
+  {
+    nextState = KEY1_OFF;
+  }
+  else if ( *timestamp > KEY_REPEAT )
+  {
+    // make sure we don't roll over...
+    if ( *currDuty > cycleStep )
+      *currDuty -= cycleStep;
+    else
+      *currDuty = 0;
+    
+    *timestamp = 0;
+  }
+
+  return nextState;
+}
+
+State currStateKey1Off(bool *keyState, unsigned char *timestamp, uint8_t *currDuty)
+{
+  return NONE;
+}
+
+State currStateKey2On(bool *keyState, unsigned char *timestamp, uint8_t *currDuty)
+{
+  State nextState = KEY2_ON; 
+
+  (*timestamp)++;
+  if ( !keyState[1] )
+  {
+    nextState = KEY2_OFF;
+  }
+  else if ( *timestamp > KEY_REPEAT )
+  {
+    // make sure we don't roll over...
+    if ( *currDuty < (0xff - cycleStep) )
+      *currDuty += cycleStep;
+    else
+      *currDuty = 0xff;
+    
+    *timestamp = 0;
+  }
+
+  return nextState;
+}
+
+State currStateKey2Off(bool *keyState, unsigned char *timestamp, uint8_t *currDuty)
+{
+  return NONE;
+}
+
+//
+///////////////////////////////////////////////
+
+void refreshDisplay()
+{
+  displayDrawDigit(DISPLAY_SIZE/2 - FONT_SIZE/2, (DISPLAY_SIZE/2) - 20, BLUE, fanRPM/1000);
+  displayDrawDigit(DISPLAY_SIZE/2 - FONT_SIZE/2, (DISPLAY_SIZE/2) - 8, BLUE, (fanRPM/100)%10);
+  displayDrawDigit(DISPLAY_SIZE/2 - FONT_SIZE/2, (DISPLAY_SIZE/2) + 4, BLUE, (fanRPM/10)%10);
+  displayDrawDigit(DISPLAY_SIZE/2 - FONT_SIZE/2, (DISPLAY_SIZE/2) + 16, BLUE, fanRPM%10);
+}
+
+int main (void)
+{
+#ifndef NDEBUG
+  for (int i=0; i<100000; i++)
+  ;
+#endif
+
+  // state machine lookup table
+  // note: not required in submitted solutions, just showing how it's done
+  getNextState keyProcessing[NUM_STATES] = {currStateNone, currStateKey1On, currStateKey1Off, currStateKey2On, currStateKey2Off};
+  State currState = NONE;
+  uint8_t timestamp = 0;
+  uint8_t currDuty = 0xff;
+  uint8_t prevDuty = currDuty;
+
+  bool keyState[NUM_KEYS] = {false, false};
+
+  // sleep to idle (wake on interrupts)
+  PM_REGS->PM_SLEEPCFG = PM_SLEEPCFG_SLEEPMODE_IDLE;
+  
+  heartInit();
+  parametersInit();
+
+  // LED output
+  PORT_REGS->GROUP[0].PORT_DIRSET = PORT_PA14;
+  PORT_REGS->GROUP[0].PORT_OUTSET = PORT_PA14;
+  
+  // we want interrupts!
+  __enable_irq();
+
+  buttonInit();
+  fanInit();
+  rpmInit();
+  updateOutput(currDuty);
+  displayInit();
+
+  // sleep until we have an interrupt
+  while (1) 
+  {
+    __WFI();
+    
+    if ((msCount % BLINK_MS) == 0)
+    {
+      PORT_REGS->GROUP[0].PORT_OUTTGL = PORT_PA14;
+    }
+
+    if ((msCount % PROCESS_MS) == 0)
+    {
+      sampleInputs(keyState);
+
+      // the core of the state machine is now a simple index into a table
+      currState = keyProcessing[currState](keyState, &timestamp, &currDuty);
+
+      // don't change the output generator unnecessarily.
+      if (currDuty != prevDuty)
+      {
+        updateOutput(currDuty);
+        prevDuty = currDuty;
+      }
+    }
+
+    if ((msCount % REFRESH_MS) == 0)
+    {
+      refreshDisplay();
+    }
+  }
+}
