@@ -11,7 +11,7 @@
 #define EMPTY_BYTE 250
 #define WAIT_BEFORE_DESPLAY 250
 #define WAIT_BEFORE_TRANSFER 50
-#define ERROR_RATE 25
+#define ERROR_RATE 10
 #define DASH_LED 1000
 #define DOT_LED 250
 
@@ -64,20 +64,20 @@ void TCC0_MC0_Handler() {
   uint8_t duration = now - prevSample;
 
   if(prevSample != 0) {// this if statment ensures that the first time something is sent, we don't look at it since it doesn't tell us the duration from rise to fall.
-    if(duration == START_BYTE) {
+    if(duration == START_BYTE || (START_BYTE-ERROR_RATE <= duration && START_BYTE+ERROR_RATE >= duration)) {
       receiving = true;
     }
     else if(receiving) {
-      if(duration == END_BYTE && (END_BYTE-ERROR_RATE <= duration && END_BYTE+ERROR_RATE >= duration)) {
+      if(duration == END_BYTE || (END_BYTE-ERROR_RATE <= duration && END_BYTE+ERROR_RATE >= duration)) {
         receiving = false;
       }
-      else if(duration == EMPTY_BYTE && (EMPTY_BYTE-ERROR_RATE <= duration && EMPTY_BYTE+ERROR_RATE >= duration)) {
+      else if(duration == EMPTY_BYTE || (EMPTY_BYTE-ERROR_RATE <= duration && EMPTY_BYTE+ERROR_RATE >= duration)) {
         receiveEmpty = false;
       }
       else if(!receiveEmpty) {
 
-        if(duration == DOT_BYTE && (DOT_BYTE-ERROR_RATE <= duration && DOT_BYTE+ERROR_RATE >= duration)) rvBits = (rvBits << 1) | 0;
-        else if(duration == DASH_BYTE && (DASH_BYTE-ERROR_RATE <= duration && DASH_BYTE+ERROR_RATE >= duration)) rvBits = (rvBits << 1) | 1;
+        if(duration == DOT_BYTE || (DOT_BYTE-ERROR_RATE <= duration && DOT_BYTE+ERROR_RATE >= duration)) rvBits = (rvBits << 1) | 0;
+        else if(duration == DASH_BYTE || (DASH_BYTE-ERROR_RATE <= duration && DASH_BYTE+ERROR_RATE >= duration)) rvBits = (rvBits << 1) | 1;
 
         rvLen++;
         receiveEmpty = true;
