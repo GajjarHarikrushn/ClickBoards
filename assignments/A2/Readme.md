@@ -1,3 +1,15 @@
+## compiling and running
+To compile just run
+```bash
+make
+```
+This should compile all the files. To install the files, run
+
+```bash
+make A2Qx-install
+```
+NOTE: x here is just a replacement for the number you will put in for the question being marked.
+
 ## Hall Sensor Measurement
 
 The Hall effect was sensor  was used to detect the presence of a magnet and its distance from the sensor. It gave different outputs depending on the distance from the magnet.
@@ -25,4 +37,8 @@ This setup ensures accurate, stable detection of the Hall sensor pulses without 
 
 ## Fan Measurement
 
-The fan was weird to control at first. Due to the friction, the fan would not start at low speeds but was able to go to that speed from higher speed. The lowest I set the fan to was 5% since anything lower than that was too slow to keep the fan running. I wasn't able to fully finish the assignment so that is all I was able to do.
+The fan was weird to control at first. Due to the friction, the fan would not start at low speeds but was able to go to that speed from higher speed. The lowest I set the fan to was 5% since anything lower than that was too slow to keep the fan running.
+
+For the buttons, some hysterisis was needed to remove the noice, so I used the same hysterisis from previous assignment since that had already been very effective.
+
+I wasn't able to fully finish the assignment so that is all I was able to do.

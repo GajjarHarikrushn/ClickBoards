@@ -7,7 +7,7 @@
 #define BUTTON2_INDEX 7
 #define BUTTON2_MASK PORT_PA07
 #define FAN_SPEED_CHANGE 5
-#define HYST_ON_LIMIT 0
+#define HYST_ON_LIMIT 5
 #define FLASH_PARAMS_ADDR 0x000FE000
 #define BUTTON_PRESSED(port_in, mask) (port_in & mask)
 
@@ -33,13 +33,6 @@ void TCC4_Handler() {
     period_ticks = capture - last_capture;
     last_capture = capture;
     TCC4_REGS->TCC_INTFLAG = TCC_INTFLAG_MC0_Msk; // clear flag
-}
-
-float readFanRPM() {
-    if (period_ticks == 0) return 0.0f;
-    float tick_time = 16.0f / 48000000.0f; // prescaler 16, 48 MHz clock
-    float freq = 1.0f / (period_ticks * tick_time);
-    return (freq * 60.0f) / 2.0f; // divide by 2 pulses per revolution
 }
 
 void SysTick_Handler() {
