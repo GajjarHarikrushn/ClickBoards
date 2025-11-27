@@ -3,6 +3,8 @@
 
 #define wait(x) for(int i = 0; i < x; i++)
 
+#define X_OFFSET 16
+
 #define CMD_COL                 0x15
 #define CMD_ROW                 0x75
 #define CMD_RAM                 0x5C
@@ -35,6 +37,7 @@ void deactivate() {
 void cmd(uint8_t c) {
     low(DC_PIN);
     spiWriteByte(c);
+    high(DC_PIN);
 }
 
 void data(uint8_t d) {
@@ -60,10 +63,10 @@ void displayInit(void) {
     cmd(CMD_DISPLAYENHANCE);    data(0x00); data(0x00);
 
     // Clear screen
-    cmd(CMD_COL); data(0x00); data(DISPLAY_SIZE-1);
-    cmd(CMD_ROW); data(0x00); data(DISPLAY_SIZE-1);
+    cmd(CMD_COL); data(0x00); data(127);
+    cmd(CMD_ROW); data(0x00); data(127);
     cmd(CMD_RAM);
-    for (int i = 0; i < 127*127; i++) {
+    for (int i = 0; i < 128*128; i++) {
         data(0x00); data(0x00); // black pixel
     }
 
@@ -74,8 +77,8 @@ void displayInit(void) {
 void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
 
     activate();
-
-    cmd(CMD_COL); data(x+16); data(x+16);
+    
+    cmd(CMD_COL); data(x+X_OFFSET); data(x+X_OFFSET);
     cmd(CMD_ROW); data(y); data(y);
     cmd(CMD_RAM);
 
@@ -85,17 +88,3 @@ void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
     deactivate();
 }
 
-void drawArray(uint8_t x, uint8_t y, uint16_t *color, uint8_t xSize, uint8_t ySize) {
-    activate();
-
-    cmd(CMD_COL); data(x+16); data(xSize+16);
-    cmd(CMD_ROW); data(y); data(ySize);
-    cmd(CMD_RAM);
-
-    for(int i = 0; i < xSize*ySize; i++) {
-        data(color[i] >> 8);
-        data(color[i] & 0xFF);
-    }
-
-    deactivate();
-}
