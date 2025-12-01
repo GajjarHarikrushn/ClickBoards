@@ -7,6 +7,11 @@
 #define BLUE        0x001F
 #define CYAN        0x07FF
 #define YELLOW      0xFFE0
+#define GOLDEN      0xFD80
+#define GRAY        0x8410
+#define LIGHT_GRAY  0xC618
+#define RED         0xF100
+#define GREEN       0x07E0
 
 void displayInit();
 void drawPixel(uint8_t x, uint8_t y, uint16_t color);
