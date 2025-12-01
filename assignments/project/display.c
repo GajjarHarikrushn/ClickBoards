@@ -59,7 +59,7 @@ void displayInit(void) {
     cmd(CMD_DISPLAYUNLOCK);     data(0x12);
     cmd(CMD_DISPLAYUNLOCK);     data(0xB1);
     cmd(CMD_OFFSET);            data(0x00);
-    cmd(CMD_REMAP);             data(0x32);
+    cmd(CMD_REMAP);             data(0x31);
     cmd(CMD_DISPLAYENHANCE);    data(0x00); data(0x00);
 
     // Clear screen
@@ -75,7 +75,6 @@ void displayInit(void) {
 }
 
 void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
-
     activate();
     
     cmd(CMD_COL); data(x+X_OFFSET); data(x+X_OFFSET);
@@ -88,3 +87,19 @@ void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
     deactivate();
 }
 
+void drawArray(uint8_t x, uint8_t X_size, uint8_t y, uint8_t Y_size, uint16_t *color) {
+    activate();
+
+    cmd(CMD_COL); data(x+X_OFFSET); data(x+X_OFFSET+(X_size - 1));
+    cmd(CMD_ROW); data(y); data(y+(Y_size - 1));
+    cmd(CMD_RAM);
+
+    int location = 0;
+    for(int i = 0; i < X_size*Y_size; i++) {
+        data(color[location] >> 8);
+        data(color[location] & 0xFF);
+        location++;
+    }
+    
+    deactivate();
+}
