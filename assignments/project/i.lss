@@ -3,35 +3,35 @@ i.elf:     file format elf32-littlearm
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00001e40  00000000  00000000  00001000  2**2
+  0 .text         00001f14  00000000  00000000  00001000  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .relocate     00000234  20000000  00001e40  00003000  2**3
+  1 .relocate     00000234  20000000  00001f14  00003000  2**3
                   CONTENTS, ALLOC, LOAD, DATA
   2 .bkupram      00000000  47000000  47000000  00003234  2**0
                   CONTENTS
   3 .qspi         00000000  04000000  04000000  00003234  2**0
                   CONTENTS
-  4 .bss          0000ac48  20000234  00002074  00003234  2**2
+  4 .bss          0000f448  20000234  00002148  00003234  2**2
                   ALLOC
-  5 .stack        00010004  2000ae7c  0000ccbc  00003234  2**0
+  5 .stack        00010004  2000f67c  00011590  00003234  2**0
                   ALLOC
   6 .ARM.attributes 0000002a  00000000  00000000  00003234  2**0
                   CONTENTS, READONLY
   7 .comment      0000008b  00000000  00000000  0000325e  2**0
                   CONTENTS, READONLY
-  8 .debug_info   00002a27  00000000  00000000  000032e9  2**0
+  8 .debug_info   00001fd2  00000000  00000000  000032e9  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
-  9 .debug_abbrev 000008b2  00000000  00000000  00005d10  2**0
+  9 .debug_abbrev 00000679  00000000  00000000  000052bb  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 10 .debug_aranges 000001d0  00000000  00000000  000065c2  2**0
+ 10 .debug_aranges 00000128  00000000  00000000  00005934  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 11 .debug_rnglists 00000158  00000000  00000000  00006792  2**0
+ 11 .debug_rnglists 000000cf  00000000  00000000  00005a5c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 12 .debug_line   00001407  00000000  00000000  000068ea  2**0
+ 12 .debug_line   00000a5e  00000000  00000000  00005b2b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_str    00001223  00000000  00000000  00007cf1  2**0
+ 13 .debug_str    00001072  00000000  00000000  00006589  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_frame  000009a4  00000000  00000000  00008f14  2**2
+ 14 .debug_frame  000006c0  00000000  00000000  000075fc  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -43,7 +43,7 @@ Disassembly of section .text:
 
 void spiFlushBuffer()
 {
-       0:	80 ae 01 20 1d 05 00 00 b9 05 00 00 b9 05 00 00     ... ............
+       0:	80 f6 01 20 1d 05 00 00 b9 05 00 00 b9 05 00 00     ... ............
   uint32_t dummy;
 
   // Flush out any unread data in SPI read buffer
@@ -110,8 +110,8 @@ void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
      26a:	b103      	cbz	r3, 26e <deregister_tm_clones+0xe>
      26c:	4718      	bx	r3
      26e:	4770      	bx	lr
-     270:	00001e40 	.word	0x00001e40
-     274:	00001e40 	.word	0x00001e40
+     270:	00001f14 	.word	0x00001f14
+     274:	00001f14 	.word	0x00001f14
      278:	00000000 	.word	0x00000000
 
 0000027c <register_tm_clones>:
@@ -126,8 +126,8 @@ void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
      28e:	b103      	cbz	r3, 292 <register_tm_clones+0x16>
      290:	4718      	bx	r3
      292:	4770      	bx	lr
-     294:	00001e40 	.word	0x00001e40
-     298:	00001e40 	.word	0x00001e40
+     294:	00001f14 	.word	0x00001f14
+     298:	00001f14 	.word	0x00001f14
      29c:	00000000 	.word	0x00000000
 
 000002a0 <__do_global_dtors_aux>:
@@ -145,7 +145,7 @@ void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
      2ba:	bd10      	pop	{r4, pc}
      2bc:	20000234 	.word	0x20000234
      2c0:	00000000 	.word	0x00000000
-     2c4:	00001e40 	.word	0x00001e40
+     2c4:	00001f14 	.word	0x00001f14
 
 000002c8 <frame_dummy>:
      2c8:	b508      	push	{r3, lr}
@@ -159,7 +159,7 @@ void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
      2de:	bf00      	nop
      2e0:	00000000 	.word	0x00000000
      2e4:	20000238 	.word	0x20000238
-     2e8:	00001e40 	.word	0x00001e40
+     2e8:	00001f14 	.word	0x00001f14
 
 000002ec <__NVIC_EnableIRQ>:
   \details Enables a device specific interrupt in the NVIC interrupt controller.
@@ -318,7 +318,7 @@ void EIC_EXTINT_15_Handler() {
      3c2:	f44f 4200 	mov.w	r2, #32768	@ 0x8000
      3c6:	615a      	str	r2, [r3, #20]
     addProjectile();
-     3c8:	f000 ff4a 	bl	1260 <addProjectile>
+     3c8:	f000 ff7e 	bl	12c8 <addProjectile>
 }
      3cc:	bf00      	nop
      3ce:	bd80      	pop	{r7, pc}
@@ -334,7 +334,7 @@ void EIC_EXTINT_14_Handler() {
      3da:	f44f 4280 	mov.w	r2, #16384	@ 0x4000
      3de:	615a      	str	r2, [r3, #20]
     resetGame();
-     3e0:	f001 fb26 	bl	1a30 <resetGame>
+     3e0:	f001 fb92 	bl	1b08 <resetGame>
 }
      3e4:	bf00      	nop
      3e6:	bd80      	pop	{r7, pc}
@@ -470,48 +470,46 @@ int main() {
      4cc:	f000 fb52 	bl	b74 <joystickInit>
     generateSpaceBackground();
      4d0:	f000 fb78 	bl	bc4 <generateSpaceBackground>
-    addEnemies();
-     4d4:	f000 fd8e 	bl	ff4 <addEnemies>
+    addEnemies(ENEMY_COUNT);
+     4d4:	200c      	movs	r0, #12
+     4d6:	f000 fd91 	bl	ffc <addEnemies>
     spawnEnemies();
-     4d8:	f000 fddc 	bl	1094 <spawnEnemies>
+     4da:	f000 fe07 	bl	10ec <spawnEnemies>
     buttonInit();
-     4dc:	f7ff ff86 	bl	3ec <buttonInit>
+     4de:	f7ff ff85 	bl	3ec <buttonInit>
     //     updateDisplay();
     // logMsg("%2.2f", msCount-start);
 
 
     while(1) {
         updateSpacePos(readAxis(X_AXIS),readAxis(Y_AXIS));
-     4e0:	2001      	movs	r0, #1
-     4e2:	f000 fb1d 	bl	b20 <readAxis>
-     4e6:	4603      	mov	r3, r0
-     4e8:	461c      	mov	r4, r3
-     4ea:	2000      	movs	r0, #0
-     4ec:	f000 fb18 	bl	b20 <readAxis>
-     4f0:	4603      	mov	r3, r0
-     4f2:	4619      	mov	r1, r3
-     4f4:	4620      	mov	r0, r4
-     4f6:	f000 fd25 	bl	f44 <updateSpacePos>
+     4e2:	2001      	movs	r0, #1
+     4e4:	f000 fb1c 	bl	b20 <readAxis>
+     4e8:	4603      	mov	r3, r0
+     4ea:	461c      	mov	r4, r3
+     4ec:	2000      	movs	r0, #0
+     4ee:	f000 fb17 	bl	b20 <readAxis>
+     4f2:	4603      	mov	r3, r0
+     4f4:	4619      	mov	r1, r3
+     4f6:	4620      	mov	r0, r4
+     4f8:	f000 fd28 	bl	f4c <updateSpacePos>
         moveBackground();
-     4fa:	f000 fbe9 	bl	cd0 <moveBackground>
+     4fc:	f000 fbf4 	bl	ce8 <moveBackground>
         updateProjectile();
-     4fe:	f000 ff95 	bl	142c <updateProjectile>
+     500:	f000 ffc4 	bl	148c <updateProjectile>
         updateEnemyProjectile();
-     502:	f001 f9c5 	bl	1890 <updateEnemyProjectile>
-        // if(msCount%50 == 0) {
-            addEnemyProjectile();
-     506:	f001 f8b3 	bl	1670 <addEnemyProjectile>
-        // }
+     504:	f001 fa1a 	bl	193c <updateEnemyProjectile>
+        addEnemyProjectile();
+     508:	f001 f8de 	bl	16c8 <addEnemyProjectile>
         spawnEnemies();
-     50a:	f000 fdc3 	bl	1094 <spawnEnemies>
+     50c:	f000 fdee 	bl	10ec <spawnEnemies>
         addSpaceship();
-     50e:	f000 fc77 	bl	e00 <addSpaceship>
+     510:	f000 fc82 	bl	e18 <addSpaceship>
         updateDisplay();
-     512:	f000 fbbb 	bl	c8c <updateDisplay>
+     514:	f000 fbbc 	bl	c90 <updateDisplay>
         updateSpacePos(readAxis(X_AXIS),readAxis(Y_AXIS));
-     516:	bf00      	nop
-     518:	e7e2      	b.n	4e0 <main+0x30>
-	...
+     518:	bf00      	nop
+     51a:	e7e2      	b.n	4e2 <main+0x32>
 
 0000051c <Reset_Handler>:
      51c:	b580      	push	{r7, lr}
@@ -561,7 +559,7 @@ int main() {
      576:	d001      	beq.n	57c <Reset_Handler+0x60>
      578:	4b0d      	ldr	r3, [pc, #52]	@ (5b0 <Reset_Handler+0x94>)
      57a:	4798      	blx	r3
-     57c:	f001 fb16 	bl	1bac <__libc_init_array>
+     57c:	f001 fb80 	bl	1c80 <__libc_init_array>
      580:	4b0c      	ldr	r3, [pc, #48]	@ (5b4 <Reset_Handler+0x98>)
      582:	2b00      	cmp	r3, #0
      584:	d001      	beq.n	58a <Reset_Handler+0x6e>
@@ -571,11 +569,11 @@ int main() {
      58e:	bf00      	nop
      590:	e7fd      	b.n	58e <Reset_Handler+0x72>
      592:	bf00      	nop
-     594:	00001e40 	.word	0x00001e40
+     594:	00001f14 	.word	0x00001f14
      598:	20000000 	.word	0x20000000
      59c:	20000234 	.word	0x20000234
      5a0:	20000234 	.word	0x20000234
-     5a4:	2000ae7c 	.word	0x2000ae7c
+     5a4:	2000f67c 	.word	0x2000f67c
      5a8:	00000000 	.word	0x00000000
      5ac:	e000ed00 	.word	0xe000ed00
 	...
@@ -1371,19 +1369,12 @@ void joystickInit() {
      b90:	41008000 	.word	0x41008000
 
 00000b94 <randRange>:
-uint16_t background[MEMORY_SIZE][DISPLAY_SIZE] = {0};
-uint8_t backgroundStart = 0;
-uint16_t screen[DISPLAY_SIZE][DISPLAY_SIZE];
-
-
-int randRange(int min, int max) {
      b94:	b580      	push	{r7, lr}
      b96:	b082      	sub	sp, #8
      b98:	af00      	add	r7, sp, #0
      b9a:	6078      	str	r0, [r7, #4]
      b9c:	6039      	str	r1, [r7, #0]
-    return min + (rand() % (max - min + 1));
-     b9e:	f000 ffe9 	bl	1b74 <rand>
+     b9e:	f001 f853 	bl	1c48 <rand>
      ba2:	4602      	mov	r2, r0
      ba4:	6839      	ldr	r1, [r7, #0]
      ba6:	687b      	ldr	r3, [r7, #4]
@@ -1394,7 +1385,6 @@ int randRange(int min, int max) {
      bb4:	1ad2      	subs	r2, r2, r3
      bb6:	687b      	ldr	r3, [r7, #4]
      bb8:	4413      	add	r3, r2
-}
      bba:	4618      	mov	r0, r3
      bbc:	3708      	adds	r7, #8
      bbe:	46bd      	mov	sp, r7
@@ -1402,20 +1392,15 @@ int randRange(int min, int max) {
 	...
 
 00000bc4 <generateSpaceBackground>:
-
-void generateSpaceBackground() {
      bc4:	b580      	push	{r7, lr}
      bc6:	b084      	sub	sp, #16
      bc8:	af00      	add	r7, sp, #0
-    for (int i = 0; i < MEMORY_SIZE; i++) {
      bca:	2300      	movs	r3, #0
      bcc:	60fb      	str	r3, [r7, #12]
      bce:	e02a      	b.n	c26 <generateSpaceBackground+0x62>
-        for (int j = 0; j < DISPLAY_SIZE; j++) {
      bd0:	2300      	movs	r3, #0
      bd2:	60bb      	str	r3, [r7, #8]
      bd4:	e021      	b.n	c1a <generateSpaceBackground+0x56>
-            if(randRange(0, DISPLAY_SIZE) > 95)   background[i][j] = WHITE;
      bd6:	2160      	movs	r1, #96	@ 0x60
      bd8:	2000      	movs	r0, #0
      bda:	f7ff ffdb 	bl	b94 <randRange>
@@ -1433,7 +1418,6 @@ void generateSpaceBackground() {
      bf4:	f64f 72ff 	movw	r2, #65535	@ 0xffff
      bf8:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
      bfc:	e00a      	b.n	c14 <generateSpaceBackground+0x50>
-            else            background[i][j] = BLACK;
      bfe:	4921      	ldr	r1, [pc, #132]	@ (c84 <generateSpaceBackground+0xc0>)
      c00:	68fa      	ldr	r2, [r7, #12]
      c02:	4613      	mov	r3, r2
@@ -1444,67 +1428,50 @@ void generateSpaceBackground() {
      c0c:	4413      	add	r3, r2
      c0e:	2200      	movs	r2, #0
      c10:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
-        for (int j = 0; j < DISPLAY_SIZE; j++) {
      c14:	68bb      	ldr	r3, [r7, #8]
      c16:	3301      	adds	r3, #1
      c18:	60bb      	str	r3, [r7, #8]
      c1a:	68bb      	ldr	r3, [r7, #8]
      c1c:	2b5f      	cmp	r3, #95	@ 0x5f
      c1e:	ddda      	ble.n	bd6 <generateSpaceBackground+0x12>
-    for (int i = 0; i < MEMORY_SIZE; i++) {
      c20:	68fb      	ldr	r3, [r7, #12]
      c22:	3301      	adds	r3, #1
      c24:	60fb      	str	r3, [r7, #12]
      c26:	68fb      	ldr	r3, [r7, #12]
      c28:	2b7f      	cmp	r3, #127	@ 0x7f
      c2a:	ddd1      	ble.n	bd0 <generateSpaceBackground+0xc>
-        }
-    }
-    for(int i = 0; i < DISPLAY_SIZE; i++) {
      c2c:	2300      	movs	r3, #0
      c2e:	607b      	str	r3, [r7, #4]
-     c30:	e020      	b.n	c74 <generateSpaceBackground+0xb0>
-        for(int j = 0; j < DISPLAY_SIZE; j++) {
-     c32:	2300      	movs	r3, #0
-     c34:	603b      	str	r3, [r7, #0]
-     c36:	e017      	b.n	c68 <generateSpaceBackground+0xa4>
-            screen[i][j] = background[i][j];
-     c38:	4912      	ldr	r1, [pc, #72]	@ (c84 <generateSpaceBackground+0xc0>)
-     c3a:	687a      	ldr	r2, [r7, #4]
-     c3c:	4613      	mov	r3, r2
-     c3e:	005b      	lsls	r3, r3, #1
-     c40:	4413      	add	r3, r2
-     c42:	015b      	lsls	r3, r3, #5
-     c44:	683a      	ldr	r2, [r7, #0]
-     c46:	4413      	add	r3, r2
-     c48:	f831 0013 	ldrh.w	r0, [r1, r3, lsl #1]
-     c4c:	490e      	ldr	r1, [pc, #56]	@ (c88 <generateSpaceBackground+0xc4>)
-     c4e:	687a      	ldr	r2, [r7, #4]
-     c50:	4613      	mov	r3, r2
-     c52:	005b      	lsls	r3, r3, #1
-     c54:	4413      	add	r3, r2
-     c56:	015b      	lsls	r3, r3, #5
-     c58:	683a      	ldr	r2, [r7, #0]
-     c5a:	4413      	add	r3, r2
-     c5c:	4602      	mov	r2, r0
-     c5e:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
-        for(int j = 0; j < DISPLAY_SIZE; j++) {
-     c62:	683b      	ldr	r3, [r7, #0]
-     c64:	3301      	adds	r3, #1
-     c66:	603b      	str	r3, [r7, #0]
-     c68:	683b      	ldr	r3, [r7, #0]
-     c6a:	2b5f      	cmp	r3, #95	@ 0x5f
-     c6c:	dde4      	ble.n	c38 <generateSpaceBackground+0x74>
-    for(int i = 0; i < DISPLAY_SIZE; i++) {
-     c6e:	687b      	ldr	r3, [r7, #4]
-     c70:	3301      	adds	r3, #1
-     c72:	607b      	str	r3, [r7, #4]
-     c74:	687b      	ldr	r3, [r7, #4]
-     c76:	2b5f      	cmp	r3, #95	@ 0x5f
-     c78:	dddb      	ble.n	c32 <generateSpaceBackground+0x6e>
-        }
-    }
-}
+     c30:	e00a      	b.n	c48 <generateSpaceBackground+0x84>
+     c32:	4a14      	ldr	r2, [pc, #80]	@ (c84 <generateSpaceBackground+0xc0>)
+     c34:	687b      	ldr	r3, [r7, #4]
+     c36:	f832 1013 	ldrh.w	r1, [r2, r3, lsl #1]
+     c3a:	4a13      	ldr	r2, [pc, #76]	@ (c88 <generateSpaceBackground+0xc4>)
+     c3c:	687b      	ldr	r3, [r7, #4]
+     c3e:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
+     c42:	687b      	ldr	r3, [r7, #4]
+     c44:	3301      	adds	r3, #1
+     c46:	607b      	str	r3, [r7, #4]
+     c48:	687b      	ldr	r3, [r7, #4]
+     c4a:	f5b3 5f10 	cmp.w	r3, #9216	@ 0x2400
+     c4e:	dbf0      	blt.n	c32 <generateSpaceBackground+0x6e>
+     c50:	2300      	movs	r3, #0
+     c52:	603b      	str	r3, [r7, #0]
+     c54:	e00d      	b.n	c72 <generateSpaceBackground+0xae>
+     c56:	f64f 71ff 	movw	r1, #65535	@ 0xffff
+     c5a:	2000      	movs	r0, #0
+     c5c:	f7ff ff9a 	bl	b94 <randRange>
+     c60:	4603      	mov	r3, r0
+     c62:	b299      	uxth	r1, r3
+     c64:	4a09      	ldr	r2, [pc, #36]	@ (c8c <generateSpaceBackground+0xc8>)
+     c66:	683b      	ldr	r3, [r7, #0]
+     c68:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
+     c6c:	683b      	ldr	r3, [r7, #0]
+     c6e:	3301      	adds	r3, #1
+     c70:	603b      	str	r3, [r7, #0]
+     c72:	683b      	ldr	r3, [r7, #0]
+     c74:	f5b3 5f10 	cmp.w	r3, #9216	@ 0x2400
+     c78:	dbed      	blt.n	c56 <generateSpaceBackground+0x92>
      c7a:	bf00      	nop
      c7c:	bf00      	nop
      c7e:	3710      	adds	r7, #16
@@ -1512,2348 +1479,2086 @@ void generateSpaceBackground() {
      c82:	bd80      	pop	{r7, pc}
      c84:	20000258 	.word	0x20000258
      c88:	2000625c 	.word	0x2000625c
+     c8c:	2000aa5c 	.word	0x2000aa5c
 
-00000c8c <updateDisplay>:
+00000c90 <updateDisplay>:
+     c90:	b580      	push	{r7, lr}
+     c92:	b084      	sub	sp, #16
+     c94:	af02      	add	r7, sp, #8
+     c96:	4b11      	ldr	r3, [pc, #68]	@ (cdc <updateDisplay+0x4c>)
+     c98:	781b      	ldrb	r3, [r3, #0]
+     c9a:	2b00      	cmp	r3, #0
+     c9c:	d011      	beq.n	cc2 <updateDisplay+0x32>
+     c9e:	2300      	movs	r3, #0
+     ca0:	607b      	str	r3, [r7, #4]
+     ca2:	e00a      	b.n	cba <updateDisplay+0x2a>
+     ca4:	4a0e      	ldr	r2, [pc, #56]	@ (ce0 <updateDisplay+0x50>)
+     ca6:	687b      	ldr	r3, [r7, #4]
+     ca8:	f832 1013 	ldrh.w	r1, [r2, r3, lsl #1]
+     cac:	4a0d      	ldr	r2, [pc, #52]	@ (ce4 <updateDisplay+0x54>)
+     cae:	687b      	ldr	r3, [r7, #4]
+     cb0:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
+     cb4:	687b      	ldr	r3, [r7, #4]
+     cb6:	3301      	adds	r3, #1
+     cb8:	607b      	str	r3, [r7, #4]
+     cba:	687b      	ldr	r3, [r7, #4]
+     cbc:	f5b3 5f10 	cmp.w	r3, #9216	@ 0x2400
+     cc0:	dbf0      	blt.n	ca4 <updateDisplay+0x14>
+     cc2:	4b08      	ldr	r3, [pc, #32]	@ (ce4 <updateDisplay+0x54>)
+     cc4:	9300      	str	r3, [sp, #0]
+     cc6:	2360      	movs	r3, #96	@ 0x60
+     cc8:	2200      	movs	r2, #0
+     cca:	2160      	movs	r1, #96	@ 0x60
+     ccc:	2000      	movs	r0, #0
+     cce:	f7ff fea9 	bl	a24 <drawArray>
+     cd2:	bf00      	nop
+     cd4:	3708      	adds	r7, #8
+     cd6:	46bd      	mov	sp, r7
+     cd8:	bd80      	pop	{r7, pc}
+     cda:	bf00      	nop
+     cdc:	20000254 	.word	0x20000254
+     ce0:	2000aa5c 	.word	0x2000aa5c
+     ce4:	2000625c 	.word	0x2000625c
 
-void updateDisplay() {
-     c8c:	b580      	push	{r7, lr}
-     c8e:	b082      	sub	sp, #8
-     c90:	af02      	add	r7, sp, #8
-    if (display_update_needed && !gameOver) {
-     c92:	4b0c      	ldr	r3, [pc, #48]	@ (cc4 <updateDisplay+0x38>)
-     c94:	781b      	ldrb	r3, [r3, #0]
-     c96:	2b00      	cmp	r3, #0
-     c98:	d011      	beq.n	cbe <updateDisplay+0x32>
-     c9a:	4b0b      	ldr	r3, [pc, #44]	@ (cc8 <updateDisplay+0x3c>)
-     c9c:	781b      	ldrb	r3, [r3, #0]
-     c9e:	f083 0301 	eor.w	r3, r3, #1
-     ca2:	b2db      	uxtb	r3, r3
-     ca4:	2b00      	cmp	r3, #0
-     ca6:	d00a      	beq.n	cbe <updateDisplay+0x32>
-        drawArray(0, DISPLAY_SIZE, 0, DISPLAY_SIZE, *screen);
-     ca8:	4b08      	ldr	r3, [pc, #32]	@ (ccc <updateDisplay+0x40>)
-     caa:	9300      	str	r3, [sp, #0]
-     cac:	2360      	movs	r3, #96	@ 0x60
-     cae:	2200      	movs	r2, #0
-     cb0:	2160      	movs	r1, #96	@ 0x60
-     cb2:	2000      	movs	r0, #0
-     cb4:	f7ff feb6 	bl	a24 <drawArray>
-        display_update_needed = false;
-     cb8:	4b02      	ldr	r3, [pc, #8]	@ (cc4 <updateDisplay+0x38>)
-     cba:	2200      	movs	r2, #0
-     cbc:	701a      	strb	r2, [r3, #0]
-    }
-}
-     cbe:	bf00      	nop
-     cc0:	46bd      	mov	sp, r7
-     cc2:	bd80      	pop	{r7, pc}
-     cc4:	20000000 	.word	0x20000000
-     cc8:	20000254 	.word	0x20000254
-     ccc:	2000625c 	.word	0x2000625c
+00000ce8 <moveBackground>:
+     ce8:	b480      	push	{r7}
+     cea:	b083      	sub	sp, #12
+     cec:	af00      	add	r7, sp, #0
+     cee:	4b22      	ldr	r3, [pc, #136]	@ (d78 <moveBackground+0x90>)
+     cf0:	781b      	ldrb	r3, [r3, #0]
+     cf2:	3b01      	subs	r3, #1
+     cf4:	425a      	negs	r2, r3
+     cf6:	f003 037f 	and.w	r3, r3, #127	@ 0x7f
+     cfa:	f002 027f 	and.w	r2, r2, #127	@ 0x7f
+     cfe:	bf58      	it	pl
+     d00:	4253      	negpl	r3, r2
+     d02:	b2da      	uxtb	r2, r3
+     d04:	4b1c      	ldr	r3, [pc, #112]	@ (d78 <moveBackground+0x90>)
+     d06:	701a      	strb	r2, [r3, #0]
+     d08:	2300      	movs	r3, #0
+     d0a:	607b      	str	r3, [r7, #4]
+     d0c:	e02b      	b.n	d66 <moveBackground+0x7e>
+     d0e:	2300      	movs	r3, #0
+     d10:	603b      	str	r3, [r7, #0]
+     d12:	e022      	b.n	d5a <moveBackground+0x72>
+     d14:	4b18      	ldr	r3, [pc, #96]	@ (d78 <moveBackground+0x90>)
+     d16:	781b      	ldrb	r3, [r3, #0]
+     d18:	461a      	mov	r2, r3
+     d1a:	687b      	ldr	r3, [r7, #4]
+     d1c:	4413      	add	r3, r2
+     d1e:	4259      	negs	r1, r3
+     d20:	f003 027f 	and.w	r2, r3, #127	@ 0x7f
+     d24:	f001 037f 	and.w	r3, r1, #127	@ 0x7f
+     d28:	bf58      	it	pl
+     d2a:	425a      	negpl	r2, r3
+     d2c:	4913      	ldr	r1, [pc, #76]	@ (d7c <moveBackground+0x94>)
+     d2e:	4613      	mov	r3, r2
+     d30:	005b      	lsls	r3, r3, #1
+     d32:	4413      	add	r3, r2
+     d34:	015b      	lsls	r3, r3, #5
+     d36:	683a      	ldr	r2, [r7, #0]
+     d38:	4413      	add	r3, r2
+     d3a:	f831 0013 	ldrh.w	r0, [r1, r3, lsl #1]
+     d3e:	4910      	ldr	r1, [pc, #64]	@ (d80 <moveBackground+0x98>)
+     d40:	687a      	ldr	r2, [r7, #4]
+     d42:	4613      	mov	r3, r2
+     d44:	005b      	lsls	r3, r3, #1
+     d46:	4413      	add	r3, r2
+     d48:	015b      	lsls	r3, r3, #5
+     d4a:	683a      	ldr	r2, [r7, #0]
+     d4c:	4413      	add	r3, r2
+     d4e:	4602      	mov	r2, r0
+     d50:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+     d54:	683b      	ldr	r3, [r7, #0]
+     d56:	3301      	adds	r3, #1
+     d58:	603b      	str	r3, [r7, #0]
+     d5a:	683b      	ldr	r3, [r7, #0]
+     d5c:	2b5f      	cmp	r3, #95	@ 0x5f
+     d5e:	ddd9      	ble.n	d14 <moveBackground+0x2c>
+     d60:	687b      	ldr	r3, [r7, #4]
+     d62:	3301      	adds	r3, #1
+     d64:	607b      	str	r3, [r7, #4]
+     d66:	687b      	ldr	r3, [r7, #4]
+     d68:	2b5f      	cmp	r3, #95	@ 0x5f
+     d6a:	ddd0      	ble.n	d0e <moveBackground+0x26>
+     d6c:	bf00      	nop
+     d6e:	bf00      	nop
+     d70:	370c      	adds	r7, #12
+     d72:	46bd      	mov	sp, r7
+     d74:	bc80      	pop	{r7}
+     d76:	4770      	bx	lr
+     d78:	20006258 	.word	0x20006258
+     d7c:	20000258 	.word	0x20000258
+     d80:	2000625c 	.word	0x2000625c
 
-00000cd0 <moveBackground>:
-
-void moveBackground() {
-     cd0:	b480      	push	{r7}
-     cd2:	b083      	sub	sp, #12
-     cd4:	af00      	add	r7, sp, #0
-    backgroundStart = (backgroundStart - 1) % MEMORY_SIZE;
-     cd6:	4b22      	ldr	r3, [pc, #136]	@ (d60 <moveBackground+0x90>)
-     cd8:	781b      	ldrb	r3, [r3, #0]
-     cda:	3b01      	subs	r3, #1
-     cdc:	425a      	negs	r2, r3
-     cde:	f003 037f 	and.w	r3, r3, #127	@ 0x7f
-     ce2:	f002 027f 	and.w	r2, r2, #127	@ 0x7f
-     ce6:	bf58      	it	pl
-     ce8:	4253      	negpl	r3, r2
-     cea:	b2da      	uxtb	r2, r3
-     cec:	4b1c      	ldr	r3, [pc, #112]	@ (d60 <moveBackground+0x90>)
-     cee:	701a      	strb	r2, [r3, #0]
-    for(int i = 0; i < DISPLAY_SIZE; i++) {
-     cf0:	2300      	movs	r3, #0
-     cf2:	607b      	str	r3, [r7, #4]
-     cf4:	e02b      	b.n	d4e <moveBackground+0x7e>
-        for(int j = 0; j < DISPLAY_SIZE; j++) {
-     cf6:	2300      	movs	r3, #0
-     cf8:	603b      	str	r3, [r7, #0]
-     cfa:	e022      	b.n	d42 <moveBackground+0x72>
-            screen[i][j] = background[(i+backgroundStart)%MEMORY_SIZE][j];
-     cfc:	4b18      	ldr	r3, [pc, #96]	@ (d60 <moveBackground+0x90>)
-     cfe:	781b      	ldrb	r3, [r3, #0]
-     d00:	461a      	mov	r2, r3
-     d02:	687b      	ldr	r3, [r7, #4]
-     d04:	4413      	add	r3, r2
-     d06:	4259      	negs	r1, r3
-     d08:	f003 027f 	and.w	r2, r3, #127	@ 0x7f
-     d0c:	f001 037f 	and.w	r3, r1, #127	@ 0x7f
-     d10:	bf58      	it	pl
-     d12:	425a      	negpl	r2, r3
-     d14:	4913      	ldr	r1, [pc, #76]	@ (d64 <moveBackground+0x94>)
-     d16:	4613      	mov	r3, r2
-     d18:	005b      	lsls	r3, r3, #1
-     d1a:	4413      	add	r3, r2
-     d1c:	015b      	lsls	r3, r3, #5
-     d1e:	683a      	ldr	r2, [r7, #0]
-     d20:	4413      	add	r3, r2
-     d22:	f831 0013 	ldrh.w	r0, [r1, r3, lsl #1]
-     d26:	4910      	ldr	r1, [pc, #64]	@ (d68 <moveBackground+0x98>)
-     d28:	687a      	ldr	r2, [r7, #4]
-     d2a:	4613      	mov	r3, r2
-     d2c:	005b      	lsls	r3, r3, #1
-     d2e:	4413      	add	r3, r2
-     d30:	015b      	lsls	r3, r3, #5
-     d32:	683a      	ldr	r2, [r7, #0]
-     d34:	4413      	add	r3, r2
-     d36:	4602      	mov	r2, r0
-     d38:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
-        for(int j = 0; j < DISPLAY_SIZE; j++) {
-     d3c:	683b      	ldr	r3, [r7, #0]
-     d3e:	3301      	adds	r3, #1
-     d40:	603b      	str	r3, [r7, #0]
-     d42:	683b      	ldr	r3, [r7, #0]
-     d44:	2b5f      	cmp	r3, #95	@ 0x5f
-     d46:	ddd9      	ble.n	cfc <moveBackground+0x2c>
-    for(int i = 0; i < DISPLAY_SIZE; i++) {
-     d48:	687b      	ldr	r3, [r7, #4]
-     d4a:	3301      	adds	r3, #1
-     d4c:	607b      	str	r3, [r7, #4]
-     d4e:	687b      	ldr	r3, [r7, #4]
-     d50:	2b5f      	cmp	r3, #95	@ 0x5f
-     d52:	ddd0      	ble.n	cf6 <moveBackground+0x26>
-        }
-    }
-}
-     d54:	bf00      	nop
-     d56:	bf00      	nop
-     d58:	370c      	adds	r7, #12
-     d5a:	46bd      	mov	sp, r7
-     d5c:	bc80      	pop	{r7}
-     d5e:	4770      	bx	lr
-     d60:	20006258 	.word	0x20006258
-     d64:	20000258 	.word	0x20000258
-     d68:	2000625c 	.word	0x2000625c
-
-00000d6c <intersects>:
-
-
-//---------------------------------Collision detection---------------------------------
-bool intersects(int c, int d, int cs, int ds, int a, int b, int as, int bs) {
-     d6c:	b480      	push	{r7}
-     d6e:	b087      	sub	sp, #28
-     d70:	af00      	add	r7, sp, #0
-     d72:	60f8      	str	r0, [r7, #12]
-     d74:	60b9      	str	r1, [r7, #8]
-     d76:	607a      	str	r2, [r7, #4]
-     d78:	603b      	str	r3, [r7, #0]
-    bool x_axis = (c >= a) && (c <= a+as);
-     d7a:	68fa      	ldr	r2, [r7, #12]
-     d7c:	6a3b      	ldr	r3, [r7, #32]
-     d7e:	429a      	cmp	r2, r3
-     d80:	db07      	blt.n	d92 <intersects+0x26>
-     d82:	6a3a      	ldr	r2, [r7, #32]
-     d84:	6abb      	ldr	r3, [r7, #40]	@ 0x28
-     d86:	4413      	add	r3, r2
-     d88:	68fa      	ldr	r2, [r7, #12]
-     d8a:	429a      	cmp	r2, r3
-     d8c:	dc01      	bgt.n	d92 <intersects+0x26>
-     d8e:	2301      	movs	r3, #1
-     d90:	e000      	b.n	d94 <intersects+0x28>
-     d92:	2300      	movs	r3, #0
-     d94:	75fb      	strb	r3, [r7, #23]
-     d96:	7dfb      	ldrb	r3, [r7, #23]
-     d98:	f003 0301 	and.w	r3, r3, #1
-     d9c:	75fb      	strb	r3, [r7, #23]
-    bool y_axis = ((d >= b) && (d <= b+bs)) || ((d+ds >= b) && (d+ds <= b+bs));
-     d9e:	68ba      	ldr	r2, [r7, #8]
-     da0:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
+00000d84 <intersects>:
+     d84:	b480      	push	{r7}
+     d86:	b087      	sub	sp, #28
+     d88:	af00      	add	r7, sp, #0
+     d8a:	60f8      	str	r0, [r7, #12]
+     d8c:	60b9      	str	r1, [r7, #8]
+     d8e:	607a      	str	r2, [r7, #4]
+     d90:	603b      	str	r3, [r7, #0]
+     d92:	68fa      	ldr	r2, [r7, #12]
+     d94:	6a3b      	ldr	r3, [r7, #32]
+     d96:	429a      	cmp	r2, r3
+     d98:	db07      	blt.n	daa <intersects+0x26>
+     d9a:	6a3a      	ldr	r2, [r7, #32]
+     d9c:	6abb      	ldr	r3, [r7, #40]	@ 0x28
+     d9e:	4413      	add	r3, r2
+     da0:	68fa      	ldr	r2, [r7, #12]
      da2:	429a      	cmp	r2, r3
-     da4:	db05      	blt.n	db2 <intersects+0x46>
-     da6:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
-     da8:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
-     daa:	4413      	add	r3, r2
-     dac:	68ba      	ldr	r2, [r7, #8]
-     dae:	429a      	cmp	r2, r3
-     db0:	dd0d      	ble.n	dce <intersects+0x62>
-     db2:	68ba      	ldr	r2, [r7, #8]
-     db4:	683b      	ldr	r3, [r7, #0]
-     db6:	4413      	add	r3, r2
-     db8:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+     da4:	dc01      	bgt.n	daa <intersects+0x26>
+     da6:	2301      	movs	r3, #1
+     da8:	e000      	b.n	dac <intersects+0x28>
+     daa:	2300      	movs	r3, #0
+     dac:	75fb      	strb	r3, [r7, #23]
+     dae:	7dfb      	ldrb	r3, [r7, #23]
+     db0:	f003 0301 	and.w	r3, r3, #1
+     db4:	75fb      	strb	r3, [r7, #23]
+     db6:	68ba      	ldr	r2, [r7, #8]
+     db8:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
      dba:	429a      	cmp	r2, r3
-     dbc:	dc09      	bgt.n	dd2 <intersects+0x66>
-     dbe:	68ba      	ldr	r2, [r7, #8]
-     dc0:	683b      	ldr	r3, [r7, #0]
-     dc2:	441a      	add	r2, r3
-     dc4:	6a79      	ldr	r1, [r7, #36]	@ 0x24
-     dc6:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
-     dc8:	440b      	add	r3, r1
-     dca:	429a      	cmp	r2, r3
-     dcc:	dc01      	bgt.n	dd2 <intersects+0x66>
-     dce:	2301      	movs	r3, #1
-     dd0:	e000      	b.n	dd4 <intersects+0x68>
-     dd2:	2300      	movs	r3, #0
-     dd4:	75bb      	strb	r3, [r7, #22]
-     dd6:	7dbb      	ldrb	r3, [r7, #22]
-     dd8:	f003 0301 	and.w	r3, r3, #1
-     ddc:	75bb      	strb	r3, [r7, #22]
-    return x_axis && y_axis;
-     dde:	7dfb      	ldrb	r3, [r7, #23]
-     de0:	2b00      	cmp	r3, #0
-     de2:	d004      	beq.n	dee <intersects+0x82>
-     de4:	7dbb      	ldrb	r3, [r7, #22]
-     de6:	2b00      	cmp	r3, #0
-     de8:	d001      	beq.n	dee <intersects+0x82>
-     dea:	2301      	movs	r3, #1
-     dec:	e000      	b.n	df0 <intersects+0x84>
-     dee:	2300      	movs	r3, #0
+     dbc:	db05      	blt.n	dca <intersects+0x46>
+     dbe:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+     dc0:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+     dc2:	4413      	add	r3, r2
+     dc4:	68ba      	ldr	r2, [r7, #8]
+     dc6:	429a      	cmp	r2, r3
+     dc8:	dd0d      	ble.n	de6 <intersects+0x62>
+     dca:	68ba      	ldr	r2, [r7, #8]
+     dcc:	683b      	ldr	r3, [r7, #0]
+     dce:	4413      	add	r3, r2
+     dd0:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+     dd2:	429a      	cmp	r2, r3
+     dd4:	dc09      	bgt.n	dea <intersects+0x66>
+     dd6:	68ba      	ldr	r2, [r7, #8]
+     dd8:	683b      	ldr	r3, [r7, #0]
+     dda:	441a      	add	r2, r3
+     ddc:	6a79      	ldr	r1, [r7, #36]	@ 0x24
+     dde:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+     de0:	440b      	add	r3, r1
+     de2:	429a      	cmp	r2, r3
+     de4:	dc01      	bgt.n	dea <intersects+0x66>
+     de6:	2301      	movs	r3, #1
+     de8:	e000      	b.n	dec <intersects+0x68>
+     dea:	2300      	movs	r3, #0
+     dec:	75bb      	strb	r3, [r7, #22]
+     dee:	7dbb      	ldrb	r3, [r7, #22]
      df0:	f003 0301 	and.w	r3, r3, #1
-     df4:	b2db      	uxtb	r3, r3
-}
-     df6:	4618      	mov	r0, r3
-     df8:	371c      	adds	r7, #28
-     dfa:	46bd      	mov	sp, r7
-     dfc:	bc80      	pop	{r7}
-     dfe:	4770      	bx	lr
-
-00000e00 <addSpaceship>:
-    {GREEN,BLACK,BLACK,RED,RED,BLACK,BLACK,GREEN},
-    {BLACK,BLACK,BLACK,RED,RED,BLACK,BLACK,BLACK},
-};
-
-
-void addSpaceship() {
-     e00:	b490      	push	{r4, r7}
-     e02:	b082      	sub	sp, #8
-     e04:	af00      	add	r7, sp, #0
-    for (int i = 0; i < SHIP_SIZE_X; i++) {
+     df4:	75bb      	strb	r3, [r7, #22]
+     df6:	7dfb      	ldrb	r3, [r7, #23]
+     df8:	2b00      	cmp	r3, #0
+     dfa:	d004      	beq.n	e06 <intersects+0x82>
+     dfc:	7dbb      	ldrb	r3, [r7, #22]
+     dfe:	2b00      	cmp	r3, #0
+     e00:	d001      	beq.n	e06 <intersects+0x82>
+     e02:	2301      	movs	r3, #1
+     e04:	e000      	b.n	e08 <intersects+0x84>
      e06:	2300      	movs	r3, #0
-     e08:	607b      	str	r3, [r7, #4]
-     e0a:	e02e      	b.n	e6a <addSpaceship+0x6a>
-        for (int j = 0; j < SHIP_SIZE_Y; j++) {
-     e0c:	2300      	movs	r3, #0
-     e0e:	603b      	str	r3, [r7, #0]
-     e10:	e025      	b.n	e5e <addSpaceship+0x5e>
-            if (spaceship[i][j] != 0)
-     e12:	491b      	ldr	r1, [pc, #108]	@ (e80 <addSpaceship+0x80>)
-     e14:	687b      	ldr	r3, [r7, #4]
-     e16:	00da      	lsls	r2, r3, #3
-     e18:	683b      	ldr	r3, [r7, #0]
-     e1a:	4413      	add	r3, r2
-     e1c:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-     e20:	2b00      	cmp	r3, #0
-     e22:	d019      	beq.n	e58 <addSpaceship+0x58>
-                screen[spaceX + i][spaceY + j] = spaceship[i][j];
-     e24:	4b17      	ldr	r3, [pc, #92]	@ (e84 <addSpaceship+0x84>)
-     e26:	781b      	ldrb	r3, [r3, #0]
-     e28:	461a      	mov	r2, r3
-     e2a:	687b      	ldr	r3, [r7, #4]
-     e2c:	441a      	add	r2, r3
-     e2e:	4b16      	ldr	r3, [pc, #88]	@ (e88 <addSpaceship+0x88>)
-     e30:	781b      	ldrb	r3, [r3, #0]
-     e32:	4619      	mov	r1, r3
-     e34:	683b      	ldr	r3, [r7, #0]
-     e36:	4419      	add	r1, r3
-     e38:	4c11      	ldr	r4, [pc, #68]	@ (e80 <addSpaceship+0x80>)
-     e3a:	687b      	ldr	r3, [r7, #4]
-     e3c:	00d8      	lsls	r0, r3, #3
-     e3e:	683b      	ldr	r3, [r7, #0]
-     e40:	4403      	add	r3, r0
-     e42:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
-     e46:	4811      	ldr	r0, [pc, #68]	@ (e8c <addSpaceship+0x8c>)
-     e48:	4613      	mov	r3, r2
-     e4a:	005b      	lsls	r3, r3, #1
-     e4c:	4413      	add	r3, r2
-     e4e:	015b      	lsls	r3, r3, #5
-     e50:	440b      	add	r3, r1
-     e52:	4622      	mov	r2, r4
-     e54:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
-        for (int j = 0; j < SHIP_SIZE_Y; j++) {
-     e58:	683b      	ldr	r3, [r7, #0]
-     e5a:	3301      	adds	r3, #1
-     e5c:	603b      	str	r3, [r7, #0]
-     e5e:	683b      	ldr	r3, [r7, #0]
-     e60:	2b07      	cmp	r3, #7
-     e62:	ddd6      	ble.n	e12 <addSpaceship+0x12>
-    for (int i = 0; i < SHIP_SIZE_X; i++) {
-     e64:	687b      	ldr	r3, [r7, #4]
-     e66:	3301      	adds	r3, #1
-     e68:	607b      	str	r3, [r7, #4]
-     e6a:	687b      	ldr	r3, [r7, #4]
-     e6c:	2b0c      	cmp	r3, #12
-     e6e:	ddcd      	ble.n	e0c <addSpaceship+0xc>
-        }
-    }
-    display_update_needed = true;
-     e70:	4b07      	ldr	r3, [pc, #28]	@ (e90 <addSpaceship+0x90>)
-     e72:	2201      	movs	r2, #1
-     e74:	701a      	strb	r2, [r3, #0]
-}
-     e76:	bf00      	nop
-     e78:	3708      	adds	r7, #8
-     e7a:	46bd      	mov	sp, r7
-     e7c:	bc90      	pop	{r4, r7}
-     e7e:	4770      	bx	lr
-     e80:	00001ccc 	.word	0x00001ccc
-     e84:	20000001 	.word	0x20000001
-     e88:	20000002 	.word	0x20000002
-     e8c:	2000625c 	.word	0x2000625c
-     e90:	20000000 	.word	0x20000000
+     e08:	f003 0301 	and.w	r3, r3, #1
+     e0c:	b2db      	uxtb	r3, r3
+     e0e:	4618      	mov	r0, r3
+     e10:	371c      	adds	r7, #28
+     e12:	46bd      	mov	sp, r7
+     e14:	bc80      	pop	{r7}
+     e16:	4770      	bx	lr
 
-00000e94 <removeSpaceship>:
+00000e18 <addSpaceship>:
+     e18:	b490      	push	{r4, r7}
+     e1a:	b082      	sub	sp, #8
+     e1c:	af00      	add	r7, sp, #0
+     e1e:	2300      	movs	r3, #0
+     e20:	607b      	str	r3, [r7, #4]
+     e22:	e02e      	b.n	e82 <addSpaceship+0x6a>
+     e24:	2300      	movs	r3, #0
+     e26:	603b      	str	r3, [r7, #0]
+     e28:	e025      	b.n	e76 <addSpaceship+0x5e>
+     e2a:	491a      	ldr	r1, [pc, #104]	@ (e94 <addSpaceship+0x7c>)
+     e2c:	687b      	ldr	r3, [r7, #4]
+     e2e:	00da      	lsls	r2, r3, #3
+     e30:	683b      	ldr	r3, [r7, #0]
+     e32:	4413      	add	r3, r2
+     e34:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+     e38:	2b00      	cmp	r3, #0
+     e3a:	d019      	beq.n	e70 <addSpaceship+0x58>
+     e3c:	4b16      	ldr	r3, [pc, #88]	@ (e98 <addSpaceship+0x80>)
+     e3e:	781b      	ldrb	r3, [r3, #0]
+     e40:	461a      	mov	r2, r3
+     e42:	687b      	ldr	r3, [r7, #4]
+     e44:	441a      	add	r2, r3
+     e46:	4b15      	ldr	r3, [pc, #84]	@ (e9c <addSpaceship+0x84>)
+     e48:	781b      	ldrb	r3, [r3, #0]
+     e4a:	4619      	mov	r1, r3
+     e4c:	683b      	ldr	r3, [r7, #0]
+     e4e:	4419      	add	r1, r3
+     e50:	4c10      	ldr	r4, [pc, #64]	@ (e94 <addSpaceship+0x7c>)
+     e52:	687b      	ldr	r3, [r7, #4]
+     e54:	00d8      	lsls	r0, r3, #3
+     e56:	683b      	ldr	r3, [r7, #0]
+     e58:	4403      	add	r3, r0
+     e5a:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+     e5e:	4810      	ldr	r0, [pc, #64]	@ (ea0 <addSpaceship+0x88>)
+     e60:	4613      	mov	r3, r2
+     e62:	005b      	lsls	r3, r3, #1
+     e64:	4413      	add	r3, r2
+     e66:	015b      	lsls	r3, r3, #5
+     e68:	440b      	add	r3, r1
+     e6a:	4622      	mov	r2, r4
+     e6c:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+     e70:	683b      	ldr	r3, [r7, #0]
+     e72:	3301      	adds	r3, #1
+     e74:	603b      	str	r3, [r7, #0]
+     e76:	683b      	ldr	r3, [r7, #0]
+     e78:	2b07      	cmp	r3, #7
+     e7a:	ddd6      	ble.n	e2a <addSpaceship+0x12>
+     e7c:	687b      	ldr	r3, [r7, #4]
+     e7e:	3301      	adds	r3, #1
+     e80:	607b      	str	r3, [r7, #4]
+     e82:	687b      	ldr	r3, [r7, #4]
+     e84:	2b0c      	cmp	r3, #12
+     e86:	ddcd      	ble.n	e24 <addSpaceship+0xc>
+     e88:	bf00      	nop
+     e8a:	bf00      	nop
+     e8c:	3708      	adds	r7, #8
+     e8e:	46bd      	mov	sp, r7
+     e90:	bc90      	pop	{r4, r7}
+     e92:	4770      	bx	lr
+     e94:	00001da0 	.word	0x00001da0
+     e98:	20000000 	.word	0x20000000
+     e9c:	20000001 	.word	0x20000001
+     ea0:	2000625c 	.word	0x2000625c
 
-void removeSpaceship() {
-     e94:	b4b0      	push	{r4, r5, r7}
-     e96:	b083      	sub	sp, #12
-     e98:	af00      	add	r7, sp, #0
-    for (int i = 0; i < SHIP_SIZE_X; i++) {
-     e9a:	2300      	movs	r3, #0
-     e9c:	607b      	str	r3, [r7, #4]
-     e9e:	e039      	b.n	f14 <removeSpaceship+0x80>
-        for (int j = 0; j < SHIP_SIZE_Y; j++) {
-     ea0:	2300      	movs	r3, #0
-     ea2:	603b      	str	r3, [r7, #0]
-     ea4:	e030      	b.n	f08 <removeSpaceship+0x74>
-            if (spaceship[i][j] != 0)
-     ea6:	4921      	ldr	r1, [pc, #132]	@ (f2c <removeSpaceship+0x98>)
-     ea8:	687b      	ldr	r3, [r7, #4]
-     eaa:	00da      	lsls	r2, r3, #3
-     eac:	683b      	ldr	r3, [r7, #0]
-     eae:	4413      	add	r3, r2
-     eb0:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-     eb4:	2b00      	cmp	r3, #0
-     eb6:	d024      	beq.n	f02 <removeSpaceship+0x6e>
-                screen[spaceX + i][spaceY + j] = background[spaceX + i][spaceY + j];
-     eb8:	4b1d      	ldr	r3, [pc, #116]	@ (f30 <removeSpaceship+0x9c>)
-     eba:	781b      	ldrb	r3, [r3, #0]
-     ebc:	461a      	mov	r2, r3
-     ebe:	687b      	ldr	r3, [r7, #4]
-     ec0:	18d1      	adds	r1, r2, r3
-     ec2:	4b1c      	ldr	r3, [pc, #112]	@ (f34 <removeSpaceship+0xa0>)
-     ec4:	781b      	ldrb	r3, [r3, #0]
-     ec6:	461a      	mov	r2, r3
-     ec8:	683b      	ldr	r3, [r7, #0]
-     eca:	18d4      	adds	r4, r2, r3
-     ecc:	4b18      	ldr	r3, [pc, #96]	@ (f30 <removeSpaceship+0x9c>)
-     ece:	781b      	ldrb	r3, [r3, #0]
-     ed0:	461a      	mov	r2, r3
-     ed2:	687b      	ldr	r3, [r7, #4]
-     ed4:	441a      	add	r2, r3
-     ed6:	4b17      	ldr	r3, [pc, #92]	@ (f34 <removeSpaceship+0xa0>)
-     ed8:	781b      	ldrb	r3, [r3, #0]
-     eda:	4618      	mov	r0, r3
-     edc:	683b      	ldr	r3, [r7, #0]
-     ede:	4418      	add	r0, r3
-     ee0:	4d15      	ldr	r5, [pc, #84]	@ (f38 <removeSpaceship+0xa4>)
-     ee2:	460b      	mov	r3, r1
-     ee4:	005b      	lsls	r3, r3, #1
-     ee6:	440b      	add	r3, r1
-     ee8:	015b      	lsls	r3, r3, #5
-     eea:	4423      	add	r3, r4
-     eec:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
-     ef0:	4912      	ldr	r1, [pc, #72]	@ (f3c <removeSpaceship+0xa8>)
-     ef2:	4613      	mov	r3, r2
+00000ea4 <removeSpaceship>:
+     ea4:	b4b0      	push	{r4, r5, r7}
+     ea6:	b083      	sub	sp, #12
+     ea8:	af00      	add	r7, sp, #0
+     eaa:	2300      	movs	r3, #0
+     eac:	607b      	str	r3, [r7, #4]
+     eae:	e039      	b.n	f24 <removeSpaceship+0x80>
+     eb0:	2300      	movs	r3, #0
+     eb2:	603b      	str	r3, [r7, #0]
+     eb4:	e030      	b.n	f18 <removeSpaceship+0x74>
+     eb6:	4920      	ldr	r1, [pc, #128]	@ (f38 <removeSpaceship+0x94>)
+     eb8:	687b      	ldr	r3, [r7, #4]
+     eba:	00da      	lsls	r2, r3, #3
+     ebc:	683b      	ldr	r3, [r7, #0]
+     ebe:	4413      	add	r3, r2
+     ec0:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+     ec4:	2b00      	cmp	r3, #0
+     ec6:	d024      	beq.n	f12 <removeSpaceship+0x6e>
+     ec8:	4b1c      	ldr	r3, [pc, #112]	@ (f3c <removeSpaceship+0x98>)
+     eca:	781b      	ldrb	r3, [r3, #0]
+     ecc:	461a      	mov	r2, r3
+     ece:	687b      	ldr	r3, [r7, #4]
+     ed0:	18d1      	adds	r1, r2, r3
+     ed2:	4b1b      	ldr	r3, [pc, #108]	@ (f40 <removeSpaceship+0x9c>)
+     ed4:	781b      	ldrb	r3, [r3, #0]
+     ed6:	461a      	mov	r2, r3
+     ed8:	683b      	ldr	r3, [r7, #0]
+     eda:	18d4      	adds	r4, r2, r3
+     edc:	4b17      	ldr	r3, [pc, #92]	@ (f3c <removeSpaceship+0x98>)
+     ede:	781b      	ldrb	r3, [r3, #0]
+     ee0:	461a      	mov	r2, r3
+     ee2:	687b      	ldr	r3, [r7, #4]
+     ee4:	441a      	add	r2, r3
+     ee6:	4b16      	ldr	r3, [pc, #88]	@ (f40 <removeSpaceship+0x9c>)
+     ee8:	781b      	ldrb	r3, [r3, #0]
+     eea:	4618      	mov	r0, r3
+     eec:	683b      	ldr	r3, [r7, #0]
+     eee:	4418      	add	r0, r3
+     ef0:	4d14      	ldr	r5, [pc, #80]	@ (f44 <removeSpaceship+0xa0>)
+     ef2:	460b      	mov	r3, r1
      ef4:	005b      	lsls	r3, r3, #1
-     ef6:	4413      	add	r3, r2
+     ef6:	440b      	add	r3, r1
      ef8:	015b      	lsls	r3, r3, #5
-     efa:	4403      	add	r3, r0
-     efc:	4622      	mov	r2, r4
-     efe:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
-        for (int j = 0; j < SHIP_SIZE_Y; j++) {
-     f02:	683b      	ldr	r3, [r7, #0]
-     f04:	3301      	adds	r3, #1
-     f06:	603b      	str	r3, [r7, #0]
-     f08:	683b      	ldr	r3, [r7, #0]
-     f0a:	2b07      	cmp	r3, #7
-     f0c:	ddcb      	ble.n	ea6 <removeSpaceship+0x12>
-    for (int i = 0; i < SHIP_SIZE_X; i++) {
-     f0e:	687b      	ldr	r3, [r7, #4]
-     f10:	3301      	adds	r3, #1
-     f12:	607b      	str	r3, [r7, #4]
-     f14:	687b      	ldr	r3, [r7, #4]
-     f16:	2b0c      	cmp	r3, #12
-     f18:	ddc2      	ble.n	ea0 <removeSpaceship+0xc>
-        }
-    }
-    display_update_needed = true;
-     f1a:	4b09      	ldr	r3, [pc, #36]	@ (f40 <removeSpaceship+0xac>)
-     f1c:	2201      	movs	r2, #1
-     f1e:	701a      	strb	r2, [r3, #0]
-}
-     f20:	bf00      	nop
-     f22:	370c      	adds	r7, #12
-     f24:	46bd      	mov	sp, r7
-     f26:	bcb0      	pop	{r4, r5, r7}
-     f28:	4770      	bx	lr
+     efa:	4423      	add	r3, r4
+     efc:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+     f00:	4911      	ldr	r1, [pc, #68]	@ (f48 <removeSpaceship+0xa4>)
+     f02:	4613      	mov	r3, r2
+     f04:	005b      	lsls	r3, r3, #1
+     f06:	4413      	add	r3, r2
+     f08:	015b      	lsls	r3, r3, #5
+     f0a:	4403      	add	r3, r0
+     f0c:	4622      	mov	r2, r4
+     f0e:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+     f12:	683b      	ldr	r3, [r7, #0]
+     f14:	3301      	adds	r3, #1
+     f16:	603b      	str	r3, [r7, #0]
+     f18:	683b      	ldr	r3, [r7, #0]
+     f1a:	2b07      	cmp	r3, #7
+     f1c:	ddcb      	ble.n	eb6 <removeSpaceship+0x12>
+     f1e:	687b      	ldr	r3, [r7, #4]
+     f20:	3301      	adds	r3, #1
+     f22:	607b      	str	r3, [r7, #4]
+     f24:	687b      	ldr	r3, [r7, #4]
+     f26:	2b0c      	cmp	r3, #12
+     f28:	ddc2      	ble.n	eb0 <removeSpaceship+0xc>
      f2a:	bf00      	nop
-     f2c:	00001ccc 	.word	0x00001ccc
-     f30:	20000001 	.word	0x20000001
-     f34:	20000002 	.word	0x20000002
-     f38:	20000258 	.word	0x20000258
-     f3c:	2000625c 	.word	0x2000625c
-     f40:	20000000 	.word	0x20000000
+     f2c:	bf00      	nop
+     f2e:	370c      	adds	r7, #12
+     f30:	46bd      	mov	sp, r7
+     f32:	bcb0      	pop	{r4, r5, r7}
+     f34:	4770      	bx	lr
+     f36:	bf00      	nop
+     f38:	00001da0 	.word	0x00001da0
+     f3c:	20000000 	.word	0x20000000
+     f40:	20000001 	.word	0x20000001
+     f44:	20000258 	.word	0x20000258
+     f48:	2000625c 	.word	0x2000625c
 
-00000f44 <updateSpacePos>:
-
-void updateSpacePos(uint8_t joyX, uint8_t joyY) {
-     f44:	b580      	push	{r7, lr}
-     f46:	b084      	sub	sp, #16
-     f48:	af00      	add	r7, sp, #0
-     f4a:	4603      	mov	r3, r0
-     f4c:	460a      	mov	r2, r1
-     f4e:	71fb      	strb	r3, [r7, #7]
-     f50:	4613      	mov	r3, r2
-     f52:	71bb      	strb	r3, [r7, #6]
-    int x = 3 - joyX;
-     f54:	79fb      	ldrb	r3, [r7, #7]
-     f56:	f1c3 0303 	rsb	r3, r3, #3
-     f5a:	60fb      	str	r3, [r7, #12]
-    int y = joyY - 3;
-     f5c:	79bb      	ldrb	r3, [r7, #6]
-     f5e:	3b03      	subs	r3, #3
-     f60:	60bb      	str	r3, [r7, #8]
-
-    if (x || y) {
-     f62:	68fb      	ldr	r3, [r7, #12]
-     f64:	2b00      	cmp	r3, #0
-     f66:	d102      	bne.n	f6e <updateSpacePos+0x2a>
-     f68:	68bb      	ldr	r3, [r7, #8]
-     f6a:	2b00      	cmp	r3, #0
-     f6c:	d039      	beq.n	fe2 <updateSpacePos+0x9e>
-        x = (int)spaceX + x;
-     f6e:	4b1f      	ldr	r3, [pc, #124]	@ (fec <updateSpacePos+0xa8>)
-     f70:	781b      	ldrb	r3, [r3, #0]
-     f72:	461a      	mov	r2, r3
-     f74:	68fb      	ldr	r3, [r7, #12]
-     f76:	4413      	add	r3, r2
-     f78:	60fb      	str	r3, [r7, #12]
-        y = (int)spaceY + y;
-     f7a:	4b1d      	ldr	r3, [pc, #116]	@ (ff0 <updateSpacePos+0xac>)
-     f7c:	781b      	ldrb	r3, [r3, #0]
-     f7e:	461a      	mov	r2, r3
-     f80:	68bb      	ldr	r3, [r7, #8]
-     f82:	4413      	add	r3, r2
-     f84:	60bb      	str	r3, [r7, #8]
-
-        if (x < 0)              x = 0;
-     f86:	68fb      	ldr	r3, [r7, #12]
-     f88:	2b00      	cmp	r3, #0
-     f8a:	da02      	bge.n	f92 <updateSpacePos+0x4e>
-     f8c:	2300      	movs	r3, #0
-     f8e:	60fb      	str	r3, [r7, #12]
-     f90:	e004      	b.n	f9c <updateSpacePos+0x58>
-        else if (x > MAX_SHIP_POS_X)     x = MAX_SHIP_POS_X;
-     f92:	68fb      	ldr	r3, [r7, #12]
-     f94:	2b53      	cmp	r3, #83	@ 0x53
-     f96:	dd01      	ble.n	f9c <updateSpacePos+0x58>
-     f98:	2353      	movs	r3, #83	@ 0x53
-     f9a:	60fb      	str	r3, [r7, #12]
-
-        if (y < 0)              y = 0;
-     f9c:	68bb      	ldr	r3, [r7, #8]
-     f9e:	2b00      	cmp	r3, #0
-     fa0:	da02      	bge.n	fa8 <updateSpacePos+0x64>
-     fa2:	2300      	movs	r3, #0
-     fa4:	60bb      	str	r3, [r7, #8]
-     fa6:	e004      	b.n	fb2 <updateSpacePos+0x6e>
-        else if (y > MAX_SHIP_POS_Y)     y = MAX_SHIP_POS_Y;
-     fa8:	68bb      	ldr	r3, [r7, #8]
-     faa:	2b58      	cmp	r3, #88	@ 0x58
-     fac:	dd01      	ble.n	fb2 <updateSpacePos+0x6e>
-     fae:	2358      	movs	r3, #88	@ 0x58
-     fb0:	60bb      	str	r3, [r7, #8]
-
-        if (x != spaceX || y != spaceY) {
-     fb2:	4b0e      	ldr	r3, [pc, #56]	@ (fec <updateSpacePos+0xa8>)
-     fb4:	781b      	ldrb	r3, [r3, #0]
-     fb6:	461a      	mov	r2, r3
-     fb8:	68fb      	ldr	r3, [r7, #12]
-     fba:	4293      	cmp	r3, r2
-     fbc:	d105      	bne.n	fca <updateSpacePos+0x86>
-     fbe:	4b0c      	ldr	r3, [pc, #48]	@ (ff0 <updateSpacePos+0xac>)
-     fc0:	781b      	ldrb	r3, [r3, #0]
-     fc2:	461a      	mov	r2, r3
-     fc4:	68bb      	ldr	r3, [r7, #8]
-     fc6:	4293      	cmp	r3, r2
-     fc8:	d00b      	beq.n	fe2 <updateSpacePos+0x9e>
-            removeSpaceship();
-     fca:	f7ff ff63 	bl	e94 <removeSpaceship>
-            spaceX = (uint8_t)x;
-     fce:	68fb      	ldr	r3, [r7, #12]
-     fd0:	b2da      	uxtb	r2, r3
-     fd2:	4b06      	ldr	r3, [pc, #24]	@ (fec <updateSpacePos+0xa8>)
-     fd4:	701a      	strb	r2, [r3, #0]
-            spaceY = (uint8_t)y;
-     fd6:	68bb      	ldr	r3, [r7, #8]
+00000f4c <updateSpacePos>:
+     f4c:	b580      	push	{r7, lr}
+     f4e:	b084      	sub	sp, #16
+     f50:	af00      	add	r7, sp, #0
+     f52:	4603      	mov	r3, r0
+     f54:	460a      	mov	r2, r1
+     f56:	71fb      	strb	r3, [r7, #7]
+     f58:	4613      	mov	r3, r2
+     f5a:	71bb      	strb	r3, [r7, #6]
+     f5c:	79fb      	ldrb	r3, [r7, #7]
+     f5e:	f1c3 0303 	rsb	r3, r3, #3
+     f62:	60fb      	str	r3, [r7, #12]
+     f64:	79bb      	ldrb	r3, [r7, #6]
+     f66:	3b03      	subs	r3, #3
+     f68:	60bb      	str	r3, [r7, #8]
+     f6a:	68fb      	ldr	r3, [r7, #12]
+     f6c:	2b00      	cmp	r3, #0
+     f6e:	d102      	bne.n	f76 <updateSpacePos+0x2a>
+     f70:	68bb      	ldr	r3, [r7, #8]
+     f72:	2b00      	cmp	r3, #0
+     f74:	d039      	beq.n	fea <updateSpacePos+0x9e>
+     f76:	4b1f      	ldr	r3, [pc, #124]	@ (ff4 <updateSpacePos+0xa8>)
+     f78:	781b      	ldrb	r3, [r3, #0]
+     f7a:	461a      	mov	r2, r3
+     f7c:	68fb      	ldr	r3, [r7, #12]
+     f7e:	4413      	add	r3, r2
+     f80:	60fb      	str	r3, [r7, #12]
+     f82:	4b1d      	ldr	r3, [pc, #116]	@ (ff8 <updateSpacePos+0xac>)
+     f84:	781b      	ldrb	r3, [r3, #0]
+     f86:	461a      	mov	r2, r3
+     f88:	68bb      	ldr	r3, [r7, #8]
+     f8a:	4413      	add	r3, r2
+     f8c:	60bb      	str	r3, [r7, #8]
+     f8e:	68fb      	ldr	r3, [r7, #12]
+     f90:	2b00      	cmp	r3, #0
+     f92:	da02      	bge.n	f9a <updateSpacePos+0x4e>
+     f94:	2300      	movs	r3, #0
+     f96:	60fb      	str	r3, [r7, #12]
+     f98:	e004      	b.n	fa4 <updateSpacePos+0x58>
+     f9a:	68fb      	ldr	r3, [r7, #12]
+     f9c:	2b53      	cmp	r3, #83	@ 0x53
+     f9e:	dd01      	ble.n	fa4 <updateSpacePos+0x58>
+     fa0:	2353      	movs	r3, #83	@ 0x53
+     fa2:	60fb      	str	r3, [r7, #12]
+     fa4:	68bb      	ldr	r3, [r7, #8]
+     fa6:	2b00      	cmp	r3, #0
+     fa8:	da02      	bge.n	fb0 <updateSpacePos+0x64>
+     faa:	2300      	movs	r3, #0
+     fac:	60bb      	str	r3, [r7, #8]
+     fae:	e004      	b.n	fba <updateSpacePos+0x6e>
+     fb0:	68bb      	ldr	r3, [r7, #8]
+     fb2:	2b58      	cmp	r3, #88	@ 0x58
+     fb4:	dd01      	ble.n	fba <updateSpacePos+0x6e>
+     fb6:	2358      	movs	r3, #88	@ 0x58
+     fb8:	60bb      	str	r3, [r7, #8]
+     fba:	4b0e      	ldr	r3, [pc, #56]	@ (ff4 <updateSpacePos+0xa8>)
+     fbc:	781b      	ldrb	r3, [r3, #0]
+     fbe:	461a      	mov	r2, r3
+     fc0:	68fb      	ldr	r3, [r7, #12]
+     fc2:	4293      	cmp	r3, r2
+     fc4:	d105      	bne.n	fd2 <updateSpacePos+0x86>
+     fc6:	4b0c      	ldr	r3, [pc, #48]	@ (ff8 <updateSpacePos+0xac>)
+     fc8:	781b      	ldrb	r3, [r3, #0]
+     fca:	461a      	mov	r2, r3
+     fcc:	68bb      	ldr	r3, [r7, #8]
+     fce:	4293      	cmp	r3, r2
+     fd0:	d00b      	beq.n	fea <updateSpacePos+0x9e>
+     fd2:	f7ff ff67 	bl	ea4 <removeSpaceship>
+     fd6:	68fb      	ldr	r3, [r7, #12]
      fd8:	b2da      	uxtb	r2, r3
-     fda:	4b05      	ldr	r3, [pc, #20]	@ (ff0 <updateSpacePos+0xac>)
+     fda:	4b06      	ldr	r3, [pc, #24]	@ (ff4 <updateSpacePos+0xa8>)
      fdc:	701a      	strb	r2, [r3, #0]
-            addSpaceship();
-     fde:	f7ff ff0f 	bl	e00 <addSpaceship>
-        }
-    }
-}
-     fe2:	bf00      	nop
-     fe4:	3710      	adds	r7, #16
-     fe6:	46bd      	mov	sp, r7
-     fe8:	bd80      	pop	{r7, pc}
+     fde:	68bb      	ldr	r3, [r7, #8]
+     fe0:	b2da      	uxtb	r2, r3
+     fe2:	4b05      	ldr	r3, [pc, #20]	@ (ff8 <updateSpacePos+0xac>)
+     fe4:	701a      	strb	r2, [r3, #0]
+     fe6:	f7ff ff17 	bl	e18 <addSpaceship>
      fea:	bf00      	nop
-     fec:	20000001 	.word	0x20000001
-     ff0:	20000002 	.word	0x20000002
+     fec:	3710      	adds	r7, #16
+     fee:	46bd      	mov	sp, r7
+     ff0:	bd80      	pop	{r7, pc}
+     ff2:	bf00      	nop
+     ff4:	20000000 	.word	0x20000000
+     ff8:	20000001 	.word	0x20000001
 
-00000ff4 <addEnemies>:
-    {BLACK, BLACK, YELLOW, BLACK, BLACK, YELLOW, BLACK, BLACK}
-};
-uint8_t activeEnemyCount = 0;
-
-
-void addEnemies() {
-     ff4:	b580      	push	{r7, lr}
-     ff6:	b082      	sub	sp, #8
-     ff8:	af00      	add	r7, sp, #0
-    activeEnemyCount = ENEMY_COUNT;
-     ffa:	4b23      	ldr	r3, [pc, #140]	@ (1088 <addEnemies+0x94>)
-     ffc:	220c      	movs	r2, #12
-     ffe:	701a      	strb	r2, [r3, #0]
-
-    for (int i = 0; i < ENEMY_COUNT; i++) {
-    1000:	2300      	movs	r3, #0
-    1002:	607b      	str	r3, [r7, #4]
-    1004:	e036      	b.n	1074 <addEnemies+0x80>
-        if(!enemyPositions[i][2]) {
-    1006:	4921      	ldr	r1, [pc, #132]	@ (108c <addEnemies+0x98>)
-    1008:	687a      	ldr	r2, [r7, #4]
-    100a:	4613      	mov	r3, r2
-    100c:	005b      	lsls	r3, r3, #1
-    100e:	4413      	add	r3, r2
-    1010:	440b      	add	r3, r1
-    1012:	3302      	adds	r3, #2
-    1014:	781b      	ldrb	r3, [r3, #0]
-    1016:	2b00      	cmp	r3, #0
-    1018:	d129      	bne.n	106e <addEnemies+0x7a>
-            enemyPositions[i][0] = randRange(0, ENEMY_BORDER);
-    101a:	2118      	movs	r1, #24
-    101c:	2000      	movs	r0, #0
-    101e:	f7ff fdb9 	bl	b94 <randRange>
-    1022:	4603      	mov	r3, r0
-    1024:	b2d8      	uxtb	r0, r3
-    1026:	4919      	ldr	r1, [pc, #100]	@ (108c <addEnemies+0x98>)
-    1028:	687a      	ldr	r2, [r7, #4]
-    102a:	4613      	mov	r3, r2
-    102c:	005b      	lsls	r3, r3, #1
-    102e:	4413      	add	r3, r2
-    1030:	440b      	add	r3, r1
-    1032:	4602      	mov	r2, r0
-    1034:	701a      	strb	r2, [r3, #0]
-            enemyPositions[i][1] = randRange(i*ENEMY_BLOCKS, i*ENEMY_BLOCKS);
-    1036:	687b      	ldr	r3, [r7, #4]
-    1038:	00da      	lsls	r2, r3, #3
-    103a:	687b      	ldr	r3, [r7, #4]
-    103c:	00db      	lsls	r3, r3, #3
-    103e:	4619      	mov	r1, r3
-    1040:	4610      	mov	r0, r2
-    1042:	f7ff fda7 	bl	b94 <randRange>
-    1046:	4603      	mov	r3, r0
-    1048:	b2d8      	uxtb	r0, r3
-    104a:	4910      	ldr	r1, [pc, #64]	@ (108c <addEnemies+0x98>)
-    104c:	687a      	ldr	r2, [r7, #4]
-    104e:	4613      	mov	r3, r2
-    1050:	005b      	lsls	r3, r3, #1
-    1052:	4413      	add	r3, r2
-    1054:	440b      	add	r3, r1
-    1056:	3301      	adds	r3, #1
-    1058:	4602      	mov	r2, r0
-    105a:	701a      	strb	r2, [r3, #0]
-            enemyPositions[i][2] = true;
-    105c:	490b      	ldr	r1, [pc, #44]	@ (108c <addEnemies+0x98>)
-    105e:	687a      	ldr	r2, [r7, #4]
-    1060:	4613      	mov	r3, r2
-    1062:	005b      	lsls	r3, r3, #1
-    1064:	4413      	add	r3, r2
-    1066:	440b      	add	r3, r1
-    1068:	3302      	adds	r3, #2
-    106a:	2201      	movs	r2, #1
-    106c:	701a      	strb	r2, [r3, #0]
-    for (int i = 0; i < ENEMY_COUNT; i++) {
-    106e:	687b      	ldr	r3, [r7, #4]
+00000ffc <addEnemies>:
+     ffc:	b580      	push	{r7, lr}
+     ffe:	b084      	sub	sp, #16
+    1000:	af00      	add	r7, sp, #0
+    1002:	6078      	str	r0, [r7, #4]
+    1004:	2300      	movs	r3, #0
+    1006:	60fb      	str	r3, [r7, #12]
+    1008:	e05d      	b.n	10c6 <addEnemies+0xca>
+    100a:	4b34      	ldr	r3, [pc, #208]	@ (10dc <addEnemies+0xe0>)
+    100c:	781b      	ldrb	r3, [r3, #0]
+    100e:	4619      	mov	r1, r3
+    1010:	4a33      	ldr	r2, [pc, #204]	@ (10e0 <addEnemies+0xe4>)
+    1012:	460b      	mov	r3, r1
+    1014:	005b      	lsls	r3, r3, #1
+    1016:	440b      	add	r3, r1
+    1018:	4413      	add	r3, r2
+    101a:	3302      	adds	r3, #2
+    101c:	781b      	ldrb	r3, [r3, #0]
+    101e:	2b00      	cmp	r3, #0
+    1020:	d13d      	bne.n	109e <addEnemies+0xa2>
+    1022:	687b      	ldr	r3, [r7, #4]
+    1024:	2b00      	cmp	r3, #0
+    1026:	db3a      	blt.n	109e <addEnemies+0xa2>
+    1028:	2118      	movs	r1, #24
+    102a:	2000      	movs	r0, #0
+    102c:	f7ff fdb2 	bl	b94 <randRange>
+    1030:	4602      	mov	r2, r0
+    1032:	4b2a      	ldr	r3, [pc, #168]	@ (10dc <addEnemies+0xe0>)
+    1034:	781b      	ldrb	r3, [r3, #0]
+    1036:	4619      	mov	r1, r3
+    1038:	b2d0      	uxtb	r0, r2
+    103a:	4a29      	ldr	r2, [pc, #164]	@ (10e0 <addEnemies+0xe4>)
+    103c:	460b      	mov	r3, r1
+    103e:	005b      	lsls	r3, r3, #1
+    1040:	440b      	add	r3, r1
+    1042:	4413      	add	r3, r2
+    1044:	4602      	mov	r2, r0
+    1046:	701a      	strb	r2, [r3, #0]
+    1048:	4b24      	ldr	r3, [pc, #144]	@ (10dc <addEnemies+0xe0>)
+    104a:	781b      	ldrb	r3, [r3, #0]
+    104c:	00db      	lsls	r3, r3, #3
+    104e:	4a23      	ldr	r2, [pc, #140]	@ (10dc <addEnemies+0xe0>)
+    1050:	7812      	ldrb	r2, [r2, #0]
+    1052:	00d2      	lsls	r2, r2, #3
+    1054:	4611      	mov	r1, r2
+    1056:	4618      	mov	r0, r3
+    1058:	f7ff fd9c 	bl	b94 <randRange>
+    105c:	4602      	mov	r2, r0
+    105e:	4b1f      	ldr	r3, [pc, #124]	@ (10dc <addEnemies+0xe0>)
+    1060:	781b      	ldrb	r3, [r3, #0]
+    1062:	4619      	mov	r1, r3
+    1064:	b2d0      	uxtb	r0, r2
+    1066:	4a1e      	ldr	r2, [pc, #120]	@ (10e0 <addEnemies+0xe4>)
+    1068:	460b      	mov	r3, r1
+    106a:	005b      	lsls	r3, r3, #1
+    106c:	440b      	add	r3, r1
+    106e:	4413      	add	r3, r2
     1070:	3301      	adds	r3, #1
-    1072:	607b      	str	r3, [r7, #4]
-    1074:	687b      	ldr	r3, [r7, #4]
-    1076:	2b0b      	cmp	r3, #11
-    1078:	ddc5      	ble.n	1006 <addEnemies+0x12>
-        }
-    }
+    1072:	4602      	mov	r2, r0
+    1074:	701a      	strb	r2, [r3, #0]
+    1076:	4b19      	ldr	r3, [pc, #100]	@ (10dc <addEnemies+0xe0>)
+    1078:	781b      	ldrb	r3, [r3, #0]
+    107a:	4619      	mov	r1, r3
+    107c:	4a18      	ldr	r2, [pc, #96]	@ (10e0 <addEnemies+0xe4>)
+    107e:	460b      	mov	r3, r1
+    1080:	005b      	lsls	r3, r3, #1
+    1082:	440b      	add	r3, r1
+    1084:	4413      	add	r3, r2
+    1086:	3302      	adds	r3, #2
+    1088:	2201      	movs	r2, #1
+    108a:	701a      	strb	r2, [r3, #0]
+    108c:	4b15      	ldr	r3, [pc, #84]	@ (10e4 <addEnemies+0xe8>)
+    108e:	781b      	ldrb	r3, [r3, #0]
+    1090:	3301      	adds	r3, #1
+    1092:	b2da      	uxtb	r2, r3
+    1094:	4b13      	ldr	r3, [pc, #76]	@ (10e4 <addEnemies+0xe8>)
+    1096:	701a      	strb	r2, [r3, #0]
+    1098:	687b      	ldr	r3, [r7, #4]
+    109a:	3b01      	subs	r3, #1
+    109c:	607b      	str	r3, [r7, #4]
+    109e:	4b0f      	ldr	r3, [pc, #60]	@ (10dc <addEnemies+0xe0>)
+    10a0:	781b      	ldrb	r3, [r3, #0]
+    10a2:	1c5a      	adds	r2, r3, #1
+    10a4:	4b10      	ldr	r3, [pc, #64]	@ (10e8 <addEnemies+0xec>)
+    10a6:	fb83 1302 	smull	r1, r3, r3, r2
+    10aa:	1059      	asrs	r1, r3, #1
+    10ac:	17d3      	asrs	r3, r2, #31
+    10ae:	1ac9      	subs	r1, r1, r3
+    10b0:	460b      	mov	r3, r1
+    10b2:	005b      	lsls	r3, r3, #1
+    10b4:	440b      	add	r3, r1
+    10b6:	009b      	lsls	r3, r3, #2
+    10b8:	1ad1      	subs	r1, r2, r3
+    10ba:	b2ca      	uxtb	r2, r1
+    10bc:	4b07      	ldr	r3, [pc, #28]	@ (10dc <addEnemies+0xe0>)
+    10be:	701a      	strb	r2, [r3, #0]
+    10c0:	68fb      	ldr	r3, [r7, #12]
+    10c2:	3301      	adds	r3, #1
+    10c4:	60fb      	str	r3, [r7, #12]
+    10c6:	4b07      	ldr	r3, [pc, #28]	@ (10e4 <addEnemies+0xe8>)
+    10c8:	781b      	ldrb	r3, [r3, #0]
+    10ca:	2b0b      	cmp	r3, #11
+    10cc:	d802      	bhi.n	10d4 <addEnemies+0xd8>
+    10ce:	687b      	ldr	r3, [r7, #4]
+    10d0:	2b00      	cmp	r3, #0
+    10d2:	da9a      	bge.n	100a <addEnemies+0xe>
+    10d4:	bf00      	nop
+    10d6:	3710      	adds	r7, #16
+    10d8:	46bd      	mov	sp, r7
+    10da:	bd80      	pop	{r7, pc}
+    10dc:	2000f281 	.word	0x2000f281
+    10e0:	2000f25c 	.word	0x2000f25c
+    10e4:	2000f280 	.word	0x2000f280
+    10e8:	2aaaaaab 	.word	0x2aaaaaab
 
-    display_update_needed = true;
-    107a:	4b05      	ldr	r3, [pc, #20]	@ (1090 <addEnemies+0x9c>)
-    107c:	2201      	movs	r2, #1
-    107e:	701a      	strb	r2, [r3, #0]
-}
-    1080:	bf00      	nop
-    1082:	3708      	adds	r7, #8
-    1084:	46bd      	mov	sp, r7
-    1086:	bd80      	pop	{r7, pc}
-    1088:	2000aa80 	.word	0x2000aa80
-    108c:	2000aa5c 	.word	0x2000aa5c
-    1090:	20000000 	.word	0x20000000
+000010ec <spawnEnemies>:
+    10ec:	b490      	push	{r4, r7}
+    10ee:	b086      	sub	sp, #24
+    10f0:	af00      	add	r7, sp, #0
+    10f2:	2300      	movs	r3, #0
+    10f4:	617b      	str	r3, [r7, #20]
+    10f6:	e065      	b.n	11c4 <spawnEnemies+0xd8>
+    10f8:	4937      	ldr	r1, [pc, #220]	@ (11d8 <spawnEnemies+0xec>)
+    10fa:	697a      	ldr	r2, [r7, #20]
+    10fc:	4613      	mov	r3, r2
+    10fe:	005b      	lsls	r3, r3, #1
+    1100:	4413      	add	r3, r2
+    1102:	440b      	add	r3, r1
+    1104:	3302      	adds	r3, #2
+    1106:	781b      	ldrb	r3, [r3, #0]
+    1108:	2b00      	cmp	r3, #0
+    110a:	d058      	beq.n	11be <spawnEnemies+0xd2>
+    110c:	4932      	ldr	r1, [pc, #200]	@ (11d8 <spawnEnemies+0xec>)
+    110e:	697a      	ldr	r2, [r7, #20]
+    1110:	4613      	mov	r3, r2
+    1112:	005b      	lsls	r3, r3, #1
+    1114:	4413      	add	r3, r2
+    1116:	440b      	add	r3, r1
+    1118:	781b      	ldrb	r3, [r3, #0]
+    111a:	72fb      	strb	r3, [r7, #11]
+    111c:	492e      	ldr	r1, [pc, #184]	@ (11d8 <spawnEnemies+0xec>)
+    111e:	697a      	ldr	r2, [r7, #20]
+    1120:	4613      	mov	r3, r2
+    1122:	005b      	lsls	r3, r3, #1
+    1124:	4413      	add	r3, r2
+    1126:	440b      	add	r3, r1
+    1128:	3301      	adds	r3, #1
+    112a:	781b      	ldrb	r3, [r3, #0]
+    112c:	72bb      	strb	r3, [r7, #10]
+    112e:	2300      	movs	r3, #0
+    1130:	613b      	str	r3, [r7, #16]
+    1132:	e038      	b.n	11a6 <spawnEnemies+0xba>
+    1134:	2300      	movs	r3, #0
+    1136:	60fb      	str	r3, [r7, #12]
+    1138:	e02f      	b.n	119a <spawnEnemies+0xae>
+    113a:	4928      	ldr	r1, [pc, #160]	@ (11dc <spawnEnemies+0xf0>)
+    113c:	693b      	ldr	r3, [r7, #16]
+    113e:	00da      	lsls	r2, r3, #3
+    1140:	68fb      	ldr	r3, [r7, #12]
+    1142:	4413      	add	r3, r2
+    1144:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    1148:	2b00      	cmp	r3, #0
+    114a:	d023      	beq.n	1194 <spawnEnemies+0xa8>
+    114c:	7afb      	ldrb	r3, [r7, #11]
+    114e:	b29a      	uxth	r2, r3
+    1150:	693b      	ldr	r3, [r7, #16]
+    1152:	b29b      	uxth	r3, r3
+    1154:	4413      	add	r3, r2
+    1156:	813b      	strh	r3, [r7, #8]
+    1158:	7abb      	ldrb	r3, [r7, #10]
+    115a:	b29a      	uxth	r2, r3
+    115c:	68fb      	ldr	r3, [r7, #12]
+    115e:	b29b      	uxth	r3, r3
+    1160:	4413      	add	r3, r2
+    1162:	80fb      	strh	r3, [r7, #6]
+    1164:	893b      	ldrh	r3, [r7, #8]
+    1166:	2b5f      	cmp	r3, #95	@ 0x5f
+    1168:	d814      	bhi.n	1194 <spawnEnemies+0xa8>
+    116a:	88fb      	ldrh	r3, [r7, #6]
+    116c:	2b5f      	cmp	r3, #95	@ 0x5f
+    116e:	d811      	bhi.n	1194 <spawnEnemies+0xa8>
+    1170:	893a      	ldrh	r2, [r7, #8]
+    1172:	88f9      	ldrh	r1, [r7, #6]
+    1174:	4c19      	ldr	r4, [pc, #100]	@ (11dc <spawnEnemies+0xf0>)
+    1176:	693b      	ldr	r3, [r7, #16]
+    1178:	00d8      	lsls	r0, r3, #3
+    117a:	68fb      	ldr	r3, [r7, #12]
+    117c:	4403      	add	r3, r0
+    117e:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    1182:	4817      	ldr	r0, [pc, #92]	@ (11e0 <spawnEnemies+0xf4>)
+    1184:	4613      	mov	r3, r2
+    1186:	005b      	lsls	r3, r3, #1
+    1188:	4413      	add	r3, r2
+    118a:	015b      	lsls	r3, r3, #5
+    118c:	440b      	add	r3, r1
+    118e:	4622      	mov	r2, r4
+    1190:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+    1194:	68fb      	ldr	r3, [r7, #12]
+    1196:	3301      	adds	r3, #1
+    1198:	60fb      	str	r3, [r7, #12]
+    119a:	68fb      	ldr	r3, [r7, #12]
+    119c:	2b07      	cmp	r3, #7
+    119e:	ddcc      	ble.n	113a <spawnEnemies+0x4e>
+    11a0:	693b      	ldr	r3, [r7, #16]
+    11a2:	3301      	adds	r3, #1
+    11a4:	613b      	str	r3, [r7, #16]
+    11a6:	693b      	ldr	r3, [r7, #16]
+    11a8:	2b07      	cmp	r3, #7
+    11aa:	ddc3      	ble.n	1134 <spawnEnemies+0x48>
+    11ac:	490a      	ldr	r1, [pc, #40]	@ (11d8 <spawnEnemies+0xec>)
+    11ae:	697a      	ldr	r2, [r7, #20]
+    11b0:	4613      	mov	r3, r2
+    11b2:	005b      	lsls	r3, r3, #1
+    11b4:	4413      	add	r3, r2
+    11b6:	440b      	add	r3, r1
+    11b8:	3302      	adds	r3, #2
+    11ba:	2201      	movs	r2, #1
+    11bc:	701a      	strb	r2, [r3, #0]
+    11be:	697b      	ldr	r3, [r7, #20]
+    11c0:	3301      	adds	r3, #1
+    11c2:	617b      	str	r3, [r7, #20]
+    11c4:	697b      	ldr	r3, [r7, #20]
+    11c6:	2b0b      	cmp	r3, #11
+    11c8:	dd96      	ble.n	10f8 <spawnEnemies+0xc>
+    11ca:	bf00      	nop
+    11cc:	bf00      	nop
+    11ce:	3718      	adds	r7, #24
+    11d0:	46bd      	mov	sp, r7
+    11d2:	bc90      	pop	{r4, r7}
+    11d4:	4770      	bx	lr
+    11d6:	bf00      	nop
+    11d8:	2000f25c 	.word	0x2000f25c
+    11dc:	00001e70 	.word	0x00001e70
+    11e0:	2000625c 	.word	0x2000625c
 
-00001094 <spawnEnemies>:
-
-void spawnEnemies() {
-    1094:	b490      	push	{r4, r7}
-    1096:	b086      	sub	sp, #24
-    1098:	af00      	add	r7, sp, #0
-    for (int enemy = 0; enemy < activeEnemyCount; enemy++) {
-    109a:	2300      	movs	r3, #0
-    109c:	617b      	str	r3, [r7, #20]
-    109e:	e068      	b.n	1172 <spawnEnemies+0xde>
-
-        if(enemyPositions[enemy][2]) {
-    10a0:	493a      	ldr	r1, [pc, #232]	@ (118c <spawnEnemies+0xf8>)
-    10a2:	697a      	ldr	r2, [r7, #20]
-    10a4:	4613      	mov	r3, r2
-    10a6:	005b      	lsls	r3, r3, #1
-    10a8:	4413      	add	r3, r2
-    10aa:	440b      	add	r3, r1
-    10ac:	3302      	adds	r3, #2
-    10ae:	781b      	ldrb	r3, [r3, #0]
-    10b0:	2b00      	cmp	r3, #0
-    10b2:	d05b      	beq.n	116c <spawnEnemies+0xd8>
-            uint8_t enemyX = enemyPositions[enemy][0];
-    10b4:	4935      	ldr	r1, [pc, #212]	@ (118c <spawnEnemies+0xf8>)
-    10b6:	697a      	ldr	r2, [r7, #20]
-    10b8:	4613      	mov	r3, r2
-    10ba:	005b      	lsls	r3, r3, #1
-    10bc:	4413      	add	r3, r2
-    10be:	440b      	add	r3, r1
-    10c0:	781b      	ldrb	r3, [r3, #0]
-    10c2:	72fb      	strb	r3, [r7, #11]
-            uint8_t enemyY = enemyPositions[enemy][1];
-    10c4:	4931      	ldr	r1, [pc, #196]	@ (118c <spawnEnemies+0xf8>)
-    10c6:	697a      	ldr	r2, [r7, #20]
-    10c8:	4613      	mov	r3, r2
-    10ca:	005b      	lsls	r3, r3, #1
-    10cc:	4413      	add	r3, r2
-    10ce:	440b      	add	r3, r1
-    10d0:	3301      	adds	r3, #1
-    10d2:	781b      	ldrb	r3, [r3, #0]
-    10d4:	72bb      	strb	r3, [r7, #10]
-
-            for (int i = 0; i < ENEMY_SIZE; i++) {
-    10d6:	2300      	movs	r3, #0
-    10d8:	613b      	str	r3, [r7, #16]
-    10da:	e038      	b.n	114e <spawnEnemies+0xba>
-                for (int j = 0; j < ENEMY_SIZE; j++) {
-    10dc:	2300      	movs	r3, #0
-    10de:	60fb      	str	r3, [r7, #12]
-    10e0:	e02f      	b.n	1142 <spawnEnemies+0xae>
-                    if (enemyShip[i][j] != BLACK) {
-    10e2:	492b      	ldr	r1, [pc, #172]	@ (1190 <spawnEnemies+0xfc>)
-    10e4:	693b      	ldr	r3, [r7, #16]
-    10e6:	00da      	lsls	r2, r3, #3
-    10e8:	68fb      	ldr	r3, [r7, #12]
-    10ea:	4413      	add	r3, r2
-    10ec:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-    10f0:	2b00      	cmp	r3, #0
-    10f2:	d023      	beq.n	113c <spawnEnemies+0xa8>
-                        uint16_t x = enemyX + i;
-    10f4:	7afb      	ldrb	r3, [r7, #11]
-    10f6:	b29a      	uxth	r2, r3
-    10f8:	693b      	ldr	r3, [r7, #16]
-    10fa:	b29b      	uxth	r3, r3
-    10fc:	4413      	add	r3, r2
-    10fe:	813b      	strh	r3, [r7, #8]
-                        uint16_t y = enemyY + j;
-    1100:	7abb      	ldrb	r3, [r7, #10]
-    1102:	b29a      	uxth	r2, r3
-    1104:	68fb      	ldr	r3, [r7, #12]
-    1106:	b29b      	uxth	r3, r3
-    1108:	4413      	add	r3, r2
-    110a:	80fb      	strh	r3, [r7, #6]
-                        if (x < DISPLAY_SIZE && y < DISPLAY_SIZE) {
-    110c:	893b      	ldrh	r3, [r7, #8]
-    110e:	2b5f      	cmp	r3, #95	@ 0x5f
-    1110:	d814      	bhi.n	113c <spawnEnemies+0xa8>
-    1112:	88fb      	ldrh	r3, [r7, #6]
-    1114:	2b5f      	cmp	r3, #95	@ 0x5f
-    1116:	d811      	bhi.n	113c <spawnEnemies+0xa8>
-                            screen[x][y] = enemyShip[i][j];
-    1118:	893a      	ldrh	r2, [r7, #8]
-    111a:	88f9      	ldrh	r1, [r7, #6]
-    111c:	4c1c      	ldr	r4, [pc, #112]	@ (1190 <spawnEnemies+0xfc>)
-    111e:	693b      	ldr	r3, [r7, #16]
-    1120:	00d8      	lsls	r0, r3, #3
-    1122:	68fb      	ldr	r3, [r7, #12]
-    1124:	4403      	add	r3, r0
-    1126:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
-    112a:	481a      	ldr	r0, [pc, #104]	@ (1194 <spawnEnemies+0x100>)
-    112c:	4613      	mov	r3, r2
-    112e:	005b      	lsls	r3, r3, #1
-    1130:	4413      	add	r3, r2
-    1132:	015b      	lsls	r3, r3, #5
-    1134:	440b      	add	r3, r1
-    1136:	4622      	mov	r2, r4
-    1138:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
-                for (int j = 0; j < ENEMY_SIZE; j++) {
-    113c:	68fb      	ldr	r3, [r7, #12]
-    113e:	3301      	adds	r3, #1
-    1140:	60fb      	str	r3, [r7, #12]
-    1142:	68fb      	ldr	r3, [r7, #12]
-    1144:	2b07      	cmp	r3, #7
-    1146:	ddcc      	ble.n	10e2 <spawnEnemies+0x4e>
-            for (int i = 0; i < ENEMY_SIZE; i++) {
-    1148:	693b      	ldr	r3, [r7, #16]
-    114a:	3301      	adds	r3, #1
-    114c:	613b      	str	r3, [r7, #16]
-    114e:	693b      	ldr	r3, [r7, #16]
-    1150:	2b07      	cmp	r3, #7
-    1152:	ddc3      	ble.n	10dc <spawnEnemies+0x48>
-                        }
-                    }
-                }
-            }
-            enemyPositions[enemy][2] = true;
-    1154:	490d      	ldr	r1, [pc, #52]	@ (118c <spawnEnemies+0xf8>)
-    1156:	697a      	ldr	r2, [r7, #20]
-    1158:	4613      	mov	r3, r2
-    115a:	005b      	lsls	r3, r3, #1
-    115c:	4413      	add	r3, r2
-    115e:	440b      	add	r3, r1
-    1160:	3302      	adds	r3, #2
-    1162:	2201      	movs	r2, #1
-    1164:	701a      	strb	r2, [r3, #0]
-            display_update_needed = true;
-    1166:	4b0c      	ldr	r3, [pc, #48]	@ (1198 <spawnEnemies+0x104>)
-    1168:	2201      	movs	r2, #1
-    116a:	701a      	strb	r2, [r3, #0]
-    for (int enemy = 0; enemy < activeEnemyCount; enemy++) {
-    116c:	697b      	ldr	r3, [r7, #20]
-    116e:	3301      	adds	r3, #1
-    1170:	617b      	str	r3, [r7, #20]
-    1172:	4b0a      	ldr	r3, [pc, #40]	@ (119c <spawnEnemies+0x108>)
-    1174:	781b      	ldrb	r3, [r3, #0]
-    1176:	461a      	mov	r2, r3
-    1178:	697b      	ldr	r3, [r7, #20]
-    117a:	4293      	cmp	r3, r2
-    117c:	db90      	blt.n	10a0 <spawnEnemies+0xc>
-        }
-    }
-}
-    117e:	bf00      	nop
-    1180:	bf00      	nop
-    1182:	3718      	adds	r7, #24
-    1184:	46bd      	mov	sp, r7
-    1186:	bc90      	pop	{r4, r7}
-    1188:	4770      	bx	lr
-    118a:	bf00      	nop
-    118c:	2000aa5c 	.word	0x2000aa5c
-    1190:	00001d9c 	.word	0x00001d9c
-    1194:	2000625c 	.word	0x2000625c
-    1198:	20000000 	.word	0x20000000
-    119c:	2000aa80 	.word	0x2000aa80
-
-000011a0 <removeEnemy>:
-
-void removeEnemy(int i) {
-    11a0:	b4b0      	push	{r4, r5, r7}
-    11a2:	b087      	sub	sp, #28
-    11a4:	af00      	add	r7, sp, #0
-    11a6:	6078      	str	r0, [r7, #4]
-    uint8_t enemyX = enemyPositions[i][0];
-    11a8:	4928      	ldr	r1, [pc, #160]	@ (124c <removeEnemy+0xac>)
-    11aa:	687a      	ldr	r2, [r7, #4]
-    11ac:	4613      	mov	r3, r2
-    11ae:	005b      	lsls	r3, r3, #1
-    11b0:	4413      	add	r3, r2
-    11b2:	440b      	add	r3, r1
-    11b4:	781b      	ldrb	r3, [r3, #0]
-    11b6:	73fb      	strb	r3, [r7, #15]
-    uint8_t enemyY = enemyPositions[i][1];
-    11b8:	4924      	ldr	r1, [pc, #144]	@ (124c <removeEnemy+0xac>)
-    11ba:	687a      	ldr	r2, [r7, #4]
-    11bc:	4613      	mov	r3, r2
-    11be:	005b      	lsls	r3, r3, #1
-    11c0:	4413      	add	r3, r2
-    11c2:	440b      	add	r3, r1
-    11c4:	3301      	adds	r3, #1
-    11c6:	781b      	ldrb	r3, [r3, #0]
-    11c8:	73bb      	strb	r3, [r7, #14]
-    for(int i = 0; i < ENEMY_SIZE; i++)
-    11ca:	2300      	movs	r3, #0
-    11cc:	617b      	str	r3, [r7, #20]
-    11ce:	e031      	b.n	1234 <removeEnemy+0x94>
-        for (int j = 0; j < ENEMY_SIZE; j++) {
-    11d0:	2300      	movs	r3, #0
-    11d2:	613b      	str	r3, [r7, #16]
-    11d4:	e028      	b.n	1228 <removeEnemy+0x88>
-            if (enemyShip[i][j] != 0)
-    11d6:	491e      	ldr	r1, [pc, #120]	@ (1250 <removeEnemy+0xb0>)
-    11d8:	697b      	ldr	r3, [r7, #20]
-    11da:	00da      	lsls	r2, r3, #3
-    11dc:	693b      	ldr	r3, [r7, #16]
-    11de:	4413      	add	r3, r2
-    11e0:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-    11e4:	2b00      	cmp	r3, #0
-    11e6:	d01c      	beq.n	1222 <removeEnemy+0x82>
-                screen[enemyX + i][enemyY + j] = background[enemyX + i][enemyY + j];
-    11e8:	7bfa      	ldrb	r2, [r7, #15]
-    11ea:	697b      	ldr	r3, [r7, #20]
-    11ec:	18d1      	adds	r1, r2, r3
-    11ee:	7bba      	ldrb	r2, [r7, #14]
-    11f0:	693b      	ldr	r3, [r7, #16]
-    11f2:	18d4      	adds	r4, r2, r3
-    11f4:	7bfa      	ldrb	r2, [r7, #15]
-    11f6:	697b      	ldr	r3, [r7, #20]
-    11f8:	441a      	add	r2, r3
-    11fa:	7bb8      	ldrb	r0, [r7, #14]
-    11fc:	693b      	ldr	r3, [r7, #16]
-    11fe:	4418      	add	r0, r3
-    1200:	4d14      	ldr	r5, [pc, #80]	@ (1254 <removeEnemy+0xb4>)
-    1202:	460b      	mov	r3, r1
-    1204:	005b      	lsls	r3, r3, #1
+000011e4 <removeEnemy>:
+    11e4:	b5b0      	push	{r4, r5, r7, lr}
+    11e6:	b086      	sub	sp, #24
+    11e8:	af00      	add	r7, sp, #0
+    11ea:	6078      	str	r0, [r7, #4]
+    11ec:	4931      	ldr	r1, [pc, #196]	@ (12b4 <removeEnemy+0xd0>)
+    11ee:	687a      	ldr	r2, [r7, #4]
+    11f0:	4613      	mov	r3, r2
+    11f2:	005b      	lsls	r3, r3, #1
+    11f4:	4413      	add	r3, r2
+    11f6:	440b      	add	r3, r1
+    11f8:	781b      	ldrb	r3, [r3, #0]
+    11fa:	73fb      	strb	r3, [r7, #15]
+    11fc:	492d      	ldr	r1, [pc, #180]	@ (12b4 <removeEnemy+0xd0>)
+    11fe:	687a      	ldr	r2, [r7, #4]
+    1200:	4613      	mov	r3, r2
+    1202:	005b      	lsls	r3, r3, #1
+    1204:	4413      	add	r3, r2
     1206:	440b      	add	r3, r1
-    1208:	015b      	lsls	r3, r3, #5
-    120a:	4423      	add	r3, r4
-    120c:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
-    1210:	4911      	ldr	r1, [pc, #68]	@ (1258 <removeEnemy+0xb8>)
-    1212:	4613      	mov	r3, r2
-    1214:	005b      	lsls	r3, r3, #1
-    1216:	4413      	add	r3, r2
-    1218:	015b      	lsls	r3, r3, #5
-    121a:	4403      	add	r3, r0
-    121c:	4622      	mov	r2, r4
-    121e:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
-        for (int j = 0; j < ENEMY_SIZE; j++) {
-    1222:	693b      	ldr	r3, [r7, #16]
-    1224:	3301      	adds	r3, #1
-    1226:	613b      	str	r3, [r7, #16]
-    1228:	693b      	ldr	r3, [r7, #16]
-    122a:	2b07      	cmp	r3, #7
-    122c:	ddd3      	ble.n	11d6 <removeEnemy+0x36>
-    for(int i = 0; i < ENEMY_SIZE; i++)
+    1208:	3301      	adds	r3, #1
+    120a:	781b      	ldrb	r3, [r3, #0]
+    120c:	73bb      	strb	r3, [r7, #14]
+    120e:	2300      	movs	r3, #0
+    1210:	617b      	str	r3, [r7, #20]
+    1212:	e031      	b.n	1278 <removeEnemy+0x94>
+    1214:	2300      	movs	r3, #0
+    1216:	613b      	str	r3, [r7, #16]
+    1218:	e028      	b.n	126c <removeEnemy+0x88>
+    121a:	4927      	ldr	r1, [pc, #156]	@ (12b8 <removeEnemy+0xd4>)
+    121c:	697b      	ldr	r3, [r7, #20]
+    121e:	00da      	lsls	r2, r3, #3
+    1220:	693b      	ldr	r3, [r7, #16]
+    1222:	4413      	add	r3, r2
+    1224:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    1228:	2b00      	cmp	r3, #0
+    122a:	d01c      	beq.n	1266 <removeEnemy+0x82>
+    122c:	7bfa      	ldrb	r2, [r7, #15]
     122e:	697b      	ldr	r3, [r7, #20]
-    1230:	3301      	adds	r3, #1
-    1232:	617b      	str	r3, [r7, #20]
-    1234:	697b      	ldr	r3, [r7, #20]
-    1236:	2b07      	cmp	r3, #7
-    1238:	ddca      	ble.n	11d0 <removeEnemy+0x30>
-        }
-    display_update_needed = true;
-    123a:	4b08      	ldr	r3, [pc, #32]	@ (125c <removeEnemy+0xbc>)
-    123c:	2201      	movs	r2, #1
-    123e:	701a      	strb	r2, [r3, #0]
-}
-    1240:	bf00      	nop
-    1242:	371c      	adds	r7, #28
-    1244:	46bd      	mov	sp, r7
-    1246:	bcb0      	pop	{r4, r5, r7}
-    1248:	4770      	bx	lr
-    124a:	bf00      	nop
-    124c:	2000aa5c 	.word	0x2000aa5c
-    1250:	00001d9c 	.word	0x00001d9c
-    1254:	20000258 	.word	0x20000258
-    1258:	2000625c 	.word	0x2000625c
-    125c:	20000000 	.word	0x20000000
-
-00001260 <addProjectile>:
-    {CYAN,  CYAN, CYAN,  CYAN},
-    {CYAN,  CYAN, CYAN,  CYAN},
-    {BLACK,  CYAN, CYAN,  BLACK},
-};
-
-void addProjectile() {
-    1260:	b490      	push	{r4, r7}
-    1262:	b084      	sub	sp, #16
-    1264:	af00      	add	r7, sp, #0
-    if(canAddProject) {
-    1266:	4b40      	ldr	r3, [pc, #256]	@ (1368 <addProjectile+0x108>)
-    1268:	781b      	ldrb	r3, [r3, #0]
-    126a:	2b00      	cmp	r3, #0
-    126c:	d077      	beq.n	135e <addProjectile+0xfe>
-        int projectX = spaceX-PROJECTILE_SIZE;
-    126e:	4b3f      	ldr	r3, [pc, #252]	@ (136c <addProjectile+0x10c>)
-    1270:	781b      	ldrb	r3, [r3, #0]
-    1272:	3b04      	subs	r3, #4
-    1274:	607b      	str	r3, [r7, #4]
-        int projectY = spaceY+PROJECTILE_SIZE/2;
-    1276:	4b3e      	ldr	r3, [pc, #248]	@ (1370 <addProjectile+0x110>)
-    1278:	781b      	ldrb	r3, [r3, #0]
-    127a:	3302      	adds	r3, #2
-    127c:	603b      	str	r3, [r7, #0]
-        
-        for(int i = 0; i < PROJECTILE_SIZE; i++) {
-    127e:	2300      	movs	r3, #0
-    1280:	60fb      	str	r3, [r7, #12]
-    1282:	e02f      	b.n	12e4 <addProjectile+0x84>
-            for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    1284:	2300      	movs	r3, #0
-    1286:	60bb      	str	r3, [r7, #8]
-    1288:	e026      	b.n	12d8 <addProjectile+0x78>
-                    if (projectileDesign[i][j] != 0 && projectX+i >= 0)
-    128a:	493a      	ldr	r1, [pc, #232]	@ (1374 <addProjectile+0x114>)
-    128c:	68fb      	ldr	r3, [r7, #12]
-    128e:	009a      	lsls	r2, r3, #2
-    1290:	68bb      	ldr	r3, [r7, #8]
+    1230:	18d1      	adds	r1, r2, r3
+    1232:	7bba      	ldrb	r2, [r7, #14]
+    1234:	693b      	ldr	r3, [r7, #16]
+    1236:	18d4      	adds	r4, r2, r3
+    1238:	7bfa      	ldrb	r2, [r7, #15]
+    123a:	697b      	ldr	r3, [r7, #20]
+    123c:	441a      	add	r2, r3
+    123e:	7bb8      	ldrb	r0, [r7, #14]
+    1240:	693b      	ldr	r3, [r7, #16]
+    1242:	4418      	add	r0, r3
+    1244:	4d1d      	ldr	r5, [pc, #116]	@ (12bc <removeEnemy+0xd8>)
+    1246:	460b      	mov	r3, r1
+    1248:	005b      	lsls	r3, r3, #1
+    124a:	440b      	add	r3, r1
+    124c:	015b      	lsls	r3, r3, #5
+    124e:	4423      	add	r3, r4
+    1250:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+    1254:	491a      	ldr	r1, [pc, #104]	@ (12c0 <removeEnemy+0xdc>)
+    1256:	4613      	mov	r3, r2
+    1258:	005b      	lsls	r3, r3, #1
+    125a:	4413      	add	r3, r2
+    125c:	015b      	lsls	r3, r3, #5
+    125e:	4403      	add	r3, r0
+    1260:	4622      	mov	r2, r4
+    1262:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+    1266:	693b      	ldr	r3, [r7, #16]
+    1268:	3301      	adds	r3, #1
+    126a:	613b      	str	r3, [r7, #16]
+    126c:	693b      	ldr	r3, [r7, #16]
+    126e:	2b07      	cmp	r3, #7
+    1270:	ddd3      	ble.n	121a <removeEnemy+0x36>
+    1272:	697b      	ldr	r3, [r7, #20]
+    1274:	3301      	adds	r3, #1
+    1276:	617b      	str	r3, [r7, #20]
+    1278:	697b      	ldr	r3, [r7, #20]
+    127a:	2b07      	cmp	r3, #7
+    127c:	ddca      	ble.n	1214 <removeEnemy+0x30>
+    127e:	4b11      	ldr	r3, [pc, #68]	@ (12c4 <removeEnemy+0xe0>)
+    1280:	781b      	ldrb	r3, [r3, #0]
+    1282:	3b01      	subs	r3, #1
+    1284:	b2da      	uxtb	r2, r3
+    1286:	4b0f      	ldr	r3, [pc, #60]	@ (12c4 <removeEnemy+0xe0>)
+    1288:	701a      	strb	r2, [r3, #0]
+    128a:	490a      	ldr	r1, [pc, #40]	@ (12b4 <removeEnemy+0xd0>)
+    128c:	687a      	ldr	r2, [r7, #4]
+    128e:	4613      	mov	r3, r2
+    1290:	005b      	lsls	r3, r3, #1
     1292:	4413      	add	r3, r2
-    1294:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-    1298:	2b00      	cmp	r3, #0
-    129a:	d01a      	beq.n	12d2 <addProjectile+0x72>
-    129c:	687a      	ldr	r2, [r7, #4]
-    129e:	68fb      	ldr	r3, [r7, #12]
-    12a0:	4413      	add	r3, r2
-    12a2:	2b00      	cmp	r3, #0
-    12a4:	db15      	blt.n	12d2 <addProjectile+0x72>
-                        screen[projectX + i][projectY + j] = projectileDesign[i][j];
-    12a6:	687a      	ldr	r2, [r7, #4]
-    12a8:	68fb      	ldr	r3, [r7, #12]
-    12aa:	441a      	add	r2, r3
-    12ac:	6839      	ldr	r1, [r7, #0]
-    12ae:	68bb      	ldr	r3, [r7, #8]
-    12b0:	4419      	add	r1, r3
-    12b2:	4c30      	ldr	r4, [pc, #192]	@ (1374 <addProjectile+0x114>)
-    12b4:	68fb      	ldr	r3, [r7, #12]
-    12b6:	0098      	lsls	r0, r3, #2
-    12b8:	68bb      	ldr	r3, [r7, #8]
-    12ba:	4403      	add	r3, r0
-    12bc:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
-    12c0:	482d      	ldr	r0, [pc, #180]	@ (1378 <addProjectile+0x118>)
-    12c2:	4613      	mov	r3, r2
-    12c4:	005b      	lsls	r3, r3, #1
-    12c6:	4413      	add	r3, r2
-    12c8:	015b      	lsls	r3, r3, #5
-    12ca:	440b      	add	r3, r1
-    12cc:	4622      	mov	r2, r4
-    12ce:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
-            for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    12d2:	68bb      	ldr	r3, [r7, #8]
-    12d4:	3301      	adds	r3, #1
-    12d6:	60bb      	str	r3, [r7, #8]
-    12d8:	68bb      	ldr	r3, [r7, #8]
-    12da:	2b03      	cmp	r3, #3
-    12dc:	ddd5      	ble.n	128a <addProjectile+0x2a>
-        for(int i = 0; i < PROJECTILE_SIZE; i++) {
-    12de:	68fb      	ldr	r3, [r7, #12]
-    12e0:	3301      	adds	r3, #1
-    12e2:	60fb      	str	r3, [r7, #12]
-    12e4:	68fb      	ldr	r3, [r7, #12]
-    12e6:	2b03      	cmp	r3, #3
-    12e8:	ddcc      	ble.n	1284 <addProjectile+0x24>
-            }
-        }
-        projectiles[newProjectileIndex][0] = projectX;
-    12ea:	4b24      	ldr	r3, [pc, #144]	@ (137c <addProjectile+0x11c>)
-    12ec:	681a      	ldr	r2, [r3, #0]
-    12ee:	4924      	ldr	r1, [pc, #144]	@ (1380 <addProjectile+0x120>)
-    12f0:	4613      	mov	r3, r2
-    12f2:	005b      	lsls	r3, r3, #1
-    12f4:	4413      	add	r3, r2
-    12f6:	009b      	lsls	r3, r3, #2
-    12f8:	440b      	add	r3, r1
-    12fa:	687a      	ldr	r2, [r7, #4]
-    12fc:	601a      	str	r2, [r3, #0]
-        projectiles[newProjectileIndex][1] = projectY;
-    12fe:	4b1f      	ldr	r3, [pc, #124]	@ (137c <addProjectile+0x11c>)
-    1300:	681a      	ldr	r2, [r3, #0]
-    1302:	491f      	ldr	r1, [pc, #124]	@ (1380 <addProjectile+0x120>)
-    1304:	4613      	mov	r3, r2
-    1306:	005b      	lsls	r3, r3, #1
+    1294:	440b      	add	r3, r1
+    1296:	3302      	adds	r3, #2
+    1298:	2200      	movs	r2, #0
+    129a:	701a      	strb	r2, [r3, #0]
+    129c:	4b09      	ldr	r3, [pc, #36]	@ (12c4 <removeEnemy+0xe0>)
+    129e:	781b      	ldrb	r3, [r3, #0]
+    12a0:	2b07      	cmp	r3, #7
+    12a2:	d802      	bhi.n	12aa <removeEnemy+0xc6>
+    12a4:	2001      	movs	r0, #1
+    12a6:	f7ff fea9 	bl	ffc <addEnemies>
+    12aa:	bf00      	nop
+    12ac:	3718      	adds	r7, #24
+    12ae:	46bd      	mov	sp, r7
+    12b0:	bdb0      	pop	{r4, r5, r7, pc}
+    12b2:	bf00      	nop
+    12b4:	2000f25c 	.word	0x2000f25c
+    12b8:	00001e70 	.word	0x00001e70
+    12bc:	20000258 	.word	0x20000258
+    12c0:	2000625c 	.word	0x2000625c
+    12c4:	2000f280 	.word	0x2000f280
+
+000012c8 <addProjectile>:
+    12c8:	b490      	push	{r4, r7}
+    12ca:	b084      	sub	sp, #16
+    12cc:	af00      	add	r7, sp, #0
+    12ce:	4b3f      	ldr	r3, [pc, #252]	@ (13cc <addProjectile+0x104>)
+    12d0:	781b      	ldrb	r3, [r3, #0]
+    12d2:	2b00      	cmp	r3, #0
+    12d4:	d074      	beq.n	13c0 <addProjectile+0xf8>
+    12d6:	4b3e      	ldr	r3, [pc, #248]	@ (13d0 <addProjectile+0x108>)
+    12d8:	781b      	ldrb	r3, [r3, #0]
+    12da:	3b04      	subs	r3, #4
+    12dc:	607b      	str	r3, [r7, #4]
+    12de:	4b3d      	ldr	r3, [pc, #244]	@ (13d4 <addProjectile+0x10c>)
+    12e0:	781b      	ldrb	r3, [r3, #0]
+    12e2:	3302      	adds	r3, #2
+    12e4:	603b      	str	r3, [r7, #0]
+    12e6:	2300      	movs	r3, #0
+    12e8:	60fb      	str	r3, [r7, #12]
+    12ea:	e02f      	b.n	134c <addProjectile+0x84>
+    12ec:	2300      	movs	r3, #0
+    12ee:	60bb      	str	r3, [r7, #8]
+    12f0:	e026      	b.n	1340 <addProjectile+0x78>
+    12f2:	4939      	ldr	r1, [pc, #228]	@ (13d8 <addProjectile+0x110>)
+    12f4:	68fb      	ldr	r3, [r7, #12]
+    12f6:	009a      	lsls	r2, r3, #2
+    12f8:	68bb      	ldr	r3, [r7, #8]
+    12fa:	4413      	add	r3, r2
+    12fc:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    1300:	2b00      	cmp	r3, #0
+    1302:	d01a      	beq.n	133a <addProjectile+0x72>
+    1304:	687a      	ldr	r2, [r7, #4]
+    1306:	68fb      	ldr	r3, [r7, #12]
     1308:	4413      	add	r3, r2
-    130a:	009b      	lsls	r3, r3, #2
-    130c:	440b      	add	r3, r1
-    130e:	3304      	adds	r3, #4
-    1310:	683a      	ldr	r2, [r7, #0]
-    1312:	601a      	str	r2, [r3, #0]
-        projectiles[newProjectileIndex][2] = true;
-    1314:	4b19      	ldr	r3, [pc, #100]	@ (137c <addProjectile+0x11c>)
-    1316:	681a      	ldr	r2, [r3, #0]
-    1318:	4919      	ldr	r1, [pc, #100]	@ (1380 <addProjectile+0x120>)
-    131a:	4613      	mov	r3, r2
-    131c:	005b      	lsls	r3, r3, #1
-    131e:	4413      	add	r3, r2
-    1320:	009b      	lsls	r3, r3, #2
-    1322:	440b      	add	r3, r1
-    1324:	3308      	adds	r3, #8
-    1326:	2201      	movs	r2, #1
-    1328:	601a      	str	r2, [r3, #0]
+    130a:	2b00      	cmp	r3, #0
+    130c:	db15      	blt.n	133a <addProjectile+0x72>
+    130e:	687a      	ldr	r2, [r7, #4]
+    1310:	68fb      	ldr	r3, [r7, #12]
+    1312:	441a      	add	r2, r3
+    1314:	6839      	ldr	r1, [r7, #0]
+    1316:	68bb      	ldr	r3, [r7, #8]
+    1318:	4419      	add	r1, r3
+    131a:	4c2f      	ldr	r4, [pc, #188]	@ (13d8 <addProjectile+0x110>)
+    131c:	68fb      	ldr	r3, [r7, #12]
+    131e:	0098      	lsls	r0, r3, #2
+    1320:	68bb      	ldr	r3, [r7, #8]
+    1322:	4403      	add	r3, r0
+    1324:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    1328:	482c      	ldr	r0, [pc, #176]	@ (13dc <addProjectile+0x114>)
+    132a:	4613      	mov	r3, r2
+    132c:	005b      	lsls	r3, r3, #1
+    132e:	4413      	add	r3, r2
+    1330:	015b      	lsls	r3, r3, #5
+    1332:	440b      	add	r3, r1
+    1334:	4622      	mov	r2, r4
+    1336:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+    133a:	68bb      	ldr	r3, [r7, #8]
+    133c:	3301      	adds	r3, #1
+    133e:	60bb      	str	r3, [r7, #8]
+    1340:	68bb      	ldr	r3, [r7, #8]
+    1342:	2b03      	cmp	r3, #3
+    1344:	ddd5      	ble.n	12f2 <addProjectile+0x2a>
+    1346:	68fb      	ldr	r3, [r7, #12]
+    1348:	3301      	adds	r3, #1
+    134a:	60fb      	str	r3, [r7, #12]
+    134c:	68fb      	ldr	r3, [r7, #12]
+    134e:	2b03      	cmp	r3, #3
+    1350:	ddcc      	ble.n	12ec <addProjectile+0x24>
+    1352:	4b23      	ldr	r3, [pc, #140]	@ (13e0 <addProjectile+0x118>)
+    1354:	681a      	ldr	r2, [r3, #0]
+    1356:	4923      	ldr	r1, [pc, #140]	@ (13e4 <addProjectile+0x11c>)
+    1358:	4613      	mov	r3, r2
+    135a:	005b      	lsls	r3, r3, #1
+    135c:	4413      	add	r3, r2
+    135e:	009b      	lsls	r3, r3, #2
+    1360:	440b      	add	r3, r1
+    1362:	687a      	ldr	r2, [r7, #4]
+    1364:	601a      	str	r2, [r3, #0]
+    1366:	4b1e      	ldr	r3, [pc, #120]	@ (13e0 <addProjectile+0x118>)
+    1368:	681a      	ldr	r2, [r3, #0]
+    136a:	491e      	ldr	r1, [pc, #120]	@ (13e4 <addProjectile+0x11c>)
+    136c:	4613      	mov	r3, r2
+    136e:	005b      	lsls	r3, r3, #1
+    1370:	4413      	add	r3, r2
+    1372:	009b      	lsls	r3, r3, #2
+    1374:	440b      	add	r3, r1
+    1376:	3304      	adds	r3, #4
+    1378:	683a      	ldr	r2, [r7, #0]
+    137a:	601a      	str	r2, [r3, #0]
+    137c:	4b18      	ldr	r3, [pc, #96]	@ (13e0 <addProjectile+0x118>)
+    137e:	681a      	ldr	r2, [r3, #0]
+    1380:	4918      	ldr	r1, [pc, #96]	@ (13e4 <addProjectile+0x11c>)
+    1382:	4613      	mov	r3, r2
+    1384:	005b      	lsls	r3, r3, #1
+    1386:	4413      	add	r3, r2
+    1388:	009b      	lsls	r3, r3, #2
+    138a:	440b      	add	r3, r1
+    138c:	3308      	adds	r3, #8
+    138e:	2201      	movs	r2, #1
+    1390:	601a      	str	r2, [r3, #0]
+    1392:	4b13      	ldr	r3, [pc, #76]	@ (13e0 <addProjectile+0x118>)
+    1394:	681b      	ldr	r3, [r3, #0]
+    1396:	1c59      	adds	r1, r3, #1
+    1398:	4b13      	ldr	r3, [pc, #76]	@ (13e8 <addProjectile+0x120>)
+    139a:	fb83 2301 	smull	r2, r3, r3, r1
+    139e:	105a      	asrs	r2, r3, #1
+    13a0:	17cb      	asrs	r3, r1, #31
+    13a2:	1ad2      	subs	r2, r2, r3
+    13a4:	4613      	mov	r3, r2
+    13a6:	005b      	lsls	r3, r3, #1
+    13a8:	4413      	add	r3, r2
+    13aa:	009b      	lsls	r3, r3, #2
+    13ac:	1aca      	subs	r2, r1, r3
+    13ae:	4b0c      	ldr	r3, [pc, #48]	@ (13e0 <addProjectile+0x118>)
+    13b0:	601a      	str	r2, [r3, #0]
+    13b2:	4b0b      	ldr	r3, [pc, #44]	@ (13e0 <addProjectile+0x118>)
+    13b4:	681b      	ldr	r3, [r3, #0]
+    13b6:	2b00      	cmp	r3, #0
+    13b8:	d102      	bne.n	13c0 <addProjectile+0xf8>
+    13ba:	4b04      	ldr	r3, [pc, #16]	@ (13cc <addProjectile+0x104>)
+    13bc:	2200      	movs	r2, #0
+    13be:	701a      	strb	r2, [r3, #0]
+    13c0:	bf00      	nop
+    13c2:	3710      	adds	r7, #16
+    13c4:	46bd      	mov	sp, r7
+    13c6:	bc90      	pop	{r4, r7}
+    13c8:	4770      	bx	lr
+    13ca:	bf00      	nop
+    13cc:	20000002 	.word	0x20000002
+    13d0:	20000000 	.word	0x20000000
+    13d4:	20000001 	.word	0x20000001
+    13d8:	20000004 	.word	0x20000004
+    13dc:	2000625c 	.word	0x2000625c
+    13e0:	2000f3a4 	.word	0x2000f3a4
+    13e4:	2000f314 	.word	0x2000f314
+    13e8:	2aaaaaab 	.word	0x2aaaaaab
 
-        newProjectileIndex = (newProjectileIndex+1) % PROJECTILE_NUM;
-    132a:	4b14      	ldr	r3, [pc, #80]	@ (137c <addProjectile+0x11c>)
-    132c:	681b      	ldr	r3, [r3, #0]
-    132e:	1c59      	adds	r1, r3, #1
-    1330:	4b14      	ldr	r3, [pc, #80]	@ (1384 <addProjectile+0x124>)
-    1332:	fb83 2301 	smull	r2, r3, r3, r1
-    1336:	105a      	asrs	r2, r3, #1
-    1338:	17cb      	asrs	r3, r1, #31
-    133a:	1ad2      	subs	r2, r2, r3
-    133c:	4613      	mov	r3, r2
-    133e:	005b      	lsls	r3, r3, #1
-    1340:	4413      	add	r3, r2
-    1342:	009b      	lsls	r3, r3, #2
-    1344:	1aca      	subs	r2, r1, r3
-    1346:	4b0d      	ldr	r3, [pc, #52]	@ (137c <addProjectile+0x11c>)
-    1348:	601a      	str	r2, [r3, #0]
-        if(newProjectileIndex == 0) {
-    134a:	4b0c      	ldr	r3, [pc, #48]	@ (137c <addProjectile+0x11c>)
-    134c:	681b      	ldr	r3, [r3, #0]
-    134e:	2b00      	cmp	r3, #0
-    1350:	d102      	bne.n	1358 <addProjectile+0xf8>
-            canAddProject = false;
-    1352:	4b05      	ldr	r3, [pc, #20]	@ (1368 <addProjectile+0x108>)
-    1354:	2200      	movs	r2, #0
-    1356:	701a      	strb	r2, [r3, #0]
-        }
-        
-        display_update_needed = true;
-    1358:	4b0b      	ldr	r3, [pc, #44]	@ (1388 <addProjectile+0x128>)
-    135a:	2201      	movs	r2, #1
-    135c:	701a      	strb	r2, [r3, #0]
-    }
-}
-    135e:	bf00      	nop
-    1360:	3710      	adds	r7, #16
-    1362:	46bd      	mov	sp, r7
-    1364:	bc90      	pop	{r4, r7}
-    1366:	4770      	bx	lr
-    1368:	20000003 	.word	0x20000003
-    136c:	20000001 	.word	0x20000001
-    1370:	20000002 	.word	0x20000002
-    1374:	20000004 	.word	0x20000004
-    1378:	2000625c 	.word	0x2000625c
-    137c:	2000ab14 	.word	0x2000ab14
-    1380:	2000aa84 	.word	0x2000aa84
-    1384:	2aaaaaab 	.word	0x2aaaaaab
-    1388:	20000000 	.word	0x20000000
-
-0000138c <removeProjectile>:
-
-void removeProjectile(int index, int projectX, int projectY) {
-    138c:	b4b0      	push	{r4, r5, r7}
-    138e:	b087      	sub	sp, #28
-    1390:	af00      	add	r7, sp, #0
-    1392:	60f8      	str	r0, [r7, #12]
-    1394:	60b9      	str	r1, [r7, #8]
-    1396:	607a      	str	r2, [r7, #4]
-    for(int i = 0; i < PROJECTILE_SIZE; i++) {
-    1398:	2300      	movs	r3, #0
-    139a:	617b      	str	r3, [r7, #20]
-    139c:	e036      	b.n	140c <removeProjectile+0x80>
-        for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    139e:	2300      	movs	r3, #0
-    13a0:	613b      	str	r3, [r7, #16]
-    13a2:	e02d      	b.n	1400 <removeProjectile+0x74>
-                if (projectileDesign[i][j] != 0 && projectX+i >= 0)
-    13a4:	491e      	ldr	r1, [pc, #120]	@ (1420 <removeProjectile+0x94>)
-    13a6:	697b      	ldr	r3, [r7, #20]
-    13a8:	009a      	lsls	r2, r3, #2
-    13aa:	693b      	ldr	r3, [r7, #16]
-    13ac:	4413      	add	r3, r2
-    13ae:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-    13b2:	2b00      	cmp	r3, #0
-    13b4:	d021      	beq.n	13fa <removeProjectile+0x6e>
-    13b6:	68ba      	ldr	r2, [r7, #8]
-    13b8:	697b      	ldr	r3, [r7, #20]
-    13ba:	4413      	add	r3, r2
-    13bc:	2b00      	cmp	r3, #0
-    13be:	db1c      	blt.n	13fa <removeProjectile+0x6e>
-                    screen[projectX + i][projectY + j] = background[projectX + i][projectY + j];
-    13c0:	68ba      	ldr	r2, [r7, #8]
-    13c2:	697b      	ldr	r3, [r7, #20]
-    13c4:	18d1      	adds	r1, r2, r3
-    13c6:	687a      	ldr	r2, [r7, #4]
-    13c8:	693b      	ldr	r3, [r7, #16]
-    13ca:	18d4      	adds	r4, r2, r3
-    13cc:	68ba      	ldr	r2, [r7, #8]
-    13ce:	697b      	ldr	r3, [r7, #20]
-    13d0:	441a      	add	r2, r3
-    13d2:	6878      	ldr	r0, [r7, #4]
-    13d4:	693b      	ldr	r3, [r7, #16]
-    13d6:	4418      	add	r0, r3
-    13d8:	4d12      	ldr	r5, [pc, #72]	@ (1424 <removeProjectile+0x98>)
-    13da:	460b      	mov	r3, r1
-    13dc:	005b      	lsls	r3, r3, #1
-    13de:	440b      	add	r3, r1
-    13e0:	015b      	lsls	r3, r3, #5
-    13e2:	4423      	add	r3, r4
-    13e4:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
-    13e8:	490f      	ldr	r1, [pc, #60]	@ (1428 <removeProjectile+0x9c>)
-    13ea:	4613      	mov	r3, r2
-    13ec:	005b      	lsls	r3, r3, #1
-    13ee:	4413      	add	r3, r2
-    13f0:	015b      	lsls	r3, r3, #5
-    13f2:	4403      	add	r3, r0
-    13f4:	4622      	mov	r2, r4
-    13f6:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
-        for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    13fa:	693b      	ldr	r3, [r7, #16]
-    13fc:	3301      	adds	r3, #1
-    13fe:	613b      	str	r3, [r7, #16]
-    1400:	693b      	ldr	r3, [r7, #16]
-    1402:	2b03      	cmp	r3, #3
-    1404:	ddce      	ble.n	13a4 <removeProjectile+0x18>
-    for(int i = 0; i < PROJECTILE_SIZE; i++) {
+000013ec <removeProjectile>:
+    13ec:	b4b0      	push	{r4, r5, r7}
+    13ee:	b087      	sub	sp, #28
+    13f0:	af00      	add	r7, sp, #0
+    13f2:	60f8      	str	r0, [r7, #12]
+    13f4:	60b9      	str	r1, [r7, #8]
+    13f6:	607a      	str	r2, [r7, #4]
+    13f8:	2300      	movs	r3, #0
+    13fa:	617b      	str	r3, [r7, #20]
+    13fc:	e036      	b.n	146c <removeProjectile+0x80>
+    13fe:	2300      	movs	r3, #0
+    1400:	613b      	str	r3, [r7, #16]
+    1402:	e02d      	b.n	1460 <removeProjectile+0x74>
+    1404:	491e      	ldr	r1, [pc, #120]	@ (1480 <removeProjectile+0x94>)
     1406:	697b      	ldr	r3, [r7, #20]
-    1408:	3301      	adds	r3, #1
-    140a:	617b      	str	r3, [r7, #20]
-    140c:	697b      	ldr	r3, [r7, #20]
-    140e:	2b03      	cmp	r3, #3
-    1410:	ddc5      	ble.n	139e <removeProjectile+0x12>
-        }
-    }
-}
-    1412:	bf00      	nop
-    1414:	bf00      	nop
-    1416:	371c      	adds	r7, #28
-    1418:	46bd      	mov	sp, r7
-    141a:	bcb0      	pop	{r4, r5, r7}
-    141c:	4770      	bx	lr
-    141e:	bf00      	nop
-    1420:	20000004 	.word	0x20000004
-    1424:	20000258 	.word	0x20000258
-    1428:	2000625c 	.word	0x2000625c
+    1408:	009a      	lsls	r2, r3, #2
+    140a:	693b      	ldr	r3, [r7, #16]
+    140c:	4413      	add	r3, r2
+    140e:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    1412:	2b00      	cmp	r3, #0
+    1414:	d021      	beq.n	145a <removeProjectile+0x6e>
+    1416:	68ba      	ldr	r2, [r7, #8]
+    1418:	697b      	ldr	r3, [r7, #20]
+    141a:	4413      	add	r3, r2
+    141c:	2b00      	cmp	r3, #0
+    141e:	db1c      	blt.n	145a <removeProjectile+0x6e>
+    1420:	68ba      	ldr	r2, [r7, #8]
+    1422:	697b      	ldr	r3, [r7, #20]
+    1424:	18d1      	adds	r1, r2, r3
+    1426:	687a      	ldr	r2, [r7, #4]
+    1428:	693b      	ldr	r3, [r7, #16]
+    142a:	18d4      	adds	r4, r2, r3
+    142c:	68ba      	ldr	r2, [r7, #8]
+    142e:	697b      	ldr	r3, [r7, #20]
+    1430:	441a      	add	r2, r3
+    1432:	6878      	ldr	r0, [r7, #4]
+    1434:	693b      	ldr	r3, [r7, #16]
+    1436:	4418      	add	r0, r3
+    1438:	4d12      	ldr	r5, [pc, #72]	@ (1484 <removeProjectile+0x98>)
+    143a:	460b      	mov	r3, r1
+    143c:	005b      	lsls	r3, r3, #1
+    143e:	440b      	add	r3, r1
+    1440:	015b      	lsls	r3, r3, #5
+    1442:	4423      	add	r3, r4
+    1444:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+    1448:	490f      	ldr	r1, [pc, #60]	@ (1488 <removeProjectile+0x9c>)
+    144a:	4613      	mov	r3, r2
+    144c:	005b      	lsls	r3, r3, #1
+    144e:	4413      	add	r3, r2
+    1450:	015b      	lsls	r3, r3, #5
+    1452:	4403      	add	r3, r0
+    1454:	4622      	mov	r2, r4
+    1456:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+    145a:	693b      	ldr	r3, [r7, #16]
+    145c:	3301      	adds	r3, #1
+    145e:	613b      	str	r3, [r7, #16]
+    1460:	693b      	ldr	r3, [r7, #16]
+    1462:	2b03      	cmp	r3, #3
+    1464:	ddce      	ble.n	1404 <removeProjectile+0x18>
+    1466:	697b      	ldr	r3, [r7, #20]
+    1468:	3301      	adds	r3, #1
+    146a:	617b      	str	r3, [r7, #20]
+    146c:	697b      	ldr	r3, [r7, #20]
+    146e:	2b03      	cmp	r3, #3
+    1470:	ddc5      	ble.n	13fe <removeProjectile+0x12>
+    1472:	bf00      	nop
+    1474:	bf00      	nop
+    1476:	371c      	adds	r7, #28
+    1478:	46bd      	mov	sp, r7
+    147a:	bcb0      	pop	{r4, r5, r7}
+    147c:	4770      	bx	lr
+    147e:	bf00      	nop
+    1480:	20000004 	.word	0x20000004
+    1484:	20000258 	.word	0x20000258
+    1488:	2000625c 	.word	0x2000625c
 
-0000142c <updateProjectile>:
-
-void updateProjectile() {
-    142c:	b5b0      	push	{r4, r5, r7, lr}
-    142e:	b090      	sub	sp, #64	@ 0x40
-    1430:	af04      	add	r7, sp, #16
-    for(int i = 0; i < PROJECTILE_NUM; i++) {
-    1432:	2300      	movs	r3, #0
-    1434:	62fb      	str	r3, [r7, #44]	@ 0x2c
-    1436:	e102      	b.n	163e <updateProjectile+0x212>
-        if(projectiles[i][2]) {
-    1438:	4986      	ldr	r1, [pc, #536]	@ (1654 <updateProjectile+0x228>)
-    143a:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
-    143c:	4613      	mov	r3, r2
-    143e:	005b      	lsls	r3, r3, #1
-    1440:	4413      	add	r3, r2
-    1442:	009b      	lsls	r3, r3, #2
-    1444:	440b      	add	r3, r1
-    1446:	3308      	adds	r3, #8
-    1448:	681b      	ldr	r3, [r3, #0]
-    144a:	2b00      	cmp	r3, #0
-    144c:	f000 80f4 	beq.w	1638 <updateProjectile+0x20c>
-            int projectX = projectiles[i][0];
-    1450:	4980      	ldr	r1, [pc, #512]	@ (1654 <updateProjectile+0x228>)
-    1452:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
-    1454:	4613      	mov	r3, r2
-    1456:	005b      	lsls	r3, r3, #1
-    1458:	4413      	add	r3, r2
-    145a:	009b      	lsls	r3, r3, #2
-    145c:	440b      	add	r3, r1
-    145e:	681b      	ldr	r3, [r3, #0]
-    1460:	613b      	str	r3, [r7, #16]
-            int projectY = projectiles[i][1];
-    1462:	497c      	ldr	r1, [pc, #496]	@ (1654 <updateProjectile+0x228>)
-    1464:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
-    1466:	4613      	mov	r3, r2
-    1468:	005b      	lsls	r3, r3, #1
-    146a:	4413      	add	r3, r2
-    146c:	009b      	lsls	r3, r3, #2
-    146e:	440b      	add	r3, r1
-    1470:	3304      	adds	r3, #4
-    1472:	681b      	ldr	r3, [r3, #0]
-    1474:	60fb      	str	r3, [r7, #12]
-
-            removeProjectile(i, projectX, projectY);
-    1476:	68fa      	ldr	r2, [r7, #12]
-    1478:	6939      	ldr	r1, [r7, #16]
-    147a:	6af8      	ldr	r0, [r7, #44]	@ 0x2c
-    147c:	f7ff ff86 	bl	138c <removeProjectile>
-
-            bool process = true;
-    1480:	2301      	movs	r3, #1
-    1482:	f887 302b 	strb.w	r3, [r7, #43]	@ 0x2b
-            for (int j = 0; j < ENEMY_COUNT; j++) {
-    1486:	2300      	movs	r3, #0
-    1488:	627b      	str	r3, [r7, #36]	@ 0x24
-    148a:	e07a      	b.n	1582 <updateProjectile+0x156>
-                if (enemyPositions[j][2]) {
-    148c:	4972      	ldr	r1, [pc, #456]	@ (1658 <updateProjectile+0x22c>)
-    148e:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
-    1490:	4613      	mov	r3, r2
-    1492:	005b      	lsls	r3, r3, #1
-    1494:	4413      	add	r3, r2
-    1496:	440b      	add	r3, r1
-    1498:	3302      	adds	r3, #2
-    149a:	781b      	ldrb	r3, [r3, #0]
-    149c:	2b00      	cmp	r3, #0
-    149e:	d06d      	beq.n	157c <updateProjectile+0x150>
-                    int ex = enemyPositions[j][0];
-    14a0:	496d      	ldr	r1, [pc, #436]	@ (1658 <updateProjectile+0x22c>)
-    14a2:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
-    14a4:	4613      	mov	r3, r2
-    14a6:	005b      	lsls	r3, r3, #1
-    14a8:	4413      	add	r3, r2
-    14aa:	440b      	add	r3, r1
-    14ac:	781b      	ldrb	r3, [r3, #0]
-    14ae:	60bb      	str	r3, [r7, #8]
-                    int ey = enemyPositions[j][1];
-    14b0:	4969      	ldr	r1, [pc, #420]	@ (1658 <updateProjectile+0x22c>)
-    14b2:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+0000148c <updateProjectile>:
+    148c:	b5b0      	push	{r4, r5, r7, lr}
+    148e:	b090      	sub	sp, #64	@ 0x40
+    1490:	af04      	add	r7, sp, #16
+    1492:	2300      	movs	r3, #0
+    1494:	62fb      	str	r3, [r7, #44]	@ 0x2c
+    1496:	e102      	b.n	169e <updateProjectile+0x212>
+    1498:	4985      	ldr	r1, [pc, #532]	@ (16b0 <updateProjectile+0x224>)
+    149a:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    149c:	4613      	mov	r3, r2
+    149e:	005b      	lsls	r3, r3, #1
+    14a0:	4413      	add	r3, r2
+    14a2:	009b      	lsls	r3, r3, #2
+    14a4:	440b      	add	r3, r1
+    14a6:	3308      	adds	r3, #8
+    14a8:	681b      	ldr	r3, [r3, #0]
+    14aa:	2b00      	cmp	r3, #0
+    14ac:	f000 80f4 	beq.w	1698 <updateProjectile+0x20c>
+    14b0:	497f      	ldr	r1, [pc, #508]	@ (16b0 <updateProjectile+0x224>)
+    14b2:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
     14b4:	4613      	mov	r3, r2
     14b6:	005b      	lsls	r3, r3, #1
     14b8:	4413      	add	r3, r2
-    14ba:	440b      	add	r3, r1
-    14bc:	3301      	adds	r3, #1
-    14be:	781b      	ldrb	r3, [r3, #0]
-    14c0:	607b      	str	r3, [r7, #4]
-
-                    if (intersects(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, ex, ey, ENEMY_SIZE, ENEMY_SIZE)) {
-    14c2:	2308      	movs	r3, #8
-    14c4:	9303      	str	r3, [sp, #12]
-    14c6:	2308      	movs	r3, #8
-    14c8:	9302      	str	r3, [sp, #8]
-    14ca:	687b      	ldr	r3, [r7, #4]
-    14cc:	9301      	str	r3, [sp, #4]
-    14ce:	68bb      	ldr	r3, [r7, #8]
-    14d0:	9300      	str	r3, [sp, #0]
-    14d2:	2304      	movs	r3, #4
-    14d4:	2204      	movs	r2, #4
-    14d6:	68f9      	ldr	r1, [r7, #12]
-    14d8:	6938      	ldr	r0, [r7, #16]
-    14da:	f7ff fc47 	bl	d6c <intersects>
-    14de:	4603      	mov	r3, r0
-    14e0:	2b00      	cmp	r3, #0
-    14e2:	d04b      	beq.n	157c <updateProjectile+0x150>
-                        enemyPositions[j][2] = false;
-    14e4:	495c      	ldr	r1, [pc, #368]	@ (1658 <updateProjectile+0x22c>)
-    14e6:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
-    14e8:	4613      	mov	r3, r2
-    14ea:	005b      	lsls	r3, r3, #1
-    14ec:	4413      	add	r3, r2
-    14ee:	440b      	add	r3, r1
-    14f0:	3302      	adds	r3, #2
-    14f2:	2200      	movs	r2, #0
-    14f4:	701a      	strb	r2, [r3, #0]
-                        removeEnemy(j);
-    14f6:	6a78      	ldr	r0, [r7, #36]	@ 0x24
-    14f8:	f7ff fe52 	bl	11a0 <removeEnemy>
-
-                        for (int k = 0; k < ENEMY_SIZE; k++)
-    14fc:	2300      	movs	r3, #0
-    14fe:	623b      	str	r3, [r7, #32]
-    1500:	e028      	b.n	1554 <updateProjectile+0x128>
-                            for (int l = 0; l < ENEMY_SIZE; l++)
-    1502:	2300      	movs	r3, #0
-    1504:	61fb      	str	r3, [r7, #28]
-    1506:	e01f      	b.n	1548 <updateProjectile+0x11c>
-                                screen[ey + k][ex + l] = background[ey + k][ex + l];
-    1508:	687a      	ldr	r2, [r7, #4]
-    150a:	6a3b      	ldr	r3, [r7, #32]
-    150c:	18d1      	adds	r1, r2, r3
-    150e:	68ba      	ldr	r2, [r7, #8]
-    1510:	69fb      	ldr	r3, [r7, #28]
-    1512:	18d4      	adds	r4, r2, r3
-    1514:	687a      	ldr	r2, [r7, #4]
-    1516:	6a3b      	ldr	r3, [r7, #32]
-    1518:	441a      	add	r2, r3
-    151a:	68b8      	ldr	r0, [r7, #8]
-    151c:	69fb      	ldr	r3, [r7, #28]
-    151e:	4418      	add	r0, r3
-    1520:	4d4e      	ldr	r5, [pc, #312]	@ (165c <updateProjectile+0x230>)
-    1522:	460b      	mov	r3, r1
-    1524:	005b      	lsls	r3, r3, #1
-    1526:	440b      	add	r3, r1
-    1528:	015b      	lsls	r3, r3, #5
-    152a:	4423      	add	r3, r4
-    152c:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
-    1530:	494b      	ldr	r1, [pc, #300]	@ (1660 <updateProjectile+0x234>)
-    1532:	4613      	mov	r3, r2
-    1534:	005b      	lsls	r3, r3, #1
-    1536:	4413      	add	r3, r2
-    1538:	015b      	lsls	r3, r3, #5
-    153a:	4403      	add	r3, r0
-    153c:	4622      	mov	r2, r4
-    153e:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
-                            for (int l = 0; l < ENEMY_SIZE; l++)
-    1542:	69fb      	ldr	r3, [r7, #28]
-    1544:	3301      	adds	r3, #1
-    1546:	61fb      	str	r3, [r7, #28]
-    1548:	69fb      	ldr	r3, [r7, #28]
-    154a:	2b07      	cmp	r3, #7
-    154c:	dddc      	ble.n	1508 <updateProjectile+0xdc>
-                        for (int k = 0; k < ENEMY_SIZE; k++)
-    154e:	6a3b      	ldr	r3, [r7, #32]
-    1550:	3301      	adds	r3, #1
-    1552:	623b      	str	r3, [r7, #32]
-    1554:	6a3b      	ldr	r3, [r7, #32]
-    1556:	2b07      	cmp	r3, #7
-    1558:	ddd3      	ble.n	1502 <updateProjectile+0xd6>
-
-                        projectiles[i][2] = false;
-    155a:	493e      	ldr	r1, [pc, #248]	@ (1654 <updateProjectile+0x228>)
-    155c:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
-    155e:	4613      	mov	r3, r2
-    1560:	005b      	lsls	r3, r3, #1
-    1562:	4413      	add	r3, r2
-    1564:	009b      	lsls	r3, r3, #2
-    1566:	440b      	add	r3, r1
-    1568:	3308      	adds	r3, #8
-    156a:	2200      	movs	r2, #0
-    156c:	601a      	str	r2, [r3, #0]
-                        canAddProject = true;
-    156e:	4b3d      	ldr	r3, [pc, #244]	@ (1664 <updateProjectile+0x238>)
-    1570:	2201      	movs	r2, #1
-    1572:	701a      	strb	r2, [r3, #0]
-
-                        process = false;
-    1574:	2300      	movs	r3, #0
-    1576:	f887 302b 	strb.w	r3, [r7, #43]	@ 0x2b
-                        break;
-    157a:	e005      	b.n	1588 <updateProjectile+0x15c>
-            for (int j = 0; j < ENEMY_COUNT; j++) {
-    157c:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
-    157e:	3301      	adds	r3, #1
-    1580:	627b      	str	r3, [r7, #36]	@ 0x24
-    1582:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
-    1584:	2b0b      	cmp	r3, #11
-    1586:	dd81      	ble.n	148c <updateProjectile+0x60>
-                    }
-                }
-            }
-
-            if(process) {
-    1588:	f897 302b 	ldrb.w	r3, [r7, #43]	@ 0x2b
-    158c:	2b00      	cmp	r3, #0
-    158e:	d053      	beq.n	1638 <updateProjectile+0x20c>
-                projectX += PLAYER_DIRECTION;
-    1590:	693b      	ldr	r3, [r7, #16]
-    1592:	3b05      	subs	r3, #5
-    1594:	613b      	str	r3, [r7, #16]
-                if(projectX+PROJECTILE_SIZE > 0) {
-    1596:	693b      	ldr	r3, [r7, #16]
-    1598:	f113 0f03 	cmn.w	r3, #3
-    159c:	db3f      	blt.n	161e <updateProjectile+0x1f2>
-                    for(int k = 0; k < PROJECTILE_SIZE; k++) {
-    159e:	2300      	movs	r3, #0
-    15a0:	61bb      	str	r3, [r7, #24]
-    15a2:	e02f      	b.n	1604 <updateProjectile+0x1d8>
-                        for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    15a4:	2300      	movs	r3, #0
-    15a6:	617b      	str	r3, [r7, #20]
-    15a8:	e026      	b.n	15f8 <updateProjectile+0x1cc>
-                            if (projectileDesign[k][j] != 0 && projectX+k >= 0)
-    15aa:	492f      	ldr	r1, [pc, #188]	@ (1668 <updateProjectile+0x23c>)
-    15ac:	69bb      	ldr	r3, [r7, #24]
-    15ae:	009a      	lsls	r2, r3, #2
-    15b0:	697b      	ldr	r3, [r7, #20]
-    15b2:	4413      	add	r3, r2
-    15b4:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-    15b8:	2b00      	cmp	r3, #0
-    15ba:	d01a      	beq.n	15f2 <updateProjectile+0x1c6>
-    15bc:	693a      	ldr	r2, [r7, #16]
-    15be:	69bb      	ldr	r3, [r7, #24]
-    15c0:	4413      	add	r3, r2
-    15c2:	2b00      	cmp	r3, #0
-    15c4:	db15      	blt.n	15f2 <updateProjectile+0x1c6>
-                                screen[projectX + k][projectY + j] = projectileDesign[k][j];
-    15c6:	693a      	ldr	r2, [r7, #16]
-    15c8:	69bb      	ldr	r3, [r7, #24]
-    15ca:	441a      	add	r2, r3
-    15cc:	68f9      	ldr	r1, [r7, #12]
-    15ce:	697b      	ldr	r3, [r7, #20]
-    15d0:	4419      	add	r1, r3
-    15d2:	4c25      	ldr	r4, [pc, #148]	@ (1668 <updateProjectile+0x23c>)
-    15d4:	69bb      	ldr	r3, [r7, #24]
-    15d6:	0098      	lsls	r0, r3, #2
-    15d8:	697b      	ldr	r3, [r7, #20]
-    15da:	4403      	add	r3, r0
-    15dc:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
-    15e0:	481f      	ldr	r0, [pc, #124]	@ (1660 <updateProjectile+0x234>)
-    15e2:	4613      	mov	r3, r2
-    15e4:	005b      	lsls	r3, r3, #1
-    15e6:	4413      	add	r3, r2
-    15e8:	015b      	lsls	r3, r3, #5
-    15ea:	440b      	add	r3, r1
-    15ec:	4622      	mov	r2, r4
-    15ee:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
-                        for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    15f2:	697b      	ldr	r3, [r7, #20]
-    15f4:	3301      	adds	r3, #1
-    15f6:	617b      	str	r3, [r7, #20]
-    15f8:	697b      	ldr	r3, [r7, #20]
-    15fa:	2b03      	cmp	r3, #3
-    15fc:	ddd5      	ble.n	15aa <updateProjectile+0x17e>
-                    for(int k = 0; k < PROJECTILE_SIZE; k++) {
-    15fe:	69bb      	ldr	r3, [r7, #24]
-    1600:	3301      	adds	r3, #1
-    1602:	61bb      	str	r3, [r7, #24]
-    1604:	69bb      	ldr	r3, [r7, #24]
-    1606:	2b03      	cmp	r3, #3
-    1608:	ddcc      	ble.n	15a4 <updateProjectile+0x178>
-                        }
-                    }
-                    projectiles[i][0] = projectX;
-    160a:	4912      	ldr	r1, [pc, #72]	@ (1654 <updateProjectile+0x228>)
-    160c:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
-    160e:	4613      	mov	r3, r2
-    1610:	005b      	lsls	r3, r3, #1
+    14ba:	009b      	lsls	r3, r3, #2
+    14bc:	440b      	add	r3, r1
+    14be:	681b      	ldr	r3, [r3, #0]
+    14c0:	613b      	str	r3, [r7, #16]
+    14c2:	497b      	ldr	r1, [pc, #492]	@ (16b0 <updateProjectile+0x224>)
+    14c4:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    14c6:	4613      	mov	r3, r2
+    14c8:	005b      	lsls	r3, r3, #1
+    14ca:	4413      	add	r3, r2
+    14cc:	009b      	lsls	r3, r3, #2
+    14ce:	440b      	add	r3, r1
+    14d0:	3304      	adds	r3, #4
+    14d2:	681b      	ldr	r3, [r3, #0]
+    14d4:	60fb      	str	r3, [r7, #12]
+    14d6:	68fa      	ldr	r2, [r7, #12]
+    14d8:	6939      	ldr	r1, [r7, #16]
+    14da:	6af8      	ldr	r0, [r7, #44]	@ 0x2c
+    14dc:	f7ff ff86 	bl	13ec <removeProjectile>
+    14e0:	2301      	movs	r3, #1
+    14e2:	f887 302b 	strb.w	r3, [r7, #43]	@ 0x2b
+    14e6:	2300      	movs	r3, #0
+    14e8:	627b      	str	r3, [r7, #36]	@ 0x24
+    14ea:	e07a      	b.n	15e2 <updateProjectile+0x156>
+    14ec:	4971      	ldr	r1, [pc, #452]	@ (16b4 <updateProjectile+0x228>)
+    14ee:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+    14f0:	4613      	mov	r3, r2
+    14f2:	005b      	lsls	r3, r3, #1
+    14f4:	4413      	add	r3, r2
+    14f6:	440b      	add	r3, r1
+    14f8:	3302      	adds	r3, #2
+    14fa:	781b      	ldrb	r3, [r3, #0]
+    14fc:	2b00      	cmp	r3, #0
+    14fe:	d06d      	beq.n	15dc <updateProjectile+0x150>
+    1500:	496c      	ldr	r1, [pc, #432]	@ (16b4 <updateProjectile+0x228>)
+    1502:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+    1504:	4613      	mov	r3, r2
+    1506:	005b      	lsls	r3, r3, #1
+    1508:	4413      	add	r3, r2
+    150a:	440b      	add	r3, r1
+    150c:	781b      	ldrb	r3, [r3, #0]
+    150e:	60bb      	str	r3, [r7, #8]
+    1510:	4968      	ldr	r1, [pc, #416]	@ (16b4 <updateProjectile+0x228>)
+    1512:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+    1514:	4613      	mov	r3, r2
+    1516:	005b      	lsls	r3, r3, #1
+    1518:	4413      	add	r3, r2
+    151a:	440b      	add	r3, r1
+    151c:	3301      	adds	r3, #1
+    151e:	781b      	ldrb	r3, [r3, #0]
+    1520:	607b      	str	r3, [r7, #4]
+    1522:	2308      	movs	r3, #8
+    1524:	9303      	str	r3, [sp, #12]
+    1526:	2308      	movs	r3, #8
+    1528:	9302      	str	r3, [sp, #8]
+    152a:	687b      	ldr	r3, [r7, #4]
+    152c:	9301      	str	r3, [sp, #4]
+    152e:	68bb      	ldr	r3, [r7, #8]
+    1530:	9300      	str	r3, [sp, #0]
+    1532:	2304      	movs	r3, #4
+    1534:	2204      	movs	r2, #4
+    1536:	68f9      	ldr	r1, [r7, #12]
+    1538:	6938      	ldr	r0, [r7, #16]
+    153a:	f7ff fc23 	bl	d84 <intersects>
+    153e:	4603      	mov	r3, r0
+    1540:	2b00      	cmp	r3, #0
+    1542:	d04b      	beq.n	15dc <updateProjectile+0x150>
+    1544:	495b      	ldr	r1, [pc, #364]	@ (16b4 <updateProjectile+0x228>)
+    1546:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+    1548:	4613      	mov	r3, r2
+    154a:	005b      	lsls	r3, r3, #1
+    154c:	4413      	add	r3, r2
+    154e:	440b      	add	r3, r1
+    1550:	3302      	adds	r3, #2
+    1552:	2200      	movs	r2, #0
+    1554:	701a      	strb	r2, [r3, #0]
+    1556:	6a78      	ldr	r0, [r7, #36]	@ 0x24
+    1558:	f7ff fe44 	bl	11e4 <removeEnemy>
+    155c:	2300      	movs	r3, #0
+    155e:	623b      	str	r3, [r7, #32]
+    1560:	e028      	b.n	15b4 <updateProjectile+0x128>
+    1562:	2300      	movs	r3, #0
+    1564:	61fb      	str	r3, [r7, #28]
+    1566:	e01f      	b.n	15a8 <updateProjectile+0x11c>
+    1568:	687a      	ldr	r2, [r7, #4]
+    156a:	6a3b      	ldr	r3, [r7, #32]
+    156c:	18d1      	adds	r1, r2, r3
+    156e:	68ba      	ldr	r2, [r7, #8]
+    1570:	69fb      	ldr	r3, [r7, #28]
+    1572:	18d4      	adds	r4, r2, r3
+    1574:	687a      	ldr	r2, [r7, #4]
+    1576:	6a3b      	ldr	r3, [r7, #32]
+    1578:	441a      	add	r2, r3
+    157a:	68b8      	ldr	r0, [r7, #8]
+    157c:	69fb      	ldr	r3, [r7, #28]
+    157e:	4418      	add	r0, r3
+    1580:	4d4d      	ldr	r5, [pc, #308]	@ (16b8 <updateProjectile+0x22c>)
+    1582:	460b      	mov	r3, r1
+    1584:	005b      	lsls	r3, r3, #1
+    1586:	440b      	add	r3, r1
+    1588:	015b      	lsls	r3, r3, #5
+    158a:	4423      	add	r3, r4
+    158c:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+    1590:	494a      	ldr	r1, [pc, #296]	@ (16bc <updateProjectile+0x230>)
+    1592:	4613      	mov	r3, r2
+    1594:	005b      	lsls	r3, r3, #1
+    1596:	4413      	add	r3, r2
+    1598:	015b      	lsls	r3, r3, #5
+    159a:	4403      	add	r3, r0
+    159c:	4622      	mov	r2, r4
+    159e:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+    15a2:	69fb      	ldr	r3, [r7, #28]
+    15a4:	3301      	adds	r3, #1
+    15a6:	61fb      	str	r3, [r7, #28]
+    15a8:	69fb      	ldr	r3, [r7, #28]
+    15aa:	2b07      	cmp	r3, #7
+    15ac:	dddc      	ble.n	1568 <updateProjectile+0xdc>
+    15ae:	6a3b      	ldr	r3, [r7, #32]
+    15b0:	3301      	adds	r3, #1
+    15b2:	623b      	str	r3, [r7, #32]
+    15b4:	6a3b      	ldr	r3, [r7, #32]
+    15b6:	2b07      	cmp	r3, #7
+    15b8:	ddd3      	ble.n	1562 <updateProjectile+0xd6>
+    15ba:	493d      	ldr	r1, [pc, #244]	@ (16b0 <updateProjectile+0x224>)
+    15bc:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    15be:	4613      	mov	r3, r2
+    15c0:	005b      	lsls	r3, r3, #1
+    15c2:	4413      	add	r3, r2
+    15c4:	009b      	lsls	r3, r3, #2
+    15c6:	440b      	add	r3, r1
+    15c8:	3308      	adds	r3, #8
+    15ca:	2200      	movs	r2, #0
+    15cc:	601a      	str	r2, [r3, #0]
+    15ce:	4b3c      	ldr	r3, [pc, #240]	@ (16c0 <updateProjectile+0x234>)
+    15d0:	2201      	movs	r2, #1
+    15d2:	701a      	strb	r2, [r3, #0]
+    15d4:	2300      	movs	r3, #0
+    15d6:	f887 302b 	strb.w	r3, [r7, #43]	@ 0x2b
+    15da:	e005      	b.n	15e8 <updateProjectile+0x15c>
+    15dc:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
+    15de:	3301      	adds	r3, #1
+    15e0:	627b      	str	r3, [r7, #36]	@ 0x24
+    15e2:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
+    15e4:	2b0b      	cmp	r3, #11
+    15e6:	dd81      	ble.n	14ec <updateProjectile+0x60>
+    15e8:	f897 302b 	ldrb.w	r3, [r7, #43]	@ 0x2b
+    15ec:	2b00      	cmp	r3, #0
+    15ee:	d053      	beq.n	1698 <updateProjectile+0x20c>
+    15f0:	693b      	ldr	r3, [r7, #16]
+    15f2:	3b05      	subs	r3, #5
+    15f4:	613b      	str	r3, [r7, #16]
+    15f6:	693b      	ldr	r3, [r7, #16]
+    15f8:	f113 0f03 	cmn.w	r3, #3
+    15fc:	db3f      	blt.n	167e <updateProjectile+0x1f2>
+    15fe:	2300      	movs	r3, #0
+    1600:	61bb      	str	r3, [r7, #24]
+    1602:	e02f      	b.n	1664 <updateProjectile+0x1d8>
+    1604:	2300      	movs	r3, #0
+    1606:	617b      	str	r3, [r7, #20]
+    1608:	e026      	b.n	1658 <updateProjectile+0x1cc>
+    160a:	492e      	ldr	r1, [pc, #184]	@ (16c4 <updateProjectile+0x238>)
+    160c:	69bb      	ldr	r3, [r7, #24]
+    160e:	009a      	lsls	r2, r3, #2
+    1610:	697b      	ldr	r3, [r7, #20]
     1612:	4413      	add	r3, r2
-    1614:	009b      	lsls	r3, r3, #2
-    1616:	440b      	add	r3, r1
-    1618:	693a      	ldr	r2, [r7, #16]
-    161a:	601a      	str	r2, [r3, #0]
-    161c:	e00c      	b.n	1638 <updateProjectile+0x20c>
-                }
-                else {
-                    projectiles[i][2] = false;
-    161e:	490d      	ldr	r1, [pc, #52]	@ (1654 <updateProjectile+0x228>)
-    1620:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
-    1622:	4613      	mov	r3, r2
-    1624:	005b      	lsls	r3, r3, #1
-    1626:	4413      	add	r3, r2
-    1628:	009b      	lsls	r3, r3, #2
-    162a:	440b      	add	r3, r1
-    162c:	3308      	adds	r3, #8
-    162e:	2200      	movs	r2, #0
-    1630:	601a      	str	r2, [r3, #0]
-                    canAddProject = true;
-    1632:	4b0c      	ldr	r3, [pc, #48]	@ (1664 <updateProjectile+0x238>)
-    1634:	2201      	movs	r2, #1
-    1636:	701a      	strb	r2, [r3, #0]
-    for(int i = 0; i < PROJECTILE_NUM; i++) {
-    1638:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
-    163a:	3301      	adds	r3, #1
-    163c:	62fb      	str	r3, [r7, #44]	@ 0x2c
-    163e:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
-    1640:	2b0b      	cmp	r3, #11
-    1642:	f77f aef9 	ble.w	1438 <updateProjectile+0xc>
-                }
-            }
-        }
-    }
-    display_update_needed = true;
-    1646:	4b09      	ldr	r3, [pc, #36]	@ (166c <updateProjectile+0x240>)
-    1648:	2201      	movs	r2, #1
-    164a:	701a      	strb	r2, [r3, #0]
-}
-    164c:	bf00      	nop
-    164e:	3730      	adds	r7, #48	@ 0x30
-    1650:	46bd      	mov	sp, r7
-    1652:	bdb0      	pop	{r4, r5, r7, pc}
-    1654:	2000aa84 	.word	0x2000aa84
-    1658:	2000aa5c 	.word	0x2000aa5c
-    165c:	20000258 	.word	0x20000258
-    1660:	2000625c 	.word	0x2000625c
-    1664:	20000003 	.word	0x20000003
-    1668:	20000004 	.word	0x20000004
-    166c:	20000000 	.word	0x20000000
+    1614:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    1618:	2b00      	cmp	r3, #0
+    161a:	d01a      	beq.n	1652 <updateProjectile+0x1c6>
+    161c:	693a      	ldr	r2, [r7, #16]
+    161e:	69bb      	ldr	r3, [r7, #24]
+    1620:	4413      	add	r3, r2
+    1622:	2b00      	cmp	r3, #0
+    1624:	db15      	blt.n	1652 <updateProjectile+0x1c6>
+    1626:	693a      	ldr	r2, [r7, #16]
+    1628:	69bb      	ldr	r3, [r7, #24]
+    162a:	441a      	add	r2, r3
+    162c:	68f9      	ldr	r1, [r7, #12]
+    162e:	697b      	ldr	r3, [r7, #20]
+    1630:	4419      	add	r1, r3
+    1632:	4c24      	ldr	r4, [pc, #144]	@ (16c4 <updateProjectile+0x238>)
+    1634:	69bb      	ldr	r3, [r7, #24]
+    1636:	0098      	lsls	r0, r3, #2
+    1638:	697b      	ldr	r3, [r7, #20]
+    163a:	4403      	add	r3, r0
+    163c:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    1640:	481e      	ldr	r0, [pc, #120]	@ (16bc <updateProjectile+0x230>)
+    1642:	4613      	mov	r3, r2
+    1644:	005b      	lsls	r3, r3, #1
+    1646:	4413      	add	r3, r2
+    1648:	015b      	lsls	r3, r3, #5
+    164a:	440b      	add	r3, r1
+    164c:	4622      	mov	r2, r4
+    164e:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+    1652:	697b      	ldr	r3, [r7, #20]
+    1654:	3301      	adds	r3, #1
+    1656:	617b      	str	r3, [r7, #20]
+    1658:	697b      	ldr	r3, [r7, #20]
+    165a:	2b03      	cmp	r3, #3
+    165c:	ddd5      	ble.n	160a <updateProjectile+0x17e>
+    165e:	69bb      	ldr	r3, [r7, #24]
+    1660:	3301      	adds	r3, #1
+    1662:	61bb      	str	r3, [r7, #24]
+    1664:	69bb      	ldr	r3, [r7, #24]
+    1666:	2b03      	cmp	r3, #3
+    1668:	ddcc      	ble.n	1604 <updateProjectile+0x178>
+    166a:	4911      	ldr	r1, [pc, #68]	@ (16b0 <updateProjectile+0x224>)
+    166c:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    166e:	4613      	mov	r3, r2
+    1670:	005b      	lsls	r3, r3, #1
+    1672:	4413      	add	r3, r2
+    1674:	009b      	lsls	r3, r3, #2
+    1676:	440b      	add	r3, r1
+    1678:	693a      	ldr	r2, [r7, #16]
+    167a:	601a      	str	r2, [r3, #0]
+    167c:	e00c      	b.n	1698 <updateProjectile+0x20c>
+    167e:	490c      	ldr	r1, [pc, #48]	@ (16b0 <updateProjectile+0x224>)
+    1680:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    1682:	4613      	mov	r3, r2
+    1684:	005b      	lsls	r3, r3, #1
+    1686:	4413      	add	r3, r2
+    1688:	009b      	lsls	r3, r3, #2
+    168a:	440b      	add	r3, r1
+    168c:	3308      	adds	r3, #8
+    168e:	2200      	movs	r2, #0
+    1690:	601a      	str	r2, [r3, #0]
+    1692:	4b0b      	ldr	r3, [pc, #44]	@ (16c0 <updateProjectile+0x234>)
+    1694:	2201      	movs	r2, #1
+    1696:	701a      	strb	r2, [r3, #0]
+    1698:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+    169a:	3301      	adds	r3, #1
+    169c:	62fb      	str	r3, [r7, #44]	@ 0x2c
+    169e:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+    16a0:	2b0b      	cmp	r3, #11
+    16a2:	f77f aef9 	ble.w	1498 <updateProjectile+0xc>
+    16a6:	bf00      	nop
+    16a8:	bf00      	nop
+    16aa:	3730      	adds	r7, #48	@ 0x30
+    16ac:	46bd      	mov	sp, r7
+    16ae:	bdb0      	pop	{r4, r5, r7, pc}
+    16b0:	2000f314 	.word	0x2000f314
+    16b4:	2000f25c 	.word	0x2000f25c
+    16b8:	20000258 	.word	0x20000258
+    16bc:	2000625c 	.word	0x2000625c
+    16c0:	20000002 	.word	0x20000002
+    16c4:	20000004 	.word	0x20000004
 
-00001670 <addEnemyProjectile>:
-
-int enemyProjectiles[ENEMY_COUNT][3];
-int newEnemyProjectile = 0;
-bool canAddEnemyProject = true;
-
-void addEnemyProjectile() {
-    1670:	b590      	push	{r4, r7, lr}
-    1672:	b089      	sub	sp, #36	@ 0x24
-    1674:	af00      	add	r7, sp, #0
-    for(int i = 0; i < ENEMY_PROJECTILE_NUM && canAddEnemyProject; i++) {
-    1676:	2300      	movs	r3, #0
-    1678:	61fb      	str	r3, [r7, #28]
-    167a:	e0a0      	b.n	17be <addEnemyProjectile+0x14e>
-        int enemy = -1;
-    167c:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
-    1680:	61bb      	str	r3, [r7, #24]
-        for(int i = 0; i < ENEMY_PROJECTILE_NUM; i++) {
-    1682:	2300      	movs	r3, #0
-    1684:	617b      	str	r3, [r7, #20]
-    1686:	e012      	b.n	16ae <addEnemyProjectile+0x3e>
-            enemy = randRange(0,ENEMY_COUNT-1);
-    1688:	210b      	movs	r1, #11
-    168a:	2000      	movs	r0, #0
-    168c:	f7ff fa82 	bl	b94 <randRange>
-    1690:	61b8      	str	r0, [r7, #24]
-            if(!enemyProjectiles[enemy][2]) break;
-    1692:	4951      	ldr	r1, [pc, #324]	@ (17d8 <addEnemyProjectile+0x168>)
-    1694:	69ba      	ldr	r2, [r7, #24]
-    1696:	4613      	mov	r3, r2
-    1698:	005b      	lsls	r3, r3, #1
-    169a:	4413      	add	r3, r2
-    169c:	009b      	lsls	r3, r3, #2
-    169e:	440b      	add	r3, r1
-    16a0:	3308      	adds	r3, #8
-    16a2:	681b      	ldr	r3, [r3, #0]
-    16a4:	2b00      	cmp	r3, #0
-    16a6:	d006      	beq.n	16b6 <addEnemyProjectile+0x46>
-        for(int i = 0; i < ENEMY_PROJECTILE_NUM; i++) {
-    16a8:	697b      	ldr	r3, [r7, #20]
-    16aa:	3301      	adds	r3, #1
-    16ac:	617b      	str	r3, [r7, #20]
-    16ae:	697b      	ldr	r3, [r7, #20]
-    16b0:	2b05      	cmp	r3, #5
-    16b2:	dde9      	ble.n	1688 <addEnemyProjectile+0x18>
-    16b4:	e000      	b.n	16b8 <addEnemyProjectile+0x48>
-            if(!enemyProjectiles[enemy][2]) break;
-    16b6:	bf00      	nop
-        }
-        if(!enemyProjectiles[enemy][2]) {
-    16b8:	4947      	ldr	r1, [pc, #284]	@ (17d8 <addEnemyProjectile+0x168>)
-    16ba:	69ba      	ldr	r2, [r7, #24]
-    16bc:	4613      	mov	r3, r2
-    16be:	005b      	lsls	r3, r3, #1
-    16c0:	4413      	add	r3, r2
-    16c2:	009b      	lsls	r3, r3, #2
-    16c4:	440b      	add	r3, r1
-    16c6:	3308      	adds	r3, #8
-    16c8:	681b      	ldr	r3, [r3, #0]
-    16ca:	2b00      	cmp	r3, #0
-    16cc:	d174      	bne.n	17b8 <addEnemyProjectile+0x148>
-            int projectX = enemyPositions[enemy][0]+ENEMY_SIZE;
-    16ce:	4943      	ldr	r1, [pc, #268]	@ (17dc <addEnemyProjectile+0x16c>)
-    16d0:	69ba      	ldr	r2, [r7, #24]
-    16d2:	4613      	mov	r3, r2
-    16d4:	005b      	lsls	r3, r3, #1
-    16d6:	4413      	add	r3, r2
-    16d8:	440b      	add	r3, r1
-    16da:	781b      	ldrb	r3, [r3, #0]
-    16dc:	3308      	adds	r3, #8
-    16de:	60bb      	str	r3, [r7, #8]
-            int projectY = enemyPositions[enemy][1]+PROJECTILE_SIZE/2;
-    16e0:	493e      	ldr	r1, [pc, #248]	@ (17dc <addEnemyProjectile+0x16c>)
-    16e2:	69ba      	ldr	r2, [r7, #24]
-    16e4:	4613      	mov	r3, r2
-    16e6:	005b      	lsls	r3, r3, #1
-    16e8:	4413      	add	r3, r2
-    16ea:	440b      	add	r3, r1
-    16ec:	3301      	adds	r3, #1
-    16ee:	781b      	ldrb	r3, [r3, #0]
-    16f0:	3302      	adds	r3, #2
-    16f2:	607b      	str	r3, [r7, #4]
-            
-            for(int i = 0; i < PROJECTILE_SIZE; i++) {
-    16f4:	2300      	movs	r3, #0
-    16f6:	613b      	str	r3, [r7, #16]
-    16f8:	e02f      	b.n	175a <addEnemyProjectile+0xea>
-                for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    16fa:	2300      	movs	r3, #0
-    16fc:	60fb      	str	r3, [r7, #12]
-    16fe:	e026      	b.n	174e <addEnemyProjectile+0xde>
-                        if (projectileDesign[i][j] != 0 && projectX+i >= 0)
-    1700:	4937      	ldr	r1, [pc, #220]	@ (17e0 <addEnemyProjectile+0x170>)
-    1702:	693b      	ldr	r3, [r7, #16]
-    1704:	009a      	lsls	r2, r3, #2
-    1706:	68fb      	ldr	r3, [r7, #12]
-    1708:	4413      	add	r3, r2
-    170a:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-    170e:	2b00      	cmp	r3, #0
-    1710:	d01a      	beq.n	1748 <addEnemyProjectile+0xd8>
-    1712:	68ba      	ldr	r2, [r7, #8]
-    1714:	693b      	ldr	r3, [r7, #16]
-    1716:	4413      	add	r3, r2
-    1718:	2b00      	cmp	r3, #0
-    171a:	db15      	blt.n	1748 <addEnemyProjectile+0xd8>
-                            screen[projectX + i][projectY + j] = projectileDesign[i][j];
-    171c:	68ba      	ldr	r2, [r7, #8]
-    171e:	693b      	ldr	r3, [r7, #16]
-    1720:	441a      	add	r2, r3
-    1722:	6879      	ldr	r1, [r7, #4]
-    1724:	68fb      	ldr	r3, [r7, #12]
-    1726:	4419      	add	r1, r3
-    1728:	4c2d      	ldr	r4, [pc, #180]	@ (17e0 <addEnemyProjectile+0x170>)
-    172a:	693b      	ldr	r3, [r7, #16]
-    172c:	0098      	lsls	r0, r3, #2
-    172e:	68fb      	ldr	r3, [r7, #12]
-    1730:	4403      	add	r3, r0
-    1732:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
-    1736:	482b      	ldr	r0, [pc, #172]	@ (17e4 <addEnemyProjectile+0x174>)
-    1738:	4613      	mov	r3, r2
-    173a:	005b      	lsls	r3, r3, #1
-    173c:	4413      	add	r3, r2
-    173e:	015b      	lsls	r3, r3, #5
-    1740:	440b      	add	r3, r1
-    1742:	4622      	mov	r2, r4
-    1744:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
-                for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    1748:	68fb      	ldr	r3, [r7, #12]
+000016c8 <addEnemyProjectile>:
+    16c8:	b590      	push	{r4, r7, lr}
+    16ca:	b089      	sub	sp, #36	@ 0x24
+    16cc:	af00      	add	r7, sp, #0
+    16ce:	2300      	movs	r3, #0
+    16d0:	61fb      	str	r3, [r7, #28]
+    16d2:	e0cb      	b.n	186c <addEnemyProjectile+0x1a4>
+    16d4:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+    16d8:	61bb      	str	r3, [r7, #24]
+    16da:	2300      	movs	r3, #0
+    16dc:	617b      	str	r3, [r7, #20]
+    16de:	e036      	b.n	174e <addEnemyProjectile+0x86>
+    16e0:	210b      	movs	r1, #11
+    16e2:	2000      	movs	r0, #0
+    16e4:	f7ff fa56 	bl	b94 <randRange>
+    16e8:	61b8      	str	r0, [r7, #24]
+    16ea:	4966      	ldr	r1, [pc, #408]	@ (1884 <addEnemyProjectile+0x1bc>)
+    16ec:	69ba      	ldr	r2, [r7, #24]
+    16ee:	4613      	mov	r3, r2
+    16f0:	005b      	lsls	r3, r3, #1
+    16f2:	4413      	add	r3, r2
+    16f4:	009b      	lsls	r3, r3, #2
+    16f6:	440b      	add	r3, r1
+    16f8:	3308      	adds	r3, #8
+    16fa:	681b      	ldr	r3, [r3, #0]
+    16fc:	2b00      	cmp	r3, #0
+    16fe:	d02a      	beq.n	1756 <addEnemyProjectile+0x8e>
+    1700:	2300      	movs	r3, #0
+    1702:	613b      	str	r3, [r7, #16]
+    1704:	e01b      	b.n	173e <addEnemyProjectile+0x76>
+    1706:	69bb      	ldr	r3, [r7, #24]
+    1708:	1c5a      	adds	r2, r3, #1
+    170a:	4b5f      	ldr	r3, [pc, #380]	@ (1888 <addEnemyProjectile+0x1c0>)
+    170c:	fb83 1302 	smull	r1, r3, r3, r2
+    1710:	1059      	asrs	r1, r3, #1
+    1712:	17d3      	asrs	r3, r2, #31
+    1714:	1ac9      	subs	r1, r1, r3
+    1716:	460b      	mov	r3, r1
+    1718:	005b      	lsls	r3, r3, #1
+    171a:	440b      	add	r3, r1
+    171c:	009b      	lsls	r3, r3, #2
+    171e:	1ad3      	subs	r3, r2, r3
+    1720:	61bb      	str	r3, [r7, #24]
+    1722:	4958      	ldr	r1, [pc, #352]	@ (1884 <addEnemyProjectile+0x1bc>)
+    1724:	69ba      	ldr	r2, [r7, #24]
+    1726:	4613      	mov	r3, r2
+    1728:	005b      	lsls	r3, r3, #1
+    172a:	4413      	add	r3, r2
+    172c:	009b      	lsls	r3, r3, #2
+    172e:	440b      	add	r3, r1
+    1730:	3308      	adds	r3, #8
+    1732:	681b      	ldr	r3, [r3, #0]
+    1734:	2b00      	cmp	r3, #0
+    1736:	d006      	beq.n	1746 <addEnemyProjectile+0x7e>
+    1738:	693b      	ldr	r3, [r7, #16]
+    173a:	3301      	adds	r3, #1
+    173c:	613b      	str	r3, [r7, #16]
+    173e:	693b      	ldr	r3, [r7, #16]
+    1740:	2b0b      	cmp	r3, #11
+    1742:	dde0      	ble.n	1706 <addEnemyProjectile+0x3e>
+    1744:	e000      	b.n	1748 <addEnemyProjectile+0x80>
+    1746:	bf00      	nop
+    1748:	697b      	ldr	r3, [r7, #20]
     174a:	3301      	adds	r3, #1
-    174c:	60fb      	str	r3, [r7, #12]
-    174e:	68fb      	ldr	r3, [r7, #12]
-    1750:	2b03      	cmp	r3, #3
-    1752:	ddd5      	ble.n	1700 <addEnemyProjectile+0x90>
-            for(int i = 0; i < PROJECTILE_SIZE; i++) {
-    1754:	693b      	ldr	r3, [r7, #16]
-    1756:	3301      	adds	r3, #1
-    1758:	613b      	str	r3, [r7, #16]
-    175a:	693b      	ldr	r3, [r7, #16]
-    175c:	2b03      	cmp	r3, #3
-    175e:	ddcc      	ble.n	16fa <addEnemyProjectile+0x8a>
-                }
-            }
-            enemyProjectiles[enemy][0] = projectX;
-    1760:	491d      	ldr	r1, [pc, #116]	@ (17d8 <addEnemyProjectile+0x168>)
-    1762:	69ba      	ldr	r2, [r7, #24]
-    1764:	4613      	mov	r3, r2
-    1766:	005b      	lsls	r3, r3, #1
-    1768:	4413      	add	r3, r2
-    176a:	009b      	lsls	r3, r3, #2
-    176c:	440b      	add	r3, r1
-    176e:	68ba      	ldr	r2, [r7, #8]
-    1770:	601a      	str	r2, [r3, #0]
-            enemyProjectiles[enemy][1] = projectY;
-    1772:	4919      	ldr	r1, [pc, #100]	@ (17d8 <addEnemyProjectile+0x168>)
-    1774:	69ba      	ldr	r2, [r7, #24]
-    1776:	4613      	mov	r3, r2
-    1778:	005b      	lsls	r3, r3, #1
-    177a:	4413      	add	r3, r2
-    177c:	009b      	lsls	r3, r3, #2
-    177e:	440b      	add	r3, r1
-    1780:	3304      	adds	r3, #4
-    1782:	687a      	ldr	r2, [r7, #4]
-    1784:	601a      	str	r2, [r3, #0]
-            enemyProjectiles[enemy][2] = true;
-    1786:	4914      	ldr	r1, [pc, #80]	@ (17d8 <addEnemyProjectile+0x168>)
-    1788:	69ba      	ldr	r2, [r7, #24]
-    178a:	4613      	mov	r3, r2
-    178c:	005b      	lsls	r3, r3, #1
-    178e:	4413      	add	r3, r2
-    1790:	009b      	lsls	r3, r3, #2
-    1792:	440b      	add	r3, r1
-    1794:	3308      	adds	r3, #8
-    1796:	2201      	movs	r2, #1
-    1798:	601a      	str	r2, [r3, #0]
+    174c:	617b      	str	r3, [r7, #20]
+    174e:	697b      	ldr	r3, [r7, #20]
+    1750:	2b05      	cmp	r3, #5
+    1752:	ddc5      	ble.n	16e0 <addEnemyProjectile+0x18>
+    1754:	e000      	b.n	1758 <addEnemyProjectile+0x90>
+    1756:	bf00      	nop
+    1758:	494a      	ldr	r1, [pc, #296]	@ (1884 <addEnemyProjectile+0x1bc>)
+    175a:	69ba      	ldr	r2, [r7, #24]
+    175c:	4613      	mov	r3, r2
+    175e:	005b      	lsls	r3, r3, #1
+    1760:	4413      	add	r3, r2
+    1762:	009b      	lsls	r3, r3, #2
+    1764:	440b      	add	r3, r1
+    1766:	3308      	adds	r3, #8
+    1768:	681b      	ldr	r3, [r3, #0]
+    176a:	2b00      	cmp	r3, #0
+    176c:	d17b      	bne.n	1866 <addEnemyProjectile+0x19e>
+    176e:	4947      	ldr	r1, [pc, #284]	@ (188c <addEnemyProjectile+0x1c4>)
+    1770:	69ba      	ldr	r2, [r7, #24]
+    1772:	4613      	mov	r3, r2
+    1774:	005b      	lsls	r3, r3, #1
+    1776:	4413      	add	r3, r2
+    1778:	440b      	add	r3, r1
+    177a:	3302      	adds	r3, #2
+    177c:	781b      	ldrb	r3, [r3, #0]
+    177e:	2b00      	cmp	r3, #0
+    1780:	d071      	beq.n	1866 <addEnemyProjectile+0x19e>
+    1782:	4942      	ldr	r1, [pc, #264]	@ (188c <addEnemyProjectile+0x1c4>)
+    1784:	69ba      	ldr	r2, [r7, #24]
+    1786:	4613      	mov	r3, r2
+    1788:	005b      	lsls	r3, r3, #1
+    178a:	4413      	add	r3, r2
+    178c:	440b      	add	r3, r1
+    178e:	781b      	ldrb	r3, [r3, #0]
+    1790:	3308      	adds	r3, #8
+    1792:	607b      	str	r3, [r7, #4]
+    1794:	493d      	ldr	r1, [pc, #244]	@ (188c <addEnemyProjectile+0x1c4>)
+    1796:	69ba      	ldr	r2, [r7, #24]
+    1798:	4613      	mov	r3, r2
+    179a:	005b      	lsls	r3, r3, #1
+    179c:	4413      	add	r3, r2
+    179e:	440b      	add	r3, r1
+    17a0:	3301      	adds	r3, #1
+    17a2:	781b      	ldrb	r3, [r3, #0]
+    17a4:	3302      	adds	r3, #2
+    17a6:	603b      	str	r3, [r7, #0]
+    17a8:	2300      	movs	r3, #0
+    17aa:	60fb      	str	r3, [r7, #12]
+    17ac:	e02f      	b.n	180e <addEnemyProjectile+0x146>
+    17ae:	2300      	movs	r3, #0
+    17b0:	60bb      	str	r3, [r7, #8]
+    17b2:	e026      	b.n	1802 <addEnemyProjectile+0x13a>
+    17b4:	4936      	ldr	r1, [pc, #216]	@ (1890 <addEnemyProjectile+0x1c8>)
+    17b6:	68fb      	ldr	r3, [r7, #12]
+    17b8:	009a      	lsls	r2, r3, #2
+    17ba:	68bb      	ldr	r3, [r7, #8]
+    17bc:	4413      	add	r3, r2
+    17be:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    17c2:	2b00      	cmp	r3, #0
+    17c4:	d01a      	beq.n	17fc <addEnemyProjectile+0x134>
+    17c6:	687a      	ldr	r2, [r7, #4]
+    17c8:	68fb      	ldr	r3, [r7, #12]
+    17ca:	4413      	add	r3, r2
+    17cc:	2b00      	cmp	r3, #0
+    17ce:	db15      	blt.n	17fc <addEnemyProjectile+0x134>
+    17d0:	687a      	ldr	r2, [r7, #4]
+    17d2:	68fb      	ldr	r3, [r7, #12]
+    17d4:	441a      	add	r2, r3
+    17d6:	6839      	ldr	r1, [r7, #0]
+    17d8:	68bb      	ldr	r3, [r7, #8]
+    17da:	4419      	add	r1, r3
+    17dc:	4c2c      	ldr	r4, [pc, #176]	@ (1890 <addEnemyProjectile+0x1c8>)
+    17de:	68fb      	ldr	r3, [r7, #12]
+    17e0:	0098      	lsls	r0, r3, #2
+    17e2:	68bb      	ldr	r3, [r7, #8]
+    17e4:	4403      	add	r3, r0
+    17e6:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    17ea:	482a      	ldr	r0, [pc, #168]	@ (1894 <addEnemyProjectile+0x1cc>)
+    17ec:	4613      	mov	r3, r2
+    17ee:	005b      	lsls	r3, r3, #1
+    17f0:	4413      	add	r3, r2
+    17f2:	015b      	lsls	r3, r3, #5
+    17f4:	440b      	add	r3, r1
+    17f6:	4622      	mov	r2, r4
+    17f8:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+    17fc:	68bb      	ldr	r3, [r7, #8]
+    17fe:	3301      	adds	r3, #1
+    1800:	60bb      	str	r3, [r7, #8]
+    1802:	68bb      	ldr	r3, [r7, #8]
+    1804:	2b03      	cmp	r3, #3
+    1806:	ddd5      	ble.n	17b4 <addEnemyProjectile+0xec>
+    1808:	68fb      	ldr	r3, [r7, #12]
+    180a:	3301      	adds	r3, #1
+    180c:	60fb      	str	r3, [r7, #12]
+    180e:	68fb      	ldr	r3, [r7, #12]
+    1810:	2b03      	cmp	r3, #3
+    1812:	ddcc      	ble.n	17ae <addEnemyProjectile+0xe6>
+    1814:	491b      	ldr	r1, [pc, #108]	@ (1884 <addEnemyProjectile+0x1bc>)
+    1816:	69ba      	ldr	r2, [r7, #24]
+    1818:	4613      	mov	r3, r2
+    181a:	005b      	lsls	r3, r3, #1
+    181c:	4413      	add	r3, r2
+    181e:	009b      	lsls	r3, r3, #2
+    1820:	440b      	add	r3, r1
+    1822:	687a      	ldr	r2, [r7, #4]
+    1824:	601a      	str	r2, [r3, #0]
+    1826:	4917      	ldr	r1, [pc, #92]	@ (1884 <addEnemyProjectile+0x1bc>)
+    1828:	69ba      	ldr	r2, [r7, #24]
+    182a:	4613      	mov	r3, r2
+    182c:	005b      	lsls	r3, r3, #1
+    182e:	4413      	add	r3, r2
+    1830:	009b      	lsls	r3, r3, #2
+    1832:	440b      	add	r3, r1
+    1834:	3304      	adds	r3, #4
+    1836:	683a      	ldr	r2, [r7, #0]
+    1838:	601a      	str	r2, [r3, #0]
+    183a:	4912      	ldr	r1, [pc, #72]	@ (1884 <addEnemyProjectile+0x1bc>)
+    183c:	69ba      	ldr	r2, [r7, #24]
+    183e:	4613      	mov	r3, r2
+    1840:	005b      	lsls	r3, r3, #1
+    1842:	4413      	add	r3, r2
+    1844:	009b      	lsls	r3, r3, #2
+    1846:	440b      	add	r3, r1
+    1848:	3308      	adds	r3, #8
+    184a:	2201      	movs	r2, #1
+    184c:	601a      	str	r2, [r3, #0]
+    184e:	4b12      	ldr	r3, [pc, #72]	@ (1898 <addEnemyProjectile+0x1d0>)
+    1850:	681b      	ldr	r3, [r3, #0]
+    1852:	3301      	adds	r3, #1
+    1854:	4a10      	ldr	r2, [pc, #64]	@ (1898 <addEnemyProjectile+0x1d0>)
+    1856:	6013      	str	r3, [r2, #0]
+    1858:	4b0f      	ldr	r3, [pc, #60]	@ (1898 <addEnemyProjectile+0x1d0>)
+    185a:	681b      	ldr	r3, [r3, #0]
+    185c:	2b06      	cmp	r3, #6
+    185e:	d102      	bne.n	1866 <addEnemyProjectile+0x19e>
+    1860:	4b0e      	ldr	r3, [pc, #56]	@ (189c <addEnemyProjectile+0x1d4>)
+    1862:	2200      	movs	r2, #0
+    1864:	701a      	strb	r2, [r3, #0]
+    1866:	69fb      	ldr	r3, [r7, #28]
+    1868:	3301      	adds	r3, #1
+    186a:	61fb      	str	r3, [r7, #28]
+    186c:	69fb      	ldr	r3, [r7, #28]
+    186e:	2b05      	cmp	r3, #5
+    1870:	dc04      	bgt.n	187c <addEnemyProjectile+0x1b4>
+    1872:	4b0a      	ldr	r3, [pc, #40]	@ (189c <addEnemyProjectile+0x1d4>)
+    1874:	781b      	ldrb	r3, [r3, #0]
+    1876:	2b00      	cmp	r3, #0
+    1878:	f47f af2c 	bne.w	16d4 <addEnemyProjectile+0xc>
+    187c:	bf00      	nop
+    187e:	3724      	adds	r7, #36	@ 0x24
+    1880:	46bd      	mov	sp, r7
+    1882:	bd90      	pop	{r4, r7, pc}
+    1884:	2000f284 	.word	0x2000f284
+    1888:	2aaaaaab 	.word	0x2aaaaaab
+    188c:	2000f25c 	.word	0x2000f25c
+    1890:	20000004 	.word	0x20000004
+    1894:	2000625c 	.word	0x2000625c
+    1898:	2000f3a8 	.word	0x2000f3a8
+    189c:	20000024 	.word	0x20000024
 
-            newEnemyProjectile = newEnemyProjectile + 1;
-    179a:	4b13      	ldr	r3, [pc, #76]	@ (17e8 <addEnemyProjectile+0x178>)
-    179c:	681b      	ldr	r3, [r3, #0]
-    179e:	3301      	adds	r3, #1
-    17a0:	4a11      	ldr	r2, [pc, #68]	@ (17e8 <addEnemyProjectile+0x178>)
-    17a2:	6013      	str	r3, [r2, #0]
-            if(newEnemyProjectile == ENEMY_PROJECTILE_NUM) {
-    17a4:	4b10      	ldr	r3, [pc, #64]	@ (17e8 <addEnemyProjectile+0x178>)
-    17a6:	681b      	ldr	r3, [r3, #0]
-    17a8:	2b06      	cmp	r3, #6
-    17aa:	d102      	bne.n	17b2 <addEnemyProjectile+0x142>
-                canAddEnemyProject = false;
-    17ac:	4b0f      	ldr	r3, [pc, #60]	@ (17ec <addEnemyProjectile+0x17c>)
-    17ae:	2200      	movs	r2, #0
-    17b0:	701a      	strb	r2, [r3, #0]
-            }
-            
-            display_update_needed = true;
-    17b2:	4b0f      	ldr	r3, [pc, #60]	@ (17f0 <addEnemyProjectile+0x180>)
-    17b4:	2201      	movs	r2, #1
-    17b6:	701a      	strb	r2, [r3, #0]
-    for(int i = 0; i < ENEMY_PROJECTILE_NUM && canAddEnemyProject; i++) {
-    17b8:	69fb      	ldr	r3, [r7, #28]
-    17ba:	3301      	adds	r3, #1
-    17bc:	61fb      	str	r3, [r7, #28]
-    17be:	69fb      	ldr	r3, [r7, #28]
-    17c0:	2b05      	cmp	r3, #5
-    17c2:	dc04      	bgt.n	17ce <addEnemyProjectile+0x15e>
-    17c4:	4b09      	ldr	r3, [pc, #36]	@ (17ec <addEnemyProjectile+0x17c>)
-    17c6:	781b      	ldrb	r3, [r3, #0]
-    17c8:	2b00      	cmp	r3, #0
-    17ca:	f47f af57 	bne.w	167c <addEnemyProjectile+0xc>
-        }
-    }
-}
-    17ce:	bf00      	nop
-    17d0:	3724      	adds	r7, #36	@ 0x24
-    17d2:	46bd      	mov	sp, r7
-    17d4:	bd90      	pop	{r4, r7, pc}
-    17d6:	bf00      	nop
-    17d8:	2000ab18 	.word	0x2000ab18
-    17dc:	2000aa5c 	.word	0x2000aa5c
-    17e0:	20000004 	.word	0x20000004
-    17e4:	2000625c 	.word	0x2000625c
-    17e8:	2000aba8 	.word	0x2000aba8
-    17ec:	20000024 	.word	0x20000024
-    17f0:	20000000 	.word	0x20000000
+000018a0 <removeEnemyProjectile>:
+    18a0:	b4b0      	push	{r4, r5, r7}
+    18a2:	b085      	sub	sp, #20
+    18a4:	af00      	add	r7, sp, #0
+    18a6:	6078      	str	r0, [r7, #4]
+    18a8:	6039      	str	r1, [r7, #0]
+    18aa:	2300      	movs	r3, #0
+    18ac:	60fb      	str	r3, [r7, #12]
+    18ae:	e036      	b.n	191e <removeEnemyProjectile+0x7e>
+    18b0:	2300      	movs	r3, #0
+    18b2:	60bb      	str	r3, [r7, #8]
+    18b4:	e02d      	b.n	1912 <removeEnemyProjectile+0x72>
+    18b6:	491e      	ldr	r1, [pc, #120]	@ (1930 <removeEnemyProjectile+0x90>)
+    18b8:	68fb      	ldr	r3, [r7, #12]
+    18ba:	009a      	lsls	r2, r3, #2
+    18bc:	68bb      	ldr	r3, [r7, #8]
+    18be:	4413      	add	r3, r2
+    18c0:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    18c4:	2b00      	cmp	r3, #0
+    18c6:	d021      	beq.n	190c <removeEnemyProjectile+0x6c>
+    18c8:	687a      	ldr	r2, [r7, #4]
+    18ca:	68fb      	ldr	r3, [r7, #12]
+    18cc:	4413      	add	r3, r2
+    18ce:	2b00      	cmp	r3, #0
+    18d0:	db1c      	blt.n	190c <removeEnemyProjectile+0x6c>
+    18d2:	687a      	ldr	r2, [r7, #4]
+    18d4:	68fb      	ldr	r3, [r7, #12]
+    18d6:	18d1      	adds	r1, r2, r3
+    18d8:	683a      	ldr	r2, [r7, #0]
+    18da:	68bb      	ldr	r3, [r7, #8]
+    18dc:	18d4      	adds	r4, r2, r3
+    18de:	687a      	ldr	r2, [r7, #4]
+    18e0:	68fb      	ldr	r3, [r7, #12]
+    18e2:	441a      	add	r2, r3
+    18e4:	6838      	ldr	r0, [r7, #0]
+    18e6:	68bb      	ldr	r3, [r7, #8]
+    18e8:	4418      	add	r0, r3
+    18ea:	4d12      	ldr	r5, [pc, #72]	@ (1934 <removeEnemyProjectile+0x94>)
+    18ec:	460b      	mov	r3, r1
+    18ee:	005b      	lsls	r3, r3, #1
+    18f0:	440b      	add	r3, r1
+    18f2:	015b      	lsls	r3, r3, #5
+    18f4:	4423      	add	r3, r4
+    18f6:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+    18fa:	490f      	ldr	r1, [pc, #60]	@ (1938 <removeEnemyProjectile+0x98>)
+    18fc:	4613      	mov	r3, r2
+    18fe:	005b      	lsls	r3, r3, #1
+    1900:	4413      	add	r3, r2
+    1902:	015b      	lsls	r3, r3, #5
+    1904:	4403      	add	r3, r0
+    1906:	4622      	mov	r2, r4
+    1908:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+    190c:	68bb      	ldr	r3, [r7, #8]
+    190e:	3301      	adds	r3, #1
+    1910:	60bb      	str	r3, [r7, #8]
+    1912:	68bb      	ldr	r3, [r7, #8]
+    1914:	2b03      	cmp	r3, #3
+    1916:	ddce      	ble.n	18b6 <removeEnemyProjectile+0x16>
+    1918:	68fb      	ldr	r3, [r7, #12]
+    191a:	3301      	adds	r3, #1
+    191c:	60fb      	str	r3, [r7, #12]
+    191e:	68fb      	ldr	r3, [r7, #12]
+    1920:	2b03      	cmp	r3, #3
+    1922:	ddc5      	ble.n	18b0 <removeEnemyProjectile+0x10>
+    1924:	bf00      	nop
+    1926:	bf00      	nop
+    1928:	3714      	adds	r7, #20
+    192a:	46bd      	mov	sp, r7
+    192c:	bcb0      	pop	{r4, r5, r7}
+    192e:	4770      	bx	lr
+    1930:	20000004 	.word	0x20000004
+    1934:	20000258 	.word	0x20000258
+    1938:	2000625c 	.word	0x2000625c
 
-000017f4 <removeEnemyProjectile>:
-
-void removeEnemyProjectile(int projectX, int projectY) {
-    17f4:	b4b0      	push	{r4, r5, r7}
-    17f6:	b085      	sub	sp, #20
-    17f8:	af00      	add	r7, sp, #0
-    17fa:	6078      	str	r0, [r7, #4]
-    17fc:	6039      	str	r1, [r7, #0]
-    for(int i = 0; i < PROJECTILE_SIZE; i++) {
-    17fe:	2300      	movs	r3, #0
-    1800:	60fb      	str	r3, [r7, #12]
-    1802:	e036      	b.n	1872 <removeEnemyProjectile+0x7e>
-        for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    1804:	2300      	movs	r3, #0
-    1806:	60bb      	str	r3, [r7, #8]
-    1808:	e02d      	b.n	1866 <removeEnemyProjectile+0x72>
-                if (projectileDesign[i][j] != 0 && projectX+i >= 0)
-    180a:	491e      	ldr	r1, [pc, #120]	@ (1884 <removeEnemyProjectile+0x90>)
-    180c:	68fb      	ldr	r3, [r7, #12]
-    180e:	009a      	lsls	r2, r3, #2
-    1810:	68bb      	ldr	r3, [r7, #8]
-    1812:	4413      	add	r3, r2
-    1814:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-    1818:	2b00      	cmp	r3, #0
-    181a:	d021      	beq.n	1860 <removeEnemyProjectile+0x6c>
-    181c:	687a      	ldr	r2, [r7, #4]
-    181e:	68fb      	ldr	r3, [r7, #12]
-    1820:	4413      	add	r3, r2
-    1822:	2b00      	cmp	r3, #0
-    1824:	db1c      	blt.n	1860 <removeEnemyProjectile+0x6c>
-                    screen[projectX + i][projectY + j] = background[projectX + i][projectY + j];
-    1826:	687a      	ldr	r2, [r7, #4]
-    1828:	68fb      	ldr	r3, [r7, #12]
-    182a:	18d1      	adds	r1, r2, r3
-    182c:	683a      	ldr	r2, [r7, #0]
-    182e:	68bb      	ldr	r3, [r7, #8]
-    1830:	18d4      	adds	r4, r2, r3
-    1832:	687a      	ldr	r2, [r7, #4]
-    1834:	68fb      	ldr	r3, [r7, #12]
-    1836:	441a      	add	r2, r3
-    1838:	6838      	ldr	r0, [r7, #0]
-    183a:	68bb      	ldr	r3, [r7, #8]
-    183c:	4418      	add	r0, r3
-    183e:	4d12      	ldr	r5, [pc, #72]	@ (1888 <removeEnemyProjectile+0x94>)
-    1840:	460b      	mov	r3, r1
-    1842:	005b      	lsls	r3, r3, #1
-    1844:	440b      	add	r3, r1
-    1846:	015b      	lsls	r3, r3, #5
-    1848:	4423      	add	r3, r4
-    184a:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
-    184e:	490f      	ldr	r1, [pc, #60]	@ (188c <removeEnemyProjectile+0x98>)
-    1850:	4613      	mov	r3, r2
-    1852:	005b      	lsls	r3, r3, #1
-    1854:	4413      	add	r3, r2
-    1856:	015b      	lsls	r3, r3, #5
-    1858:	4403      	add	r3, r0
-    185a:	4622      	mov	r2, r4
-    185c:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
-        for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    1860:	68bb      	ldr	r3, [r7, #8]
-    1862:	3301      	adds	r3, #1
-    1864:	60bb      	str	r3, [r7, #8]
-    1866:	68bb      	ldr	r3, [r7, #8]
-    1868:	2b03      	cmp	r3, #3
-    186a:	ddce      	ble.n	180a <removeEnemyProjectile+0x16>
-    for(int i = 0; i < PROJECTILE_SIZE; i++) {
-    186c:	68fb      	ldr	r3, [r7, #12]
-    186e:	3301      	adds	r3, #1
-    1870:	60fb      	str	r3, [r7, #12]
-    1872:	68fb      	ldr	r3, [r7, #12]
-    1874:	2b03      	cmp	r3, #3
-    1876:	ddc5      	ble.n	1804 <removeEnemyProjectile+0x10>
-        }
-    }
-}
-    1878:	bf00      	nop
-    187a:	bf00      	nop
-    187c:	3714      	adds	r7, #20
-    187e:	46bd      	mov	sp, r7
-    1880:	bcb0      	pop	{r4, r5, r7}
-    1882:	4770      	bx	lr
-    1884:	20000004 	.word	0x20000004
-    1888:	20000258 	.word	0x20000258
-    188c:	2000625c 	.word	0x2000625c
-
-00001890 <updateEnemyProjectile>:
-
-void updateEnemyProjectile() {
-    1890:	b590      	push	{r4, r7, lr}
-    1892:	b08b      	sub	sp, #44	@ 0x2c
-    1894:	af04      	add	r7, sp, #16
-    for(int i = 0; i < ENEMY_COUNT; i++) {
-    1896:	2300      	movs	r3, #0
-    1898:	617b      	str	r3, [r7, #20]
-    189a:	e0ad      	b.n	19f8 <updateEnemyProjectile+0x168>
-        if(enemyProjectiles[i][2]) {
-    189c:	495c      	ldr	r1, [pc, #368]	@ (1a10 <updateEnemyProjectile+0x180>)
-    189e:	697a      	ldr	r2, [r7, #20]
-    18a0:	4613      	mov	r3, r2
-    18a2:	005b      	lsls	r3, r3, #1
-    18a4:	4413      	add	r3, r2
-    18a6:	009b      	lsls	r3, r3, #2
-    18a8:	440b      	add	r3, r1
-    18aa:	3308      	adds	r3, #8
-    18ac:	681b      	ldr	r3, [r3, #0]
-    18ae:	2b00      	cmp	r3, #0
-    18b0:	f000 809f 	beq.w	19f2 <updateEnemyProjectile+0x162>
-            int projectX = enemyProjectiles[i][0];
-    18b4:	4956      	ldr	r1, [pc, #344]	@ (1a10 <updateEnemyProjectile+0x180>)
-    18b6:	697a      	ldr	r2, [r7, #20]
-    18b8:	4613      	mov	r3, r2
-    18ba:	005b      	lsls	r3, r3, #1
-    18bc:	4413      	add	r3, r2
-    18be:	009b      	lsls	r3, r3, #2
-    18c0:	440b      	add	r3, r1
-    18c2:	681b      	ldr	r3, [r3, #0]
-    18c4:	607b      	str	r3, [r7, #4]
-            int projectY = enemyProjectiles[i][1];
-    18c6:	4952      	ldr	r1, [pc, #328]	@ (1a10 <updateEnemyProjectile+0x180>)
-    18c8:	697a      	ldr	r2, [r7, #20]
-    18ca:	4613      	mov	r3, r2
-    18cc:	005b      	lsls	r3, r3, #1
-    18ce:	4413      	add	r3, r2
-    18d0:	009b      	lsls	r3, r3, #2
-    18d2:	440b      	add	r3, r1
-    18d4:	3304      	adds	r3, #4
-    18d6:	681b      	ldr	r3, [r3, #0]
-    18d8:	603b      	str	r3, [r7, #0]
-
-            removeEnemyProjectile(projectX, projectY);
-    18da:	6839      	ldr	r1, [r7, #0]
-    18dc:	6878      	ldr	r0, [r7, #4]
-    18de:	f7ff ff89 	bl	17f4 <removeEnemyProjectile>
-
-            bool process = true;
-    18e2:	2301      	movs	r3, #1
-    18e4:	74fb      	strb	r3, [r7, #19]
-
-            if (intersects(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE)) {
-    18e6:	4b4b      	ldr	r3, [pc, #300]	@ (1a14 <updateEnemyProjectile+0x184>)
-    18e8:	781b      	ldrb	r3, [r3, #0]
-    18ea:	4618      	mov	r0, r3
-    18ec:	4b4a      	ldr	r3, [pc, #296]	@ (1a18 <updateEnemyProjectile+0x188>)
-    18ee:	781b      	ldrb	r3, [r3, #0]
-    18f0:	4619      	mov	r1, r3
-    18f2:	2304      	movs	r3, #4
-    18f4:	9303      	str	r3, [sp, #12]
-    18f6:	2304      	movs	r3, #4
-    18f8:	9302      	str	r3, [sp, #8]
-    18fa:	683b      	ldr	r3, [r7, #0]
-    18fc:	9301      	str	r3, [sp, #4]
-    18fe:	687b      	ldr	r3, [r7, #4]
-    1900:	9300      	str	r3, [sp, #0]
-    1902:	2308      	movs	r3, #8
-    1904:	220d      	movs	r2, #13
-    1906:	f7ff fa31 	bl	d6c <intersects>
-    190a:	4603      	mov	r3, r0
-    190c:	2b00      	cmp	r3, #0
-    190e:	d015      	beq.n	193c <updateEnemyProjectile+0xac>
-                removeSpaceship();
-    1910:	f7ff fac0 	bl	e94 <removeSpaceship>
-
-                enemyProjectiles[i][2] = false;
-    1914:	493e      	ldr	r1, [pc, #248]	@ (1a10 <updateEnemyProjectile+0x180>)
-    1916:	697a      	ldr	r2, [r7, #20]
-    1918:	4613      	mov	r3, r2
-    191a:	005b      	lsls	r3, r3, #1
-    191c:	4413      	add	r3, r2
-    191e:	009b      	lsls	r3, r3, #2
-    1920:	440b      	add	r3, r1
-    1922:	3308      	adds	r3, #8
-    1924:	2200      	movs	r2, #0
-    1926:	601a      	str	r2, [r3, #0]
-                canAddEnemyProject = false;
-    1928:	4b3c      	ldr	r3, [pc, #240]	@ (1a1c <updateEnemyProjectile+0x18c>)
-    192a:	2200      	movs	r2, #0
-    192c:	701a      	strb	r2, [r3, #0]
-                newEnemyProjectile--;
-    192e:	4b3c      	ldr	r3, [pc, #240]	@ (1a20 <updateEnemyProjectile+0x190>)
-    1930:	681b      	ldr	r3, [r3, #0]
-    1932:	3b01      	subs	r3, #1
-    1934:	4a3a      	ldr	r2, [pc, #232]	@ (1a20 <updateEnemyProjectile+0x190>)
-    1936:	6013      	str	r3, [r2, #0]
-
-                process = false;
-    1938:	2300      	movs	r3, #0
-    193a:	74fb      	strb	r3, [r7, #19]
-            }
-
-            if(process) {
-    193c:	7cfb      	ldrb	r3, [r7, #19]
-    193e:	2b00      	cmp	r3, #0
-    1940:	d057      	beq.n	19f2 <updateEnemyProjectile+0x162>
-                projectX += ENEMY_DIRECTION;
-    1942:	687b      	ldr	r3, [r7, #4]
-    1944:	3303      	adds	r3, #3
-    1946:	607b      	str	r3, [r7, #4]
-                if(projectX+PROJECTILE_SIZE < DISPLAY_SIZE) {
-    1948:	687b      	ldr	r3, [r7, #4]
-    194a:	2b5b      	cmp	r3, #91	@ 0x5b
-    194c:	dc3f      	bgt.n	19ce <updateEnemyProjectile+0x13e>
-                    for(int k = 0; k < PROJECTILE_SIZE; k++) {
-    194e:	2300      	movs	r3, #0
-    1950:	60fb      	str	r3, [r7, #12]
-    1952:	e02f      	b.n	19b4 <updateEnemyProjectile+0x124>
-                        for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    1954:	2300      	movs	r3, #0
-    1956:	60bb      	str	r3, [r7, #8]
-    1958:	e026      	b.n	19a8 <updateEnemyProjectile+0x118>
-                            if (projectileDesign[k][j] != 0 && projectX+k < DISPLAY_SIZE)
-    195a:	4932      	ldr	r1, [pc, #200]	@ (1a24 <updateEnemyProjectile+0x194>)
-    195c:	68fb      	ldr	r3, [r7, #12]
-    195e:	009a      	lsls	r2, r3, #2
-    1960:	68bb      	ldr	r3, [r7, #8]
-    1962:	4413      	add	r3, r2
-    1964:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
-    1968:	2b00      	cmp	r3, #0
-    196a:	d01a      	beq.n	19a2 <updateEnemyProjectile+0x112>
-    196c:	687a      	ldr	r2, [r7, #4]
-    196e:	68fb      	ldr	r3, [r7, #12]
-    1970:	4413      	add	r3, r2
-    1972:	2b5f      	cmp	r3, #95	@ 0x5f
-    1974:	dc15      	bgt.n	19a2 <updateEnemyProjectile+0x112>
-                                screen[projectX + k][projectY + j] = projectileDesign[k][j];
-    1976:	687a      	ldr	r2, [r7, #4]
-    1978:	68fb      	ldr	r3, [r7, #12]
-    197a:	441a      	add	r2, r3
-    197c:	6839      	ldr	r1, [r7, #0]
-    197e:	68bb      	ldr	r3, [r7, #8]
-    1980:	4419      	add	r1, r3
-    1982:	4c28      	ldr	r4, [pc, #160]	@ (1a24 <updateEnemyProjectile+0x194>)
-    1984:	68fb      	ldr	r3, [r7, #12]
-    1986:	0098      	lsls	r0, r3, #2
-    1988:	68bb      	ldr	r3, [r7, #8]
-    198a:	4403      	add	r3, r0
-    198c:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
-    1990:	4825      	ldr	r0, [pc, #148]	@ (1a28 <updateEnemyProjectile+0x198>)
-    1992:	4613      	mov	r3, r2
-    1994:	005b      	lsls	r3, r3, #1
-    1996:	4413      	add	r3, r2
-    1998:	015b      	lsls	r3, r3, #5
-    199a:	440b      	add	r3, r1
-    199c:	4622      	mov	r2, r4
-    199e:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
-                        for(int j = 0; j < PROJECTILE_SIZE; j++) {
-    19a2:	68bb      	ldr	r3, [r7, #8]
-    19a4:	3301      	adds	r3, #1
-    19a6:	60bb      	str	r3, [r7, #8]
-    19a8:	68bb      	ldr	r3, [r7, #8]
-    19aa:	2b03      	cmp	r3, #3
-    19ac:	ddd5      	ble.n	195a <updateEnemyProjectile+0xca>
-                    for(int k = 0; k < PROJECTILE_SIZE; k++) {
-    19ae:	68fb      	ldr	r3, [r7, #12]
-    19b0:	3301      	adds	r3, #1
-    19b2:	60fb      	str	r3, [r7, #12]
-    19b4:	68fb      	ldr	r3, [r7, #12]
-    19b6:	2b03      	cmp	r3, #3
-    19b8:	ddcc      	ble.n	1954 <updateEnemyProjectile+0xc4>
-                        }
-                    }
-                    enemyProjectiles[i][0] = projectX;
-    19ba:	4915      	ldr	r1, [pc, #84]	@ (1a10 <updateEnemyProjectile+0x180>)
-    19bc:	697a      	ldr	r2, [r7, #20]
-    19be:	4613      	mov	r3, r2
-    19c0:	005b      	lsls	r3, r3, #1
-    19c2:	4413      	add	r3, r2
-    19c4:	009b      	lsls	r3, r3, #2
-    19c6:	440b      	add	r3, r1
-    19c8:	687a      	ldr	r2, [r7, #4]
-    19ca:	601a      	str	r2, [r3, #0]
-    19cc:	e011      	b.n	19f2 <updateEnemyProjectile+0x162>
-                }
-                else {
-                    enemyProjectiles[i][2] = false;
-    19ce:	4910      	ldr	r1, [pc, #64]	@ (1a10 <updateEnemyProjectile+0x180>)
-    19d0:	697a      	ldr	r2, [r7, #20]
-    19d2:	4613      	mov	r3, r2
-    19d4:	005b      	lsls	r3, r3, #1
-    19d6:	4413      	add	r3, r2
-    19d8:	009b      	lsls	r3, r3, #2
-    19da:	440b      	add	r3, r1
-    19dc:	3308      	adds	r3, #8
-    19de:	2200      	movs	r2, #0
-    19e0:	601a      	str	r2, [r3, #0]
-                    canAddEnemyProject = true;
-    19e2:	4b0e      	ldr	r3, [pc, #56]	@ (1a1c <updateEnemyProjectile+0x18c>)
-    19e4:	2201      	movs	r2, #1
-    19e6:	701a      	strb	r2, [r3, #0]
-                    newEnemyProjectile--;
-    19e8:	4b0d      	ldr	r3, [pc, #52]	@ (1a20 <updateEnemyProjectile+0x190>)
-    19ea:	681b      	ldr	r3, [r3, #0]
-    19ec:	3b01      	subs	r3, #1
-    19ee:	4a0c      	ldr	r2, [pc, #48]	@ (1a20 <updateEnemyProjectile+0x190>)
-    19f0:	6013      	str	r3, [r2, #0]
-    for(int i = 0; i < ENEMY_COUNT; i++) {
-    19f2:	697b      	ldr	r3, [r7, #20]
-    19f4:	3301      	adds	r3, #1
-    19f6:	617b      	str	r3, [r7, #20]
-    19f8:	697b      	ldr	r3, [r7, #20]
-    19fa:	2b0b      	cmp	r3, #11
-    19fc:	f77f af4e 	ble.w	189c <updateEnemyProjectile+0xc>
-                }
-            }
-        }
-    }
-    display_update_needed = true;
-    1a00:	4b0a      	ldr	r3, [pc, #40]	@ (1a2c <updateEnemyProjectile+0x19c>)
-    1a02:	2201      	movs	r2, #1
-    1a04:	701a      	strb	r2, [r3, #0]
-}
-    1a06:	bf00      	nop
-    1a08:	371c      	adds	r7, #28
-    1a0a:	46bd      	mov	sp, r7
-    1a0c:	bd90      	pop	{r4, r7, pc}
-    1a0e:	bf00      	nop
-    1a10:	2000ab18 	.word	0x2000ab18
-    1a14:	20000001 	.word	0x20000001
-    1a18:	20000002 	.word	0x20000002
-    1a1c:	20000024 	.word	0x20000024
-    1a20:	2000aba8 	.word	0x2000aba8
-    1a24:	20000004 	.word	0x20000004
-    1a28:	2000625c 	.word	0x2000625c
-    1a2c:	20000000 	.word	0x20000000
-
-00001a30 <resetGame>:
-
-
-void resetGame() {
-    1a30:	b580      	push	{r7, lr}
-    1a32:	b084      	sub	sp, #16
-    1a34:	af00      	add	r7, sp, #0
-    spaceX = DEFAULT_SHIP_X;
-    1a36:	4b41      	ldr	r3, [pc, #260]	@ (1b3c <resetGame+0x10c>)
-    1a38:	224c      	movs	r2, #76	@ 0x4c
-    1a3a:	701a      	strb	r2, [r3, #0]
-    spaceY = DEFAULT_SHIP_Y;
-    1a3c:	4b40      	ldr	r3, [pc, #256]	@ (1b40 <resetGame+0x110>)
-    1a3e:	222c      	movs	r2, #44	@ 0x2c
-    1a40:	701a      	strb	r2, [r3, #0]
-
-    for(int i = 0; i < ENEMY_COUNT; i++) {
-    1a42:	2300      	movs	r3, #0
-    1a44:	60fb      	str	r3, [r7, #12]
-    1a46:	e01f      	b.n	1a88 <resetGame+0x58>
-        enemyPositions[i][2] = 0;
-    1a48:	493e      	ldr	r1, [pc, #248]	@ (1b44 <resetGame+0x114>)
-    1a4a:	68fa      	ldr	r2, [r7, #12]
-    1a4c:	4613      	mov	r3, r2
-    1a4e:	005b      	lsls	r3, r3, #1
-    1a50:	4413      	add	r3, r2
-    1a52:	440b      	add	r3, r1
-    1a54:	3302      	adds	r3, #2
-    1a56:	2200      	movs	r2, #0
-    1a58:	701a      	strb	r2, [r3, #0]
-        enemyProjectiles[i][2] = 0;
-    1a5a:	493b      	ldr	r1, [pc, #236]	@ (1b48 <resetGame+0x118>)
-    1a5c:	68fa      	ldr	r2, [r7, #12]
-    1a5e:	4613      	mov	r3, r2
-    1a60:	005b      	lsls	r3, r3, #1
-    1a62:	4413      	add	r3, r2
-    1a64:	009b      	lsls	r3, r3, #2
-    1a66:	440b      	add	r3, r1
-    1a68:	3308      	adds	r3, #8
-    1a6a:	2200      	movs	r2, #0
-    1a6c:	601a      	str	r2, [r3, #0]
-        projectiles[i][2] = 0;
-    1a6e:	4937      	ldr	r1, [pc, #220]	@ (1b4c <resetGame+0x11c>)
-    1a70:	68fa      	ldr	r2, [r7, #12]
-    1a72:	4613      	mov	r3, r2
-    1a74:	005b      	lsls	r3, r3, #1
-    1a76:	4413      	add	r3, r2
-    1a78:	009b      	lsls	r3, r3, #2
-    1a7a:	440b      	add	r3, r1
-    1a7c:	3308      	adds	r3, #8
-    1a7e:	2200      	movs	r2, #0
-    1a80:	601a      	str	r2, [r3, #0]
-    for(int i = 0; i < ENEMY_COUNT; i++) {
-    1a82:	68fb      	ldr	r3, [r7, #12]
-    1a84:	3301      	adds	r3, #1
-    1a86:	60fb      	str	r3, [r7, #12]
-    1a88:	68fb      	ldr	r3, [r7, #12]
-    1a8a:	2b0b      	cmp	r3, #11
-    1a8c:	dddc      	ble.n	1a48 <resetGame+0x18>
-    }
-
-    for(int i = 0; i < PROJECTILE_NUM; i++) {
-    1a8e:	2300      	movs	r3, #0
-    1a90:	60bb      	str	r3, [r7, #8]
-    1a92:	e00c      	b.n	1aae <resetGame+0x7e>
-        projectiles[i][2] = 0;
-    1a94:	492d      	ldr	r1, [pc, #180]	@ (1b4c <resetGame+0x11c>)
-    1a96:	68ba      	ldr	r2, [r7, #8]
-    1a98:	4613      	mov	r3, r2
-    1a9a:	005b      	lsls	r3, r3, #1
-    1a9c:	4413      	add	r3, r2
-    1a9e:	009b      	lsls	r3, r3, #2
-    1aa0:	440b      	add	r3, r1
-    1aa2:	3308      	adds	r3, #8
-    1aa4:	2200      	movs	r2, #0
+0000193c <updateEnemyProjectile>:
+    193c:	b590      	push	{r4, r7, lr}
+    193e:	b08b      	sub	sp, #44	@ 0x2c
+    1940:	af04      	add	r7, sp, #16
+    1942:	2300      	movs	r3, #0
+    1944:	617b      	str	r3, [r7, #20]
+    1946:	e0c5      	b.n	1ad4 <updateEnemyProjectile+0x198>
+    1948:	4967      	ldr	r1, [pc, #412]	@ (1ae8 <updateEnemyProjectile+0x1ac>)
+    194a:	697a      	ldr	r2, [r7, #20]
+    194c:	4613      	mov	r3, r2
+    194e:	005b      	lsls	r3, r3, #1
+    1950:	4413      	add	r3, r2
+    1952:	009b      	lsls	r3, r3, #2
+    1954:	440b      	add	r3, r1
+    1956:	3308      	adds	r3, #8
+    1958:	681b      	ldr	r3, [r3, #0]
+    195a:	2b00      	cmp	r3, #0
+    195c:	f000 80b7 	beq.w	1ace <updateEnemyProjectile+0x192>
+    1960:	4961      	ldr	r1, [pc, #388]	@ (1ae8 <updateEnemyProjectile+0x1ac>)
+    1962:	697a      	ldr	r2, [r7, #20]
+    1964:	4613      	mov	r3, r2
+    1966:	005b      	lsls	r3, r3, #1
+    1968:	4413      	add	r3, r2
+    196a:	009b      	lsls	r3, r3, #2
+    196c:	440b      	add	r3, r1
+    196e:	681b      	ldr	r3, [r3, #0]
+    1970:	607b      	str	r3, [r7, #4]
+    1972:	495d      	ldr	r1, [pc, #372]	@ (1ae8 <updateEnemyProjectile+0x1ac>)
+    1974:	697a      	ldr	r2, [r7, #20]
+    1976:	4613      	mov	r3, r2
+    1978:	005b      	lsls	r3, r3, #1
+    197a:	4413      	add	r3, r2
+    197c:	009b      	lsls	r3, r3, #2
+    197e:	440b      	add	r3, r1
+    1980:	3304      	adds	r3, #4
+    1982:	681b      	ldr	r3, [r3, #0]
+    1984:	603b      	str	r3, [r7, #0]
+    1986:	6839      	ldr	r1, [r7, #0]
+    1988:	6878      	ldr	r0, [r7, #4]
+    198a:	f7ff ff89 	bl	18a0 <removeEnemyProjectile>
+    198e:	2301      	movs	r3, #1
+    1990:	74fb      	strb	r3, [r7, #19]
+    1992:	4b56      	ldr	r3, [pc, #344]	@ (1aec <updateEnemyProjectile+0x1b0>)
+    1994:	781b      	ldrb	r3, [r3, #0]
+    1996:	4618      	mov	r0, r3
+    1998:	4b55      	ldr	r3, [pc, #340]	@ (1af0 <updateEnemyProjectile+0x1b4>)
+    199a:	781b      	ldrb	r3, [r3, #0]
+    199c:	4619      	mov	r1, r3
+    199e:	2304      	movs	r3, #4
+    19a0:	9303      	str	r3, [sp, #12]
+    19a2:	2304      	movs	r3, #4
+    19a4:	9302      	str	r3, [sp, #8]
+    19a6:	683b      	ldr	r3, [r7, #0]
+    19a8:	9301      	str	r3, [sp, #4]
+    19aa:	687b      	ldr	r3, [r7, #4]
+    19ac:	9300      	str	r3, [sp, #0]
+    19ae:	2308      	movs	r3, #8
+    19b0:	220d      	movs	r2, #13
+    19b2:	f7ff f9e7 	bl	d84 <intersects>
+    19b6:	4603      	mov	r3, r0
+    19b8:	2b00      	cmp	r3, #0
+    19ba:	d114      	bne.n	19e6 <updateEnemyProjectile+0xaa>
+    19bc:	4b4b      	ldr	r3, [pc, #300]	@ (1aec <updateEnemyProjectile+0x1b0>)
+    19be:	781b      	ldrb	r3, [r3, #0]
+    19c0:	461a      	mov	r2, r3
+    19c2:	4b4b      	ldr	r3, [pc, #300]	@ (1af0 <updateEnemyProjectile+0x1b4>)
+    19c4:	781b      	ldrb	r3, [r3, #0]
+    19c6:	4619      	mov	r1, r3
+    19c8:	2308      	movs	r3, #8
+    19ca:	9303      	str	r3, [sp, #12]
+    19cc:	230d      	movs	r3, #13
+    19ce:	9302      	str	r3, [sp, #8]
+    19d0:	9101      	str	r1, [sp, #4]
+    19d2:	9200      	str	r2, [sp, #0]
+    19d4:	2304      	movs	r3, #4
+    19d6:	2204      	movs	r2, #4
+    19d8:	6839      	ldr	r1, [r7, #0]
+    19da:	6878      	ldr	r0, [r7, #4]
+    19dc:	f7ff f9d2 	bl	d84 <intersects>
+    19e0:	4603      	mov	r3, r0
+    19e2:	2b00      	cmp	r3, #0
+    19e4:	d018      	beq.n	1a18 <updateEnemyProjectile+0xdc>
+    19e6:	f7ff fa5d 	bl	ea4 <removeSpaceship>
+    19ea:	493f      	ldr	r1, [pc, #252]	@ (1ae8 <updateEnemyProjectile+0x1ac>)
+    19ec:	697a      	ldr	r2, [r7, #20]
+    19ee:	4613      	mov	r3, r2
+    19f0:	005b      	lsls	r3, r3, #1
+    19f2:	4413      	add	r3, r2
+    19f4:	009b      	lsls	r3, r3, #2
+    19f6:	440b      	add	r3, r1
+    19f8:	3308      	adds	r3, #8
+    19fa:	2200      	movs	r2, #0
+    19fc:	601a      	str	r2, [r3, #0]
+    19fe:	4b3d      	ldr	r3, [pc, #244]	@ (1af4 <updateEnemyProjectile+0x1b8>)
+    1a00:	2200      	movs	r2, #0
+    1a02:	701a      	strb	r2, [r3, #0]
+    1a04:	4b3c      	ldr	r3, [pc, #240]	@ (1af8 <updateEnemyProjectile+0x1bc>)
+    1a06:	681b      	ldr	r3, [r3, #0]
+    1a08:	3b01      	subs	r3, #1
+    1a0a:	4a3b      	ldr	r2, [pc, #236]	@ (1af8 <updateEnemyProjectile+0x1bc>)
+    1a0c:	6013      	str	r3, [r2, #0]
+    1a0e:	4b3b      	ldr	r3, [pc, #236]	@ (1afc <updateEnemyProjectile+0x1c0>)
+    1a10:	2201      	movs	r2, #1
+    1a12:	701a      	strb	r2, [r3, #0]
+    1a14:	2300      	movs	r3, #0
+    1a16:	74fb      	strb	r3, [r7, #19]
+    1a18:	7cfb      	ldrb	r3, [r7, #19]
+    1a1a:	2b00      	cmp	r3, #0
+    1a1c:	d057      	beq.n	1ace <updateEnemyProjectile+0x192>
+    1a1e:	687b      	ldr	r3, [r7, #4]
+    1a20:	3303      	adds	r3, #3
+    1a22:	607b      	str	r3, [r7, #4]
+    1a24:	687b      	ldr	r3, [r7, #4]
+    1a26:	2b5b      	cmp	r3, #91	@ 0x5b
+    1a28:	dc3f      	bgt.n	1aaa <updateEnemyProjectile+0x16e>
+    1a2a:	2300      	movs	r3, #0
+    1a2c:	60fb      	str	r3, [r7, #12]
+    1a2e:	e02f      	b.n	1a90 <updateEnemyProjectile+0x154>
+    1a30:	2300      	movs	r3, #0
+    1a32:	60bb      	str	r3, [r7, #8]
+    1a34:	e026      	b.n	1a84 <updateEnemyProjectile+0x148>
+    1a36:	4932      	ldr	r1, [pc, #200]	@ (1b00 <updateEnemyProjectile+0x1c4>)
+    1a38:	68fb      	ldr	r3, [r7, #12]
+    1a3a:	009a      	lsls	r2, r3, #2
+    1a3c:	68bb      	ldr	r3, [r7, #8]
+    1a3e:	4413      	add	r3, r2
+    1a40:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    1a44:	2b00      	cmp	r3, #0
+    1a46:	d01a      	beq.n	1a7e <updateEnemyProjectile+0x142>
+    1a48:	687a      	ldr	r2, [r7, #4]
+    1a4a:	68fb      	ldr	r3, [r7, #12]
+    1a4c:	4413      	add	r3, r2
+    1a4e:	2b5f      	cmp	r3, #95	@ 0x5f
+    1a50:	dc15      	bgt.n	1a7e <updateEnemyProjectile+0x142>
+    1a52:	687a      	ldr	r2, [r7, #4]
+    1a54:	68fb      	ldr	r3, [r7, #12]
+    1a56:	441a      	add	r2, r3
+    1a58:	6839      	ldr	r1, [r7, #0]
+    1a5a:	68bb      	ldr	r3, [r7, #8]
+    1a5c:	4419      	add	r1, r3
+    1a5e:	4c28      	ldr	r4, [pc, #160]	@ (1b00 <updateEnemyProjectile+0x1c4>)
+    1a60:	68fb      	ldr	r3, [r7, #12]
+    1a62:	0098      	lsls	r0, r3, #2
+    1a64:	68bb      	ldr	r3, [r7, #8]
+    1a66:	4403      	add	r3, r0
+    1a68:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    1a6c:	4825      	ldr	r0, [pc, #148]	@ (1b04 <updateEnemyProjectile+0x1c8>)
+    1a6e:	4613      	mov	r3, r2
+    1a70:	005b      	lsls	r3, r3, #1
+    1a72:	4413      	add	r3, r2
+    1a74:	015b      	lsls	r3, r3, #5
+    1a76:	440b      	add	r3, r1
+    1a78:	4622      	mov	r2, r4
+    1a7a:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+    1a7e:	68bb      	ldr	r3, [r7, #8]
+    1a80:	3301      	adds	r3, #1
+    1a82:	60bb      	str	r3, [r7, #8]
+    1a84:	68bb      	ldr	r3, [r7, #8]
+    1a86:	2b03      	cmp	r3, #3
+    1a88:	ddd5      	ble.n	1a36 <updateEnemyProjectile+0xfa>
+    1a8a:	68fb      	ldr	r3, [r7, #12]
+    1a8c:	3301      	adds	r3, #1
+    1a8e:	60fb      	str	r3, [r7, #12]
+    1a90:	68fb      	ldr	r3, [r7, #12]
+    1a92:	2b03      	cmp	r3, #3
+    1a94:	ddcc      	ble.n	1a30 <updateEnemyProjectile+0xf4>
+    1a96:	4914      	ldr	r1, [pc, #80]	@ (1ae8 <updateEnemyProjectile+0x1ac>)
+    1a98:	697a      	ldr	r2, [r7, #20]
+    1a9a:	4613      	mov	r3, r2
+    1a9c:	005b      	lsls	r3, r3, #1
+    1a9e:	4413      	add	r3, r2
+    1aa0:	009b      	lsls	r3, r3, #2
+    1aa2:	440b      	add	r3, r1
+    1aa4:	687a      	ldr	r2, [r7, #4]
     1aa6:	601a      	str	r2, [r3, #0]
-    for(int i = 0; i < PROJECTILE_NUM; i++) {
-    1aa8:	68bb      	ldr	r3, [r7, #8]
-    1aaa:	3301      	adds	r3, #1
-    1aac:	60bb      	str	r3, [r7, #8]
-    1aae:	68bb      	ldr	r3, [r7, #8]
-    1ab0:	2b0b      	cmp	r3, #11
-    1ab2:	ddef      	ble.n	1a94 <resetGame+0x64>
-    }
-    newEnemyProjectile = 0;
-    1ab4:	4b26      	ldr	r3, [pc, #152]	@ (1b50 <resetGame+0x120>)
-    1ab6:	2200      	movs	r2, #0
-    1ab8:	601a      	str	r2, [r3, #0]
-    newProjectileIndex = 0;
-    1aba:	4b26      	ldr	r3, [pc, #152]	@ (1b54 <resetGame+0x124>)
-    1abc:	2200      	movs	r2, #0
-    1abe:	601a      	str	r2, [r3, #0]
-    canAddEnemyProject = true;
-    1ac0:	4b25      	ldr	r3, [pc, #148]	@ (1b58 <resetGame+0x128>)
-    1ac2:	2201      	movs	r2, #1
-    1ac4:	701a      	strb	r2, [r3, #0]
-    canAddProject = true;
-    1ac6:	4b25      	ldr	r3, [pc, #148]	@ (1b5c <resetGame+0x12c>)
-    1ac8:	2201      	movs	r2, #1
-    1aca:	701a      	strb	r2, [r3, #0]
-    activeEnemyCount = 0;
-    1acc:	4b24      	ldr	r3, [pc, #144]	@ (1b60 <resetGame+0x130>)
-    1ace:	2200      	movs	r2, #0
-    1ad0:	701a      	strb	r2, [r3, #0]
-    gameOver = false;
-    1ad2:	4b24      	ldr	r3, [pc, #144]	@ (1b64 <resetGame+0x134>)
-    1ad4:	2200      	movs	r2, #0
-    1ad6:	701a      	strb	r2, [r3, #0]
-    display_update_needed = true;
-    1ad8:	4b23      	ldr	r3, [pc, #140]	@ (1b68 <resetGame+0x138>)
-    1ada:	2201      	movs	r2, #1
-    1adc:	701a      	strb	r2, [r3, #0]
+    1aa8:	e011      	b.n	1ace <updateEnemyProjectile+0x192>
+    1aaa:	490f      	ldr	r1, [pc, #60]	@ (1ae8 <updateEnemyProjectile+0x1ac>)
+    1aac:	697a      	ldr	r2, [r7, #20]
+    1aae:	4613      	mov	r3, r2
+    1ab0:	005b      	lsls	r3, r3, #1
+    1ab2:	4413      	add	r3, r2
+    1ab4:	009b      	lsls	r3, r3, #2
+    1ab6:	440b      	add	r3, r1
+    1ab8:	3308      	adds	r3, #8
+    1aba:	2200      	movs	r2, #0
+    1abc:	601a      	str	r2, [r3, #0]
+    1abe:	4b0d      	ldr	r3, [pc, #52]	@ (1af4 <updateEnemyProjectile+0x1b8>)
+    1ac0:	2201      	movs	r2, #1
+    1ac2:	701a      	strb	r2, [r3, #0]
+    1ac4:	4b0c      	ldr	r3, [pc, #48]	@ (1af8 <updateEnemyProjectile+0x1bc>)
+    1ac6:	681b      	ldr	r3, [r3, #0]
+    1ac8:	3b01      	subs	r3, #1
+    1aca:	4a0b      	ldr	r2, [pc, #44]	@ (1af8 <updateEnemyProjectile+0x1bc>)
+    1acc:	6013      	str	r3, [r2, #0]
+    1ace:	697b      	ldr	r3, [r7, #20]
+    1ad0:	3301      	adds	r3, #1
+    1ad2:	617b      	str	r3, [r7, #20]
+    1ad4:	697b      	ldr	r3, [r7, #20]
+    1ad6:	2b0b      	cmp	r3, #11
+    1ad8:	f77f af36 	ble.w	1948 <updateEnemyProjectile+0xc>
+    1adc:	bf00      	nop
+    1ade:	bf00      	nop
+    1ae0:	371c      	adds	r7, #28
+    1ae2:	46bd      	mov	sp, r7
+    1ae4:	bd90      	pop	{r4, r7, pc}
+    1ae6:	bf00      	nop
+    1ae8:	2000f284 	.word	0x2000f284
+    1aec:	20000000 	.word	0x20000000
+    1af0:	20000001 	.word	0x20000001
+    1af4:	20000024 	.word	0x20000024
+    1af8:	2000f3a8 	.word	0x2000f3a8
+    1afc:	20000254 	.word	0x20000254
+    1b00:	20000004 	.word	0x20000004
+    1b04:	2000625c 	.word	0x2000625c
 
-    for(int i = 0; i < DISPLAY_SIZE; i++) {
-    1ade:	2300      	movs	r3, #0
-    1ae0:	607b      	str	r3, [r7, #4]
-    1ae2:	e020      	b.n	1b26 <resetGame+0xf6>
-        for(int j = 0; j < DISPLAY_SIZE; j++) {
-    1ae4:	2300      	movs	r3, #0
-    1ae6:	603b      	str	r3, [r7, #0]
-    1ae8:	e017      	b.n	1b1a <resetGame+0xea>
-        screen[i][j] = background[i][j];
-    1aea:	4920      	ldr	r1, [pc, #128]	@ (1b6c <resetGame+0x13c>)
-    1aec:	687a      	ldr	r2, [r7, #4]
-    1aee:	4613      	mov	r3, r2
-    1af0:	005b      	lsls	r3, r3, #1
-    1af2:	4413      	add	r3, r2
-    1af4:	015b      	lsls	r3, r3, #5
-    1af6:	683a      	ldr	r2, [r7, #0]
-    1af8:	4413      	add	r3, r2
-    1afa:	f831 0013 	ldrh.w	r0, [r1, r3, lsl #1]
-    1afe:	491c      	ldr	r1, [pc, #112]	@ (1b70 <resetGame+0x140>)
-    1b00:	687a      	ldr	r2, [r7, #4]
-    1b02:	4613      	mov	r3, r2
-    1b04:	005b      	lsls	r3, r3, #1
-    1b06:	4413      	add	r3, r2
-    1b08:	015b      	lsls	r3, r3, #5
-    1b0a:	683a      	ldr	r2, [r7, #0]
-    1b0c:	4413      	add	r3, r2
-    1b0e:	4602      	mov	r2, r0
-    1b10:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
-        for(int j = 0; j < DISPLAY_SIZE; j++) {
-    1b14:	683b      	ldr	r3, [r7, #0]
-    1b16:	3301      	adds	r3, #1
-    1b18:	603b      	str	r3, [r7, #0]
-    1b1a:	683b      	ldr	r3, [r7, #0]
-    1b1c:	2b5f      	cmp	r3, #95	@ 0x5f
-    1b1e:	dde4      	ble.n	1aea <resetGame+0xba>
-    for(int i = 0; i < DISPLAY_SIZE; i++) {
-    1b20:	687b      	ldr	r3, [r7, #4]
-    1b22:	3301      	adds	r3, #1
-    1b24:	607b      	str	r3, [r7, #4]
-    1b26:	687b      	ldr	r3, [r7, #4]
-    1b28:	2b5f      	cmp	r3, #95	@ 0x5f
-    1b2a:	dddb      	ble.n	1ae4 <resetGame+0xb4>
-        }
-    }
+00001b08 <resetGame>:
+    1b08:	b580      	push	{r7, lr}
+    1b0a:	b084      	sub	sp, #16
+    1b0c:	af00      	add	r7, sp, #0
+    1b0e:	4b41      	ldr	r3, [pc, #260]	@ (1c14 <resetGame+0x10c>)
+    1b10:	224c      	movs	r2, #76	@ 0x4c
+    1b12:	701a      	strb	r2, [r3, #0]
+    1b14:	4b40      	ldr	r3, [pc, #256]	@ (1c18 <resetGame+0x110>)
+    1b16:	222c      	movs	r2, #44	@ 0x2c
+    1b18:	701a      	strb	r2, [r3, #0]
+    1b1a:	2300      	movs	r3, #0
+    1b1c:	60fb      	str	r3, [r7, #12]
+    1b1e:	e01f      	b.n	1b60 <resetGame+0x58>
+    1b20:	493e      	ldr	r1, [pc, #248]	@ (1c1c <resetGame+0x114>)
+    1b22:	68fa      	ldr	r2, [r7, #12]
+    1b24:	4613      	mov	r3, r2
+    1b26:	005b      	lsls	r3, r3, #1
+    1b28:	4413      	add	r3, r2
+    1b2a:	440b      	add	r3, r1
+    1b2c:	3302      	adds	r3, #2
+    1b2e:	2200      	movs	r2, #0
+    1b30:	701a      	strb	r2, [r3, #0]
+    1b32:	493b      	ldr	r1, [pc, #236]	@ (1c20 <resetGame+0x118>)
+    1b34:	68fa      	ldr	r2, [r7, #12]
+    1b36:	4613      	mov	r3, r2
+    1b38:	005b      	lsls	r3, r3, #1
+    1b3a:	4413      	add	r3, r2
+    1b3c:	009b      	lsls	r3, r3, #2
+    1b3e:	440b      	add	r3, r1
+    1b40:	3308      	adds	r3, #8
+    1b42:	2200      	movs	r2, #0
+    1b44:	601a      	str	r2, [r3, #0]
+    1b46:	4937      	ldr	r1, [pc, #220]	@ (1c24 <resetGame+0x11c>)
+    1b48:	68fa      	ldr	r2, [r7, #12]
+    1b4a:	4613      	mov	r3, r2
+    1b4c:	005b      	lsls	r3, r3, #1
+    1b4e:	4413      	add	r3, r2
+    1b50:	009b      	lsls	r3, r3, #2
+    1b52:	440b      	add	r3, r1
+    1b54:	3308      	adds	r3, #8
+    1b56:	2200      	movs	r2, #0
+    1b58:	601a      	str	r2, [r3, #0]
+    1b5a:	68fb      	ldr	r3, [r7, #12]
+    1b5c:	3301      	adds	r3, #1
+    1b5e:	60fb      	str	r3, [r7, #12]
+    1b60:	68fb      	ldr	r3, [r7, #12]
+    1b62:	2b0b      	cmp	r3, #11
+    1b64:	dddc      	ble.n	1b20 <resetGame+0x18>
+    1b66:	2300      	movs	r3, #0
+    1b68:	60bb      	str	r3, [r7, #8]
+    1b6a:	e00c      	b.n	1b86 <resetGame+0x7e>
+    1b6c:	492d      	ldr	r1, [pc, #180]	@ (1c24 <resetGame+0x11c>)
+    1b6e:	68ba      	ldr	r2, [r7, #8]
+    1b70:	4613      	mov	r3, r2
+    1b72:	005b      	lsls	r3, r3, #1
+    1b74:	4413      	add	r3, r2
+    1b76:	009b      	lsls	r3, r3, #2
+    1b78:	440b      	add	r3, r1
+    1b7a:	3308      	adds	r3, #8
+    1b7c:	2200      	movs	r2, #0
+    1b7e:	601a      	str	r2, [r3, #0]
+    1b80:	68bb      	ldr	r3, [r7, #8]
+    1b82:	3301      	adds	r3, #1
+    1b84:	60bb      	str	r3, [r7, #8]
+    1b86:	68bb      	ldr	r3, [r7, #8]
+    1b88:	2b0b      	cmp	r3, #11
+    1b8a:	ddef      	ble.n	1b6c <resetGame+0x64>
+    1b8c:	4b26      	ldr	r3, [pc, #152]	@ (1c28 <resetGame+0x120>)
+    1b8e:	2200      	movs	r2, #0
+    1b90:	601a      	str	r2, [r3, #0]
+    1b92:	4b26      	ldr	r3, [pc, #152]	@ (1c2c <resetGame+0x124>)
+    1b94:	2200      	movs	r2, #0
+    1b96:	601a      	str	r2, [r3, #0]
+    1b98:	4b25      	ldr	r3, [pc, #148]	@ (1c30 <resetGame+0x128>)
+    1b9a:	2201      	movs	r2, #1
+    1b9c:	701a      	strb	r2, [r3, #0]
+    1b9e:	4b25      	ldr	r3, [pc, #148]	@ (1c34 <resetGame+0x12c>)
+    1ba0:	2201      	movs	r2, #1
+    1ba2:	701a      	strb	r2, [r3, #0]
+    1ba4:	4b24      	ldr	r3, [pc, #144]	@ (1c38 <resetGame+0x130>)
+    1ba6:	2200      	movs	r2, #0
+    1ba8:	701a      	strb	r2, [r3, #0]
+    1baa:	4b24      	ldr	r3, [pc, #144]	@ (1c3c <resetGame+0x134>)
+    1bac:	2200      	movs	r2, #0
+    1bae:	701a      	strb	r2, [r3, #0]
+    1bb0:	2300      	movs	r3, #0
+    1bb2:	607b      	str	r3, [r7, #4]
+    1bb4:	e020      	b.n	1bf8 <resetGame+0xf0>
+    1bb6:	2300      	movs	r3, #0
+    1bb8:	603b      	str	r3, [r7, #0]
+    1bba:	e017      	b.n	1bec <resetGame+0xe4>
+    1bbc:	4920      	ldr	r1, [pc, #128]	@ (1c40 <resetGame+0x138>)
+    1bbe:	687a      	ldr	r2, [r7, #4]
+    1bc0:	4613      	mov	r3, r2
+    1bc2:	005b      	lsls	r3, r3, #1
+    1bc4:	4413      	add	r3, r2
+    1bc6:	015b      	lsls	r3, r3, #5
+    1bc8:	683a      	ldr	r2, [r7, #0]
+    1bca:	4413      	add	r3, r2
+    1bcc:	f831 0013 	ldrh.w	r0, [r1, r3, lsl #1]
+    1bd0:	491c      	ldr	r1, [pc, #112]	@ (1c44 <resetGame+0x13c>)
+    1bd2:	687a      	ldr	r2, [r7, #4]
+    1bd4:	4613      	mov	r3, r2
+    1bd6:	005b      	lsls	r3, r3, #1
+    1bd8:	4413      	add	r3, r2
+    1bda:	015b      	lsls	r3, r3, #5
+    1bdc:	683a      	ldr	r2, [r7, #0]
+    1bde:	4413      	add	r3, r2
+    1be0:	4602      	mov	r2, r0
+    1be2:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+    1be6:	683b      	ldr	r3, [r7, #0]
+    1be8:	3301      	adds	r3, #1
+    1bea:	603b      	str	r3, [r7, #0]
+    1bec:	683b      	ldr	r3, [r7, #0]
+    1bee:	2b5f      	cmp	r3, #95	@ 0x5f
+    1bf0:	dde4      	ble.n	1bbc <resetGame+0xb4>
+    1bf2:	687b      	ldr	r3, [r7, #4]
+    1bf4:	3301      	adds	r3, #1
+    1bf6:	607b      	str	r3, [r7, #4]
+    1bf8:	687b      	ldr	r3, [r7, #4]
+    1bfa:	2b5f      	cmp	r3, #95	@ 0x5f
+    1bfc:	dddb      	ble.n	1bb6 <resetGame+0xae>
+    1bfe:	f7fe ffe1 	bl	bc4 <generateSpaceBackground>
+    1c02:	f7ff f909 	bl	e18 <addSpaceship>
+    1c06:	200c      	movs	r0, #12
+    1c08:	f7ff f9f8 	bl	ffc <addEnemies>
+    1c0c:	bf00      	nop
+    1c0e:	3710      	adds	r7, #16
+    1c10:	46bd      	mov	sp, r7
+    1c12:	bd80      	pop	{r7, pc}
+    1c14:	20000000 	.word	0x20000000
+    1c18:	20000001 	.word	0x20000001
+    1c1c:	2000f25c 	.word	0x2000f25c
+    1c20:	2000f284 	.word	0x2000f284
+    1c24:	2000f314 	.word	0x2000f314
+    1c28:	2000f3a8 	.word	0x2000f3a8
+    1c2c:	2000f3a4 	.word	0x2000f3a4
+    1c30:	20000024 	.word	0x20000024
+    1c34:	20000002 	.word	0x20000002
+    1c38:	2000f280 	.word	0x2000f280
+    1c3c:	20000254 	.word	0x20000254
+    1c40:	20000258 	.word	0x20000258
+    1c44:	2000625c 	.word	0x2000625c
 
-    addSpaceship();
-    1b2c:	f7ff f968 	bl	e00 <addSpaceship>
-    addEnemies();
-    1b30:	f7ff fa60 	bl	ff4 <addEnemies>
-    1b34:	bf00      	nop
-    1b36:	3710      	adds	r7, #16
-    1b38:	46bd      	mov	sp, r7
-    1b3a:	bd80      	pop	{r7, pc}
-    1b3c:	20000001 	.word	0x20000001
-    1b40:	20000002 	.word	0x20000002
-    1b44:	2000aa5c 	.word	0x2000aa5c
-    1b48:	2000ab18 	.word	0x2000ab18
-    1b4c:	2000aa84 	.word	0x2000aa84
-    1b50:	2000aba8 	.word	0x2000aba8
-    1b54:	2000ab14 	.word	0x2000ab14
-    1b58:	20000024 	.word	0x20000024
-    1b5c:	20000003 	.word	0x20000003
-    1b60:	2000aa80 	.word	0x2000aa80
-    1b64:	20000254 	.word	0x20000254
-    1b68:	20000000 	.word	0x20000000
-    1b6c:	20000258 	.word	0x20000258
-    1b70:	2000625c 	.word	0x2000625c
+00001c48 <rand>:
+    1c48:	4b0a      	ldr	r3, [pc, #40]	@ (1c74 <rand+0x2c>)
+    1c4a:	480b      	ldr	r0, [pc, #44]	@ (1c78 <rand+0x30>)
+    1c4c:	6819      	ldr	r1, [r3, #0]
+    1c4e:	4a0b      	ldr	r2, [pc, #44]	@ (1c7c <rand+0x34>)
+    1c50:	f8d1 3098 	ldr.w	r3, [r1, #152]	@ 0x98
+    1c54:	f8d1 c09c 	ldr.w	ip, [r1, #156]	@ 0x9c
+    1c58:	fb03 f000 	mul.w	r0, r3, r0
+    1c5c:	fb02 000c 	mla	r0, r2, ip, r0
+    1c60:	fba3 3202 	umull	r3, r2, r3, r2
+    1c64:	3301      	adds	r3, #1
+    1c66:	eb40 0002 	adc.w	r0, r0, r2
+    1c6a:	e9c1 3026 	strd	r3, r0, [r1, #152]	@ 0x98
+    1c6e:	f020 4000 	bic.w	r0, r0, #2147483648	@ 0x80000000
+    1c72:	4770      	bx	lr
+    1c74:	20000028 	.word	0x20000028
+    1c78:	5851f42d 	.word	0x5851f42d
+    1c7c:	4c957f2d 	.word	0x4c957f2d
 
-00001b74 <rand>:
-    1b74:	4b0a      	ldr	r3, [pc, #40]	@ (1ba0 <rand+0x2c>)
-    1b76:	480b      	ldr	r0, [pc, #44]	@ (1ba4 <rand+0x30>)
-    1b78:	6819      	ldr	r1, [r3, #0]
-    1b7a:	4a0b      	ldr	r2, [pc, #44]	@ (1ba8 <rand+0x34>)
-    1b7c:	f8d1 3098 	ldr.w	r3, [r1, #152]	@ 0x98
-    1b80:	f8d1 c09c 	ldr.w	ip, [r1, #156]	@ 0x9c
-    1b84:	fb03 f000 	mul.w	r0, r3, r0
-    1b88:	fb02 000c 	mla	r0, r2, ip, r0
-    1b8c:	fba3 3202 	umull	r3, r2, r3, r2
-    1b90:	3301      	adds	r3, #1
-    1b92:	eb40 0002 	adc.w	r0, r0, r2
-    1b96:	e9c1 3026 	strd	r3, r0, [r1, #152]	@ 0x98
-    1b9a:	f020 4000 	bic.w	r0, r0, #2147483648	@ 0x80000000
-    1b9e:	4770      	bx	lr
-    1ba0:	20000028 	.word	0x20000028
-    1ba4:	5851f42d 	.word	0x5851f42d
-    1ba8:	4c957f2d 	.word	0x4c957f2d
+00001c80 <__libc_init_array>:
+    1c80:	b570      	push	{r4, r5, r6, lr}
+    1c82:	4b0f      	ldr	r3, [pc, #60]	@ (1cc0 <__libc_init_array+0x40>)
+    1c84:	4d0f      	ldr	r5, [pc, #60]	@ (1cc4 <__libc_init_array+0x44>)
+    1c86:	42ab      	cmp	r3, r5
+    1c88:	eba3 0605 	sub.w	r6, r3, r5
+    1c8c:	d007      	beq.n	1c9e <__libc_init_array+0x1e>
+    1c8e:	10b6      	asrs	r6, r6, #2
+    1c90:	2400      	movs	r4, #0
+    1c92:	f855 3b04 	ldr.w	r3, [r5], #4
+    1c96:	3401      	adds	r4, #1
+    1c98:	4798      	blx	r3
+    1c9a:	42a6      	cmp	r6, r4
+    1c9c:	d8f9      	bhi.n	1c92 <__libc_init_array+0x12>
+    1c9e:	f000 f927 	bl	1ef0 <_init>
+    1ca2:	4d09      	ldr	r5, [pc, #36]	@ (1cc8 <__libc_init_array+0x48>)
+    1ca4:	4b09      	ldr	r3, [pc, #36]	@ (1ccc <__libc_init_array+0x4c>)
+    1ca6:	1b5e      	subs	r6, r3, r5
+    1ca8:	42ab      	cmp	r3, r5
+    1caa:	ea4f 06a6 	mov.w	r6, r6, asr #2
+    1cae:	d006      	beq.n	1cbe <__libc_init_array+0x3e>
+    1cb0:	2400      	movs	r4, #0
+    1cb2:	f855 3b04 	ldr.w	r3, [r5], #4
+    1cb6:	3401      	adds	r4, #1
+    1cb8:	4798      	blx	r3
+    1cba:	42a6      	cmp	r6, r4
+    1cbc:	d8f9      	bhi.n	1cb2 <__libc_init_array+0x32>
+    1cbe:	bd70      	pop	{r4, r5, r6, pc}
+    1cc0:	00001efc 	.word	0x00001efc
+    1cc4:	00001efc 	.word	0x00001efc
+    1cc8:	00001efc 	.word	0x00001efc
+    1ccc:	00001f04 	.word	0x00001f04
 
-00001bac <__libc_init_array>:
-    1bac:	b570      	push	{r4, r5, r6, lr}
-    1bae:	4b0f      	ldr	r3, [pc, #60]	@ (1bec <__libc_init_array+0x40>)
-    1bb0:	4d0f      	ldr	r5, [pc, #60]	@ (1bf0 <__libc_init_array+0x44>)
-    1bb2:	42ab      	cmp	r3, r5
-    1bb4:	eba3 0605 	sub.w	r6, r3, r5
-    1bb8:	d007      	beq.n	1bca <__libc_init_array+0x1e>
-    1bba:	10b6      	asrs	r6, r6, #2
-    1bbc:	2400      	movs	r4, #0
-    1bbe:	f855 3b04 	ldr.w	r3, [r5], #4
-    1bc2:	3401      	adds	r4, #1
-    1bc4:	4798      	blx	r3
-    1bc6:	42a6      	cmp	r6, r4
-    1bc8:	d8f9      	bhi.n	1bbe <__libc_init_array+0x12>
-    1bca:	f000 f927 	bl	1e1c <_init>
-    1bce:	4d09      	ldr	r5, [pc, #36]	@ (1bf4 <__libc_init_array+0x48>)
-    1bd0:	4b09      	ldr	r3, [pc, #36]	@ (1bf8 <__libc_init_array+0x4c>)
-    1bd2:	1b5e      	subs	r6, r3, r5
-    1bd4:	42ab      	cmp	r3, r5
-    1bd6:	ea4f 06a6 	mov.w	r6, r6, asr #2
-    1bda:	d006      	beq.n	1bea <__libc_init_array+0x3e>
-    1bdc:	2400      	movs	r4, #0
-    1bde:	f855 3b04 	ldr.w	r3, [r5], #4
-    1be2:	3401      	adds	r4, #1
-    1be4:	4798      	blx	r3
-    1be6:	42a6      	cmp	r6, r4
-    1be8:	d8f9      	bhi.n	1bde <__libc_init_array+0x32>
-    1bea:	bd70      	pop	{r4, r5, r6, pc}
-    1bec:	00001e28 	.word	0x00001e28
-    1bf0:	00001e28 	.word	0x00001e28
-    1bf4:	00001e28 	.word	0x00001e28
-    1bf8:	00001e30 	.word	0x00001e30
+00001cd0 <__retarget_lock_acquire_recursive>:
+    1cd0:	4770      	bx	lr
+    1cd2:	bf00      	nop
 
-00001bfc <__retarget_lock_acquire_recursive>:
-    1bfc:	4770      	bx	lr
-    1bfe:	bf00      	nop
+00001cd4 <__retarget_lock_release_recursive>:
+    1cd4:	4770      	bx	lr
+    1cd6:	bf00      	nop
 
-00001c00 <__retarget_lock_release_recursive>:
-    1c00:	4770      	bx	lr
-    1c02:	bf00      	nop
+00001cd8 <register_fini>:
+    1cd8:	4b02      	ldr	r3, [pc, #8]	@ (1ce4 <register_fini+0xc>)
+    1cda:	b113      	cbz	r3, 1ce2 <register_fini+0xa>
+    1cdc:	4802      	ldr	r0, [pc, #8]	@ (1ce8 <register_fini+0x10>)
+    1cde:	f000 b805 	b.w	1cec <atexit>
+    1ce2:	4770      	bx	lr
+    1ce4:	00000000 	.word	0x00000000
+    1ce8:	00001cf9 	.word	0x00001cf9
 
-00001c04 <register_fini>:
-    1c04:	4b02      	ldr	r3, [pc, #8]	@ (1c10 <register_fini+0xc>)
-    1c06:	b113      	cbz	r3, 1c0e <register_fini+0xa>
-    1c08:	4802      	ldr	r0, [pc, #8]	@ (1c14 <register_fini+0x10>)
-    1c0a:	f000 b805 	b.w	1c18 <atexit>
-    1c0e:	4770      	bx	lr
-    1c10:	00000000 	.word	0x00000000
-    1c14:	00001c25 	.word	0x00001c25
+00001cec <atexit>:
+    1cec:	2300      	movs	r3, #0
+    1cee:	4601      	mov	r1, r0
+    1cf0:	461a      	mov	r2, r3
+    1cf2:	4618      	mov	r0, r3
+    1cf4:	f000 b814 	b.w	1d20 <__register_exitproc>
 
-00001c18 <atexit>:
-    1c18:	2300      	movs	r3, #0
-    1c1a:	4601      	mov	r1, r0
-    1c1c:	461a      	mov	r2, r3
-    1c1e:	4618      	mov	r0, r3
-    1c20:	f000 b814 	b.w	1c4c <__register_exitproc>
+00001cf8 <__libc_fini_array>:
+    1cf8:	b538      	push	{r3, r4, r5, lr}
+    1cfa:	4d07      	ldr	r5, [pc, #28]	@ (1d18 <__libc_fini_array+0x20>)
+    1cfc:	4c07      	ldr	r4, [pc, #28]	@ (1d1c <__libc_fini_array+0x24>)
+    1cfe:	1b2c      	subs	r4, r5, r4
+    1d00:	10a4      	asrs	r4, r4, #2
+    1d02:	d005      	beq.n	1d10 <__libc_fini_array+0x18>
+    1d04:	3c01      	subs	r4, #1
+    1d06:	f855 3d04 	ldr.w	r3, [r5, #-4]!
+    1d0a:	4798      	blx	r3
+    1d0c:	2c00      	cmp	r4, #0
+    1d0e:	d1f9      	bne.n	1d04 <__libc_fini_array+0xc>
+    1d10:	e8bd 4038 	ldmia.w	sp!, {r3, r4, r5, lr}
+    1d14:	f000 b8f6 	b.w	1f04 <_fini>
+    1d18:	00001f14 	.word	0x00001f14
+    1d1c:	00001f10 	.word	0x00001f10
 
-00001c24 <__libc_fini_array>:
-    1c24:	b538      	push	{r3, r4, r5, lr}
-    1c26:	4d07      	ldr	r5, [pc, #28]	@ (1c44 <__libc_fini_array+0x20>)
-    1c28:	4c07      	ldr	r4, [pc, #28]	@ (1c48 <__libc_fini_array+0x24>)
-    1c2a:	1b2c      	subs	r4, r5, r4
-    1c2c:	10a4      	asrs	r4, r4, #2
-    1c2e:	d005      	beq.n	1c3c <__libc_fini_array+0x18>
-    1c30:	3c01      	subs	r4, #1
-    1c32:	f855 3d04 	ldr.w	r3, [r5, #-4]!
-    1c36:	4798      	blx	r3
-    1c38:	2c00      	cmp	r4, #0
-    1c3a:	d1f9      	bne.n	1c30 <__libc_fini_array+0xc>
-    1c3c:	e8bd 4038 	ldmia.w	sp!, {r3, r4, r5, lr}
-    1c40:	f000 b8f6 	b.w	1e30 <_fini>
-    1c44:	00001e40 	.word	0x00001e40
-    1c48:	00001e3c 	.word	0x00001e3c
+00001d20 <__register_exitproc>:
+    1d20:	e92d 43f8 	stmdb	sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
+    1d24:	4d1b      	ldr	r5, [pc, #108]	@ (1d94 <__register_exitproc+0x74>)
+    1d26:	4606      	mov	r6, r0
+    1d28:	6828      	ldr	r0, [r5, #0]
+    1d2a:	4698      	mov	r8, r3
+    1d2c:	460f      	mov	r7, r1
+    1d2e:	4691      	mov	r9, r2
+    1d30:	f7ff ffce 	bl	1cd0 <__retarget_lock_acquire_recursive>
+    1d34:	4b18      	ldr	r3, [pc, #96]	@ (1d98 <__register_exitproc+0x78>)
+    1d36:	681c      	ldr	r4, [r3, #0]
+    1d38:	b31c      	cbz	r4, 1d82 <__register_exitproc+0x62>
+    1d3a:	6828      	ldr	r0, [r5, #0]
+    1d3c:	6865      	ldr	r5, [r4, #4]
+    1d3e:	2d1f      	cmp	r5, #31
+    1d40:	dc22      	bgt.n	1d88 <__register_exitproc+0x68>
+    1d42:	b94e      	cbnz	r6, 1d58 <__register_exitproc+0x38>
+    1d44:	1c6b      	adds	r3, r5, #1
+    1d46:	3502      	adds	r5, #2
+    1d48:	6063      	str	r3, [r4, #4]
+    1d4a:	f844 7025 	str.w	r7, [r4, r5, lsl #2]
+    1d4e:	f7ff ffc1 	bl	1cd4 <__retarget_lock_release_recursive>
+    1d52:	2000      	movs	r0, #0
+    1d54:	e8bd 83f8 	ldmia.w	sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
+    1d58:	eb04 0185 	add.w	r1, r4, r5, lsl #2
+    1d5c:	2301      	movs	r3, #1
+    1d5e:	f8c1 9088 	str.w	r9, [r1, #136]	@ 0x88
+    1d62:	f8d4 2188 	ldr.w	r2, [r4, #392]	@ 0x188
+    1d66:	40ab      	lsls	r3, r5
+    1d68:	431a      	orrs	r2, r3
+    1d6a:	2e02      	cmp	r6, #2
+    1d6c:	f8c4 2188 	str.w	r2, [r4, #392]	@ 0x188
+    1d70:	f8c1 8108 	str.w	r8, [r1, #264]	@ 0x108
+    1d74:	d1e6      	bne.n	1d44 <__register_exitproc+0x24>
+    1d76:	f8d4 218c 	ldr.w	r2, [r4, #396]	@ 0x18c
+    1d7a:	431a      	orrs	r2, r3
+    1d7c:	f8c4 218c 	str.w	r2, [r4, #396]	@ 0x18c
+    1d80:	e7e0      	b.n	1d44 <__register_exitproc+0x24>
+    1d82:	4c06      	ldr	r4, [pc, #24]	@ (1d9c <__register_exitproc+0x7c>)
+    1d84:	601c      	str	r4, [r3, #0]
+    1d86:	e7d8      	b.n	1d3a <__register_exitproc+0x1a>
+    1d88:	f7ff ffa4 	bl	1cd4 <__retarget_lock_release_recursive>
+    1d8c:	f04f 30ff 	mov.w	r0, #4294967295	@ 0xffffffff
+    1d90:	e7e0      	b.n	1d54 <__register_exitproc+0x34>
+    1d92:	bf00      	nop
+    1d94:	20000230 	.word	0x20000230
+    1d98:	2000f4e8 	.word	0x2000f4e8
+    1d9c:	2000f4ec 	.word	0x2000f4ec
 
-00001c4c <__register_exitproc>:
-    1c4c:	e92d 43f8 	stmdb	sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
-    1c50:	4d1b      	ldr	r5, [pc, #108]	@ (1cc0 <__register_exitproc+0x74>)
-    1c52:	4606      	mov	r6, r0
-    1c54:	6828      	ldr	r0, [r5, #0]
-    1c56:	4698      	mov	r8, r3
-    1c58:	460f      	mov	r7, r1
-    1c5a:	4691      	mov	r9, r2
-    1c5c:	f7ff ffce 	bl	1bfc <__retarget_lock_acquire_recursive>
-    1c60:	4b18      	ldr	r3, [pc, #96]	@ (1cc4 <__register_exitproc+0x78>)
-    1c62:	681c      	ldr	r4, [r3, #0]
-    1c64:	b31c      	cbz	r4, 1cae <__register_exitproc+0x62>
-    1c66:	6828      	ldr	r0, [r5, #0]
-    1c68:	6865      	ldr	r5, [r4, #4]
-    1c6a:	2d1f      	cmp	r5, #31
-    1c6c:	dc22      	bgt.n	1cb4 <__register_exitproc+0x68>
-    1c6e:	b94e      	cbnz	r6, 1c84 <__register_exitproc+0x38>
-    1c70:	1c6b      	adds	r3, r5, #1
-    1c72:	3502      	adds	r5, #2
-    1c74:	6063      	str	r3, [r4, #4]
-    1c76:	f844 7025 	str.w	r7, [r4, r5, lsl #2]
-    1c7a:	f7ff ffc1 	bl	1c00 <__retarget_lock_release_recursive>
-    1c7e:	2000      	movs	r0, #0
-    1c80:	e8bd 83f8 	ldmia.w	sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
-    1c84:	eb04 0185 	add.w	r1, r4, r5, lsl #2
-    1c88:	2301      	movs	r3, #1
-    1c8a:	f8c1 9088 	str.w	r9, [r1, #136]	@ 0x88
-    1c8e:	f8d4 2188 	ldr.w	r2, [r4, #392]	@ 0x188
-    1c92:	40ab      	lsls	r3, r5
-    1c94:	431a      	orrs	r2, r3
-    1c96:	2e02      	cmp	r6, #2
-    1c98:	f8c4 2188 	str.w	r2, [r4, #392]	@ 0x188
-    1c9c:	f8c1 8108 	str.w	r8, [r1, #264]	@ 0x108
-    1ca0:	d1e6      	bne.n	1c70 <__register_exitproc+0x24>
-    1ca2:	f8d4 218c 	ldr.w	r2, [r4, #396]	@ 0x18c
-    1ca6:	431a      	orrs	r2, r3
-    1ca8:	f8c4 218c 	str.w	r2, [r4, #396]	@ 0x18c
-    1cac:	e7e0      	b.n	1c70 <__register_exitproc+0x24>
-    1cae:	4c06      	ldr	r4, [pc, #24]	@ (1cc8 <__register_exitproc+0x7c>)
-    1cb0:	601c      	str	r4, [r3, #0]
-    1cb2:	e7d8      	b.n	1c66 <__register_exitproc+0x1a>
-    1cb4:	f7ff ffa4 	bl	1c00 <__retarget_lock_release_recursive>
-    1cb8:	f04f 30ff 	mov.w	r0, #4294967295	@ 0xffffffff
-    1cbc:	e7e0      	b.n	1c80 <__register_exitproc+0x34>
-    1cbe:	bf00      	nop
-    1cc0:	20000230 	.word	0x20000230
-    1cc4:	2000ace8 	.word	0x2000ace8
-    1cc8:	2000acec 	.word	0x2000acec
+00001da0 <spaceship>:
+    1da0:	00000000 c6180000 0000c618 00000000     ................
+    1db0:	00000000 ffffc618 c618ffff 00000000     ................
+    1dc0:	c6180000 07ffffff ffff07ff 0000c618     ................
+    1dd0:	ffff0000 001f07ff 07ff001f 0000ffff     ................
+    1de0:	ffff8410 001f07ff 07ff001f 8410ffff     ................
+    1df0:	ffffc618 07ff07ff 07ff07ff c618ffff     ................
+    1e00:	ffffffff 07ffffff ffff07ff ffffffff     ................
+    1e10:	c618ffff 07e0ffff ffff07e0 ffffc618     ................
+    1e20:	c618c618 07e007e0 07e007e0 c618c618     ................
+    1e30:	07e08410 f100ffff fffff100 841007e0     ................
+    1e40:	07e007e0 f1000000 0000f100 07e007e0     ................
+    1e50:	000007e0 f1000000 0000f100 07e00000     ................
+    1e60:	00000000 f1000000 0000f100 00000000     ................
 
-00001ccc <spaceship>:
-    1ccc:	00000000 c6180000 0000c618 00000000     ................
-    1cdc:	00000000 ffffc618 c618ffff 00000000     ................
-    1cec:	c6180000 07ffffff ffff07ff 0000c618     ................
-    1cfc:	ffff0000 001f07ff 07ff001f 0000ffff     ................
-    1d0c:	ffff8410 001f07ff 07ff001f 8410ffff     ................
-    1d1c:	ffffc618 07ff07ff 07ff07ff c618ffff     ................
-    1d2c:	ffffffff 07ffffff ffff07ff ffffffff     ................
-    1d3c:	c618ffff 07e0ffff ffff07e0 ffffc618     ................
-    1d4c:	c618c618 07e007e0 07e007e0 c618c618     ................
-    1d5c:	07e08410 f100ffff fffff100 841007e0     ................
-    1d6c:	07e007e0 f1000000 0000f100 07e007e0     ................
-    1d7c:	000007e0 f1000000 0000f100 07e00000     ................
-    1d8c:	00000000 f1000000 0000f100 00000000     ................
+00001e70 <enemyShip>:
+    1e70:	00000000 ffe0ffe0 ffe0ffe0 00000000     ................
+    1e80:	ffe00000 ffe0ffe0 ffe0ffe0 0000ffe0     ................
+    1e90:	ffe0ffe0 fd80fd80 fd80fd80 ffe0ffe0     ................
+    1ea0:	fd80ffe0 0000fd80 fd800000 ffe0fd80     ................
+    1eb0:	fd80ffe0 00000000 00000000 ffe0fd80     ................
+    1ec0:	fd80ffe0 fd80fd80 fd80fd80 ffe0fd80     ................
+    1ed0:	ffe00000 ffe0ffe0 ffe0ffe0 0000ffe0     ................
+    1ee0:	00000000 0000ffe0 ffe00000 00000000     ................
 
-00001d9c <enemyShip>:
-    1d9c:	00000000 ffe0ffe0 ffe0ffe0 00000000     ................
-    1dac:	ffe00000 ffe0ffe0 ffe0ffe0 0000ffe0     ................
-    1dbc:	ffe0ffe0 fd80fd80 fd80fd80 ffe0ffe0     ................
-    1dcc:	fd80ffe0 0000fd80 fd800000 ffe0fd80     ................
-    1ddc:	fd80ffe0 00000000 00000000 ffe0fd80     ................
-    1dec:	fd80ffe0 fd80fd80 fd80fd80 ffe0fd80     ................
-    1dfc:	ffe00000 ffe0ffe0 ffe0ffe0 0000ffe0     ................
-    1e0c:	00000000 0000ffe0 ffe00000 00000000     ................
+00001ef0 <_init>:
+    1ef0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    1ef2:	bf00      	nop
+    1ef4:	bcf8      	pop	{r3, r4, r5, r6, r7}
+    1ef6:	bc08      	pop	{r3}
+    1ef8:	469e      	mov	lr, r3
+    1efa:	4770      	bx	lr
 
-00001e1c <_init>:
-    1e1c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
-    1e1e:	bf00      	nop
-    1e20:	bcf8      	pop	{r3, r4, r5, r6, r7}
-    1e22:	bc08      	pop	{r3}
-    1e24:	469e      	mov	lr, r3
-    1e26:	4770      	bx	lr
+00001efc <__init_array_start>:
+    1efc:	00001cd9 	.word	0x00001cd9
 
-00001e28 <__init_array_start>:
-    1e28:	00001c05 	.word	0x00001c05
+00001f00 <__frame_dummy_init_array_entry>:
+    1f00:	000002c9                                ....
 
-00001e2c <__frame_dummy_init_array_entry>:
-    1e2c:	000002c9                                ....
+00001f04 <_fini>:
+    1f04:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    1f06:	bf00      	nop
+    1f08:	bcf8      	pop	{r3, r4, r5, r6, r7}
+    1f0a:	bc08      	pop	{r3}
+    1f0c:	469e      	mov	lr, r3
+    1f0e:	4770      	bx	lr
 
-00001e30 <_fini>:
-    1e30:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
-    1e32:	bf00      	nop
-    1e34:	bcf8      	pop	{r3, r4, r5, r6, r7}
-    1e36:	bc08      	pop	{r3}
-    1e38:	469e      	mov	lr, r3
-    1e3a:	4770      	bx	lr
-
-00001e3c <__do_global_dtors_aux_fini_array_entry>:
-    1e3c:	02a1 0000                                   ....
+00001f10 <__do_global_dtors_aux_fini_array_entry>:
+    1f10:	02a1 0000                                   ....

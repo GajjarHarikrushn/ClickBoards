@@ -7,35 +7,38 @@
 
 bool gameOver = false;
 
-bool display_update_needed = true;
 uint16_t background[MEMORY_SIZE][DISPLAY_SIZE] = {0};
 uint8_t backgroundStart = 0;
 uint16_t screen[DISPLAY_SIZE][DISPLAY_SIZE];
-
+uint16_t gameover[DISPLAY_SIZE][DISPLAY_SIZE];
 
 int randRange(int min, int max) {
     return min + (rand() % (max - min + 1));
 }
 
 void generateSpaceBackground() {
-    for (int i = 0; i < MEMORY_SIZE; i++) {
-        for (int j = 0; j < DISPLAY_SIZE; j++) {
+    for(int i = 0; i < MEMORY_SIZE; i++) {
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
             if(randRange(0, DISPLAY_SIZE) > 95)   background[i][j] = WHITE;
             else            background[i][j] = BLACK;
         }
     }
-    for(int i = 0; i < DISPLAY_SIZE; i++) {
-        for(int j = 0; j < DISPLAY_SIZE; j++) {
-            screen[i][j] = background[i][j];
-        }
+    for(int i = 0; i < DISPLAY_SIZE*DISPLAY_SIZE; i++) {
+        screen[0][i] = background[0][i];
+    }
+
+    for(int i = 0; i < DISPLAY_SIZE*DISPLAY_SIZE; i++) {
+        gameover[0][i] = randRange(0x0000,0xFFFF);
     }
 }
 
 void updateDisplay() {
-    if (display_update_needed && !gameOver) {
-        drawArray(0, DISPLAY_SIZE, 0, DISPLAY_SIZE, *screen);
-        display_update_needed = false;
+    if(gameOver) {
+        for(int i = 0; i < DISPLAY_SIZE*DISPLAY_SIZE; i++) {
+            screen[0][i] = gameover[0][i];
+        }
     }
+    drawArray(0, DISPLAY_SIZE, 0, DISPLAY_SIZE, *screen);
 }
 
 void moveBackground() {
@@ -91,7 +94,6 @@ void addSpaceship() {
                 screen[spaceX + i][spaceY + j] = spaceship[i][j];
         }
     }
-    display_update_needed = true;
 }
 
 void removeSpaceship() {
@@ -101,7 +103,6 @@ void removeSpaceship() {
                 screen[spaceX + i][spaceY + j] = background[spaceX + i][spaceY + j];
         }
     }
-    display_update_needed = true;
 }
 
 void updateSpacePos(uint8_t joyX, uint8_t joyY) {
@@ -132,7 +133,6 @@ void updateSpacePos(uint8_t joyX, uint8_t joyY) {
 //---------------------------------Everything related to enemy---------------------------------
 #define ENEMY_SIZE      8
 #define ENEMY_BORDER    DISPLAY_SIZE/4
-#define ENEMY_COUNT     12
 #define ENEMY_BLOCKS    (DISPLAY_SIZE/ENEMY_COUNT)
 
 uint8_t enemyPositions[ENEMY_COUNT][3] = {0};
@@ -147,24 +147,25 @@ const uint16_t enemyShip[ENEMY_SIZE][ENEMY_SIZE] = {
     {BLACK, BLACK, YELLOW, BLACK, BLACK, YELLOW, BLACK, BLACK}
 };
 uint8_t activeEnemyCount = 0;
+uint8_t enemyIndex = 0;
 
+int enemyProjectiles[ENEMY_COUNT][3];
 
-void addEnemies() {
-    activeEnemyCount = ENEMY_COUNT;
-
-    for (int i = 0; i < ENEMY_COUNT; i++) {
-        if(!enemyPositions[i][2]) {
-            enemyPositions[i][0] = randRange(0, ENEMY_BORDER);
-            enemyPositions[i][1] = randRange(i*ENEMY_BLOCKS, i*ENEMY_BLOCKS);
-            enemyPositions[i][2] = true;
+void addEnemies(int count) {
+    for (int i = 0; activeEnemyCount < ENEMY_COUNT && count >= 0; i++) {
+        if(!enemyPositions[enemyIndex][2] && count >= 0) {
+            enemyPositions[enemyIndex][0] = randRange(0, ENEMY_BORDER);
+            enemyPositions[enemyIndex][1] = randRange(enemyIndex*ENEMY_BLOCKS, enemyIndex*ENEMY_BLOCKS);
+            enemyPositions[enemyIndex][2] = true;
+            activeEnemyCount++;
+            count--;
         }
+        enemyIndex = (enemyIndex+1) % ENEMY_COUNT;
     }
-
-    display_update_needed = true;
 }
 
 void spawnEnemies() {
-    for (int enemy = 0; enemy < activeEnemyCount; enemy++) {
+    for (int enemy = 0; enemy < ENEMY_COUNT; enemy++) {
 
         if(enemyPositions[enemy][2]) {
             uint8_t enemyX = enemyPositions[enemy][0];
@@ -182,20 +183,24 @@ void spawnEnemies() {
                 }
             }
             enemyPositions[enemy][2] = true;
-            display_update_needed = true;
         }
     }
 }
 
-void removeEnemy(int i) {
-    uint8_t enemyX = enemyPositions[i][0];
-    uint8_t enemyY = enemyPositions[i][1];
-    for(int i = 0; i < ENEMY_SIZE; i++)
+void removeEnemy(int index) {
+    uint8_t enemyX = enemyPositions[index][0];
+    uint8_t enemyY = enemyPositions[index][1];
+    for(int i = 0; i < ENEMY_SIZE; i++) {
         for (int j = 0; j < ENEMY_SIZE; j++) {
             if (enemyShip[i][j] != 0)
                 screen[enemyX + i][enemyY + j] = background[enemyX + i][enemyY + j];
         }
-    display_update_needed = true;
+    }
+    activeEnemyCount--;
+    enemyPositions[index][2] = false;
+    if(activeEnemyCount < 8) {
+        addEnemies(1);
+    }
 }
 
 
@@ -235,8 +240,6 @@ void addProjectile() {
         if(newProjectileIndex == 0) {
             canAddProject = false;
         }
-        
-        display_update_needed = true;
     }
 }
 
@@ -298,15 +301,12 @@ void updateProjectile() {
             }
         }
     }
-    display_update_needed = true;
 }
 
-//--------------------------------------------------------------------------------------------------
 
 #define ENEMY_PROJECTILE_NUM  6
 #define ENEMY_DIRECTION       3
 
-int enemyProjectiles[ENEMY_COUNT][3];
 int newEnemyProjectile = 0;
 bool canAddEnemyProject = true;
 
@@ -316,8 +316,14 @@ void addEnemyProjectile() {
         for(int i = 0; i < ENEMY_PROJECTILE_NUM; i++) {
             enemy = randRange(0,ENEMY_COUNT-1);
             if(!enemyProjectiles[enemy][2]) break;
+            else {
+                for(int i = 0; i < ENEMY_COUNT; i++) {
+                    enemy = (enemy+1) % ENEMY_COUNT;
+                    if(!enemyProjectiles[enemy][2]) break;
+                }
+            }
         }
-        if(!enemyProjectiles[enemy][2]) {
+        if(!enemyProjectiles[enemy][2] && enemyPositions[enemy][2]) {
             int projectX = enemyPositions[enemy][0]+ENEMY_SIZE;
             int projectY = enemyPositions[enemy][1]+PROJECTILE_SIZE/2;
             
@@ -335,8 +341,6 @@ void addEnemyProjectile() {
             if(newEnemyProjectile == ENEMY_PROJECTILE_NUM) {
                 canAddEnemyProject = false;
             }
-            
-            display_update_needed = true;
         }
     }
 }
@@ -360,7 +364,8 @@ void updateEnemyProjectile() {
 
             bool process = true;
 
-            if (intersects(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE)) {
+            if (intersects(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE) ||
+                intersects(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y)) {
                 removeSpaceship();
 
                 enemyProjectiles[i][2] = false;
@@ -390,7 +395,6 @@ void updateEnemyProjectile() {
             }
         }
     }
-    display_update_needed = true;
 }
 
 
@@ -413,7 +417,6 @@ void resetGame() {
     canAddProject = true;
     activeEnemyCount = 0;
     gameOver = false;
-    display_update_needed = true;
 
     for(int i = 0; i < DISPLAY_SIZE; i++) {
         for(int j = 0; j < DISPLAY_SIZE; j++) {
@@ -421,6 +424,7 @@ void resetGame() {
         }
     }
 
+    generateSpaceBackground();
     addSpaceship();
-    addEnemies();
+    addEnemies(ENEMY_COUNT);
 }

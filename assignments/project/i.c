@@ -54,22 +54,22 @@ int main() {
     displayInit();
     joystickInit();
     generateSpaceBackground();
-    addEnemies();
+    addEnemies(ENEMY_COUNT);
     spawnEnemies();
     buttonInit();
-    // int start = msCount;
-    //     updateSpacePos(readAxis(X_AXIS),readAxis(Y_AXIS));
-    // logMsg("%2.2f", msCount-start);
-    //     moveBackground();
-    // logMsg("%2.2f", msCount-start);
-    //     updateProjectile();
-    // logMsg("%2.2f", msCount-start);
-    //     spawnEnemies();
-    // logMsg("%2.2f", msCount-start);
-    //     addSpaceship();
-    // logMsg("%2.2f", msCount-start);
-    //     updateDisplay();
-    // logMsg("%2.2f", msCount-start);
+    int start = msCount;
+        updateSpacePos(readAxis(X_AXIS),readAxis(Y_AXIS));
+    logMsg("%2.2f", msCount-start);
+        moveBackground();
+    logMsg("%2.2f", msCount-start);
+        updateProjectile();
+    logMsg("%2.2f", msCount-start);
+        spawnEnemies();
+    logMsg("%2.2f", msCount-start);
+        addSpaceship();
+    logMsg("%2.2f", msCount-start);
+        updateDisplay();
+    logMsg("%2.2f", msCount-start);
 
 
     while(1) {
@@ -77,9 +77,7 @@ int main() {
         moveBackground();
         updateProjectile();
         updateEnemyProjectile();
-        // if(msCount%50 == 0) {
-            addEnemyProjectile();
-        // }
+        addEnemyProjectile();
         spawnEnemies();
         addSpaceship();
         updateDisplay();
