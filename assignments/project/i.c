@@ -11,6 +11,10 @@ void EIC_EXTINT_14_Handler() {
 }
 
 void buttonInit() {
+    PORT_REGS->GROUP[0].PORT_DIRSET = PORT_PA15;
+    PORT_REGS->GROUP[0].PORT_OUTSET = PORT_PA15;
+    PORT_REGS->GROUP[0].PORT_PINCFG[15] = PORT_PINCFG_PMUXEN_Msk | PORT_PINCFG_PULLEN_Msk;
+
     PORT_REGS->GROUP[1].PORT_DIRCLR = PORT_PB14;
     PORT_REGS->GROUP[1].PORT_PINCFG[14] = PORT_PINCFG_PMUXEN_Msk | PORT_PINCFG_PULLEN_Msk;
     PORT_REGS->GROUP[1].PORT_PMUX[7] = PORT_PMUX_PMUXE_A;
@@ -45,7 +49,8 @@ int main() {
         updateSpacePos(readAxis(X_AXIS),readAxis(Y_AXIS));
         moveBackground();
         updateProjectile();
-        addProjectile();
+        if(!(PORT_REGS->GROUP[0].PORT_IN & PORT_PA15))
+            addProjectile();
         updateEnemyProjectile();
         addEnemyProjectile();
         spawnEnemies();
