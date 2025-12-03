@@ -1,0 +1,3859 @@
+
+i.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00001e40  00000000  00000000  00001000  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .relocate     00000234  20000000  00001e40  00003000  2**3
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bkupram      00000000  47000000  47000000  00003234  2**0
+                  CONTENTS
+  3 .qspi         00000000  04000000  04000000  00003234  2**0
+                  CONTENTS
+  4 .bss          0000ac48  20000234  00002074  00003234  2**2
+                  ALLOC
+  5 .stack        00010004  2000ae7c  0000ccbc  00003234  2**0
+                  ALLOC
+  6 .ARM.attributes 0000002a  00000000  00000000  00003234  2**0
+                  CONTENTS, READONLY
+  7 .comment      0000008b  00000000  00000000  0000325e  2**0
+                  CONTENTS, READONLY
+  8 .debug_info   00002a27  00000000  00000000  000032e9  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+  9 .debug_abbrev 000008b2  00000000  00000000  00005d10  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 10 .debug_aranges 000001d0  00000000  00000000  000065c2  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 11 .debug_rnglists 00000158  00000000  00000000  00006792  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 12 .debug_line   00001407  00000000  00000000  000068ea  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 13 .debug_str    00001223  00000000  00000000  00007cf1  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_frame  000009a4  00000000  00000000  00008f14  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+00000000 <exception_table>:
+  while((SERCOM1_REGS->SPIM.SERCOM_SYNCBUSY) != 0)
+    ;/* Wait for synchronization */
+}
+
+void spiFlushBuffer()
+{
+       0:	80 ae 01 20 1d 05 00 00 b9 05 00 00 b9 05 00 00     ... ............
+  uint32_t dummy;
+
+  // Flush out any unread data in SPI read buffer
+  while((SERCOM1_REGS->SPIM.SERCOM_INTFLAG & SERCOM_SPIM_INTFLAG_RXC_Msk) == SERCOM_SPIM_INTFLAG_RXC_Msk)
+      10:	b9 05 00 00 b9 05 00 00 b9 05 00 00 00 00 00 00     ................
+	...
+}
+
+void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
+    activate();
+    
+    cmd(CMD_COL); data(x+X_OFFSET); data(x+X_OFFSET);
+      2c:	b9 05 00 00 b9 05 00 00 00 00 00 00 b9 05 00 00     ................
+    cmd(CMD_ROW); data(y); data(y);
+      3c:	95 04 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+    cmd(CMD_RAM);
+      4c:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+
+    data(color >> 8);
+      5c:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+    data(color & 0xFF);
+
+    deactivate();
+}
+      6c:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+      7c:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+      8c:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+      9c:	b9 05 00 00 b9 05 00 00 b9 05 00 00 d5 03 00 00     ................
+      ac:	bd 03 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+      bc:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+      cc:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+      dc:	b9 05 00 00 b9 05 00 00 b9 05 00 00 00 00 00 00     ................
+	...
+      f4:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     104:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     114:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     124:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     134:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     144:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     154:	b9 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00     ................
+	...
+     178:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     188:	b9 05 00 00 b9 05 00 00 00 00 00 00 b9 05 00 00     ................
+     198:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     1a8:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     1b8:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     1c8:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     1d8:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     1e8:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     1f8:	b9 05 00 00 b9 05 00 00 b9 05 00 00 00 00 00 00     ................
+     208:	00 00 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     218:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     228:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     238:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     248:	b9 05 00 00 b9 05 00 00 b9 05 00 00 b9 05 00 00     ................
+     258:	b9 05 00 00 b9 05 00 00                             ........
+
+00000260 <deregister_tm_clones>:
+     260:	4803      	ldr	r0, [pc, #12]	@ (270 <deregister_tm_clones+0x10>)
+     262:	4b04      	ldr	r3, [pc, #16]	@ (274 <deregister_tm_clones+0x14>)
+     264:	4283      	cmp	r3, r0
+     266:	d002      	beq.n	26e <deregister_tm_clones+0xe>
+     268:	4b03      	ldr	r3, [pc, #12]	@ (278 <deregister_tm_clones+0x18>)
+     26a:	b103      	cbz	r3, 26e <deregister_tm_clones+0xe>
+     26c:	4718      	bx	r3
+     26e:	4770      	bx	lr
+     270:	00001e40 	.word	0x00001e40
+     274:	00001e40 	.word	0x00001e40
+     278:	00000000 	.word	0x00000000
+
+0000027c <register_tm_clones>:
+     27c:	4805      	ldr	r0, [pc, #20]	@ (294 <register_tm_clones+0x18>)
+     27e:	4b06      	ldr	r3, [pc, #24]	@ (298 <register_tm_clones+0x1c>)
+     280:	1a1b      	subs	r3, r3, r0
+     282:	0fd9      	lsrs	r1, r3, #31
+     284:	eb01 01a3 	add.w	r1, r1, r3, asr #2
+     288:	1049      	asrs	r1, r1, #1
+     28a:	d002      	beq.n	292 <register_tm_clones+0x16>
+     28c:	4b03      	ldr	r3, [pc, #12]	@ (29c <register_tm_clones+0x20>)
+     28e:	b103      	cbz	r3, 292 <register_tm_clones+0x16>
+     290:	4718      	bx	r3
+     292:	4770      	bx	lr
+     294:	00001e40 	.word	0x00001e40
+     298:	00001e40 	.word	0x00001e40
+     29c:	00000000 	.word	0x00000000
+
+000002a0 <__do_global_dtors_aux>:
+     2a0:	b510      	push	{r4, lr}
+     2a2:	4c06      	ldr	r4, [pc, #24]	@ (2bc <__do_global_dtors_aux+0x1c>)
+     2a4:	7823      	ldrb	r3, [r4, #0]
+     2a6:	b943      	cbnz	r3, 2ba <__do_global_dtors_aux+0x1a>
+     2a8:	f7ff ffda 	bl	260 <deregister_tm_clones>
+     2ac:	4b04      	ldr	r3, [pc, #16]	@ (2c0 <__do_global_dtors_aux+0x20>)
+     2ae:	b113      	cbz	r3, 2b6 <__do_global_dtors_aux+0x16>
+     2b0:	4804      	ldr	r0, [pc, #16]	@ (2c4 <__do_global_dtors_aux+0x24>)
+     2b2:	f3af 8000 	nop.w
+     2b6:	2301      	movs	r3, #1
+     2b8:	7023      	strb	r3, [r4, #0]
+     2ba:	bd10      	pop	{r4, pc}
+     2bc:	20000234 	.word	0x20000234
+     2c0:	00000000 	.word	0x00000000
+     2c4:	00001e40 	.word	0x00001e40
+
+000002c8 <frame_dummy>:
+     2c8:	b508      	push	{r3, lr}
+     2ca:	4b05      	ldr	r3, [pc, #20]	@ (2e0 <frame_dummy+0x18>)
+     2cc:	b11b      	cbz	r3, 2d6 <frame_dummy+0xe>
+     2ce:	4905      	ldr	r1, [pc, #20]	@ (2e4 <frame_dummy+0x1c>)
+     2d0:	4805      	ldr	r0, [pc, #20]	@ (2e8 <frame_dummy+0x20>)
+     2d2:	f3af 8000 	nop.w
+     2d6:	e8bd 4008 	ldmia.w	sp!, {r3, lr}
+     2da:	f7ff bfcf 	b.w	27c <register_tm_clones>
+     2de:	bf00      	nop
+     2e0:	00000000 	.word	0x00000000
+     2e4:	20000238 	.word	0x20000238
+     2e8:	00001e40 	.word	0x00001e40
+
+000002ec <__NVIC_EnableIRQ>:
+  \details Enables a device specific interrupt in the NVIC interrupt controller.
+  \param [in]      IRQn  Device specific interrupt number.
+  \note    IRQn must not be negative.
+ */
+__STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn)
+{
+     2ec:	b480      	push	{r7}
+     2ee:	b083      	sub	sp, #12
+     2f0:	af00      	add	r7, sp, #0
+     2f2:	4603      	mov	r3, r0
+     2f4:	80fb      	strh	r3, [r7, #6]
+  if ((int32_t)(IRQn) >= 0)
+     2f6:	f9b7 3006 	ldrsh.w	r3, [r7, #6]
+     2fa:	2b00      	cmp	r3, #0
+     2fc:	db0b      	blt.n	316 <__NVIC_EnableIRQ+0x2a>
+  {
+    __COMPILER_BARRIER();
+    NVIC->ISER[(((uint32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+     2fe:	88fb      	ldrh	r3, [r7, #6]
+     300:	f003 021f 	and.w	r2, r3, #31
+     304:	4906      	ldr	r1, [pc, #24]	@ (320 <__NVIC_EnableIRQ+0x34>)
+     306:	f9b7 3006 	ldrsh.w	r3, [r7, #6]
+     30a:	095b      	lsrs	r3, r3, #5
+     30c:	2001      	movs	r0, #1
+     30e:	fa00 f202 	lsl.w	r2, r0, r2
+     312:	f841 2023 	str.w	r2, [r1, r3, lsl #2]
+    __COMPILER_BARRIER();
+  }
+}
+     316:	bf00      	nop
+     318:	370c      	adds	r7, #12
+     31a:	46bd      	mov	sp, r7
+     31c:	bc80      	pop	{r7}
+     31e:	4770      	bx	lr
+     320:	e000e100 	.word	0xe000e100
+
+00000324 <__NVIC_SetPriority>:
+  \param [in]      IRQn  Interrupt number.
+  \param [in]  priority  Priority to set.
+  \note    The priority cannot be set for every processor exception.
+ */
+__STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+{
+     324:	b480      	push	{r7}
+     326:	b083      	sub	sp, #12
+     328:	af00      	add	r7, sp, #0
+     32a:	4603      	mov	r3, r0
+     32c:	6039      	str	r1, [r7, #0]
+     32e:	80fb      	strh	r3, [r7, #6]
+  if ((int32_t)(IRQn) >= 0)
+     330:	f9b7 3006 	ldrsh.w	r3, [r7, #6]
+     334:	2b00      	cmp	r3, #0
+     336:	db0a      	blt.n	34e <__NVIC_SetPriority+0x2a>
+  {
+    NVIC->IP[((uint32_t)IRQn)]               = (uint8_t)((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL);
+     338:	683b      	ldr	r3, [r7, #0]
+     33a:	b2da      	uxtb	r2, r3
+     33c:	490c      	ldr	r1, [pc, #48]	@ (370 <__NVIC_SetPriority+0x4c>)
+     33e:	f9b7 3006 	ldrsh.w	r3, [r7, #6]
+     342:	0152      	lsls	r2, r2, #5
+     344:	b2d2      	uxtb	r2, r2
+     346:	440b      	add	r3, r1
+     348:	f883 2300 	strb.w	r2, [r3, #768]	@ 0x300
+  }
+  else
+  {
+    SCB->SHP[(((uint32_t)IRQn) & 0xFUL)-4UL] = (uint8_t)((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL);
+  }
+}
+     34c:	e00a      	b.n	364 <__NVIC_SetPriority+0x40>
+    SCB->SHP[(((uint32_t)IRQn) & 0xFUL)-4UL] = (uint8_t)((priority << (8U - __NVIC_PRIO_BITS)) & (uint32_t)0xFFUL);
+     34e:	683b      	ldr	r3, [r7, #0]
+     350:	b2da      	uxtb	r2, r3
+     352:	4908      	ldr	r1, [pc, #32]	@ (374 <__NVIC_SetPriority+0x50>)
+     354:	88fb      	ldrh	r3, [r7, #6]
+     356:	f003 030f 	and.w	r3, r3, #15
+     35a:	3b04      	subs	r3, #4
+     35c:	0152      	lsls	r2, r2, #5
+     35e:	b2d2      	uxtb	r2, r2
+     360:	440b      	add	r3, r1
+     362:	761a      	strb	r2, [r3, #24]
+}
+     364:	bf00      	nop
+     366:	370c      	adds	r7, #12
+     368:	46bd      	mov	sp, r7
+     36a:	bc80      	pop	{r7}
+     36c:	4770      	bx	lr
+     36e:	bf00      	nop
+     370:	e000e100 	.word	0xe000e100
+     374:	e000ed00 	.word	0xe000ed00
+
+00000378 <SysTick_Config>:
+  \note    When the variable <b>__Vendor_SysTickConfig</b> is set to 1, then the
+           function <b>SysTick_Config</b> is not included. In this case, the file <b><i>device</i>.h</b>
+           must contain a vendor-specific implementation of this function.
+ */
+__STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
+{
+     378:	b580      	push	{r7, lr}
+     37a:	b082      	sub	sp, #8
+     37c:	af00      	add	r7, sp, #0
+     37e:	6078      	str	r0, [r7, #4]
+  if ((ticks - 1UL) > SysTick_LOAD_RELOAD_Msk)
+     380:	687b      	ldr	r3, [r7, #4]
+     382:	3b01      	subs	r3, #1
+     384:	f1b3 7f80 	cmp.w	r3, #16777216	@ 0x1000000
+     388:	d301      	bcc.n	38e <SysTick_Config+0x16>
+  {
+    return (1UL);                                                   /* Reload value impossible */
+     38a:	2301      	movs	r3, #1
+     38c:	e00f      	b.n	3ae <SysTick_Config+0x36>
+  }
+
+  SysTick->LOAD  = (uint32_t)(ticks - 1UL);                         /* set reload register */
+     38e:	4a0a      	ldr	r2, [pc, #40]	@ (3b8 <SysTick_Config+0x40>)
+     390:	687b      	ldr	r3, [r7, #4]
+     392:	3b01      	subs	r3, #1
+     394:	6053      	str	r3, [r2, #4]
+  NVIC_SetPriority (SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL); /* set Priority for Systick Interrupt */
+     396:	2107      	movs	r1, #7
+     398:	f04f 30ff 	mov.w	r0, #4294967295	@ 0xffffffff
+     39c:	f7ff ffc2 	bl	324 <__NVIC_SetPriority>
+  SysTick->VAL   = 0UL;                                             /* Load the SysTick Counter Value */
+     3a0:	4b05      	ldr	r3, [pc, #20]	@ (3b8 <SysTick_Config+0x40>)
+     3a2:	2200      	movs	r2, #0
+     3a4:	609a      	str	r2, [r3, #8]
+  SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |
+     3a6:	4b04      	ldr	r3, [pc, #16]	@ (3b8 <SysTick_Config+0x40>)
+     3a8:	2207      	movs	r2, #7
+     3aa:	601a      	str	r2, [r3, #0]
+                   SysTick_CTRL_TICKINT_Msk   |
+                   SysTick_CTRL_ENABLE_Msk;                         /* Enable SysTick IRQ and SysTick Timer */
+  return (0UL);                                                     /* Function successful */
+     3ac:	2300      	movs	r3, #0
+}
+     3ae:	4618      	mov	r0, r3
+     3b0:	3708      	adds	r7, #8
+     3b2:	46bd      	mov	sp, r7
+     3b4:	bd80      	pop	{r7, pc}
+     3b6:	bf00      	nop
+     3b8:	e000e010 	.word	0xe000e010
+
+000003bc <EIC_EXTINT_15_Handler>:
+
+#define wait(x) for(int i = 0; i < x; i++)
+
+uint32_t msCount = 0;
+
+void EIC_EXTINT_15_Handler() {
+     3bc:	b580      	push	{r7, lr}
+     3be:	af00      	add	r7, sp, #0
+    EIC_REGS->EIC_INTFLAG = PORT_PA15;
+     3c0:	4b03      	ldr	r3, [pc, #12]	@ (3d0 <EIC_EXTINT_15_Handler+0x14>)
+     3c2:	f44f 4200 	mov.w	r2, #32768	@ 0x8000
+     3c6:	615a      	str	r2, [r3, #20]
+    addProjectile();
+     3c8:	f000 ff4a 	bl	1260 <addProjectile>
+}
+     3cc:	bf00      	nop
+     3ce:	bd80      	pop	{r7, pc}
+     3d0:	40002800 	.word	0x40002800
+
+000003d4 <EIC_EXTINT_14_Handler>:
+
+void EIC_EXTINT_14_Handler() {
+     3d4:	b580      	push	{r7, lr}
+     3d6:	af00      	add	r7, sp, #0
+    EIC_REGS->EIC_INTFLAG = PORT_PB14;
+     3d8:	4b03      	ldr	r3, [pc, #12]	@ (3e8 <EIC_EXTINT_14_Handler+0x14>)
+     3da:	f44f 4280 	mov.w	r2, #16384	@ 0x4000
+     3de:	615a      	str	r2, [r3, #20]
+    resetGame();
+     3e0:	f001 fb26 	bl	1a30 <resetGame>
+}
+     3e4:	bf00      	nop
+     3e6:	bd80      	pop	{r7, pc}
+     3e8:	40002800 	.word	0x40002800
+
+000003ec <buttonInit>:
+
+void buttonInit() {
+     3ec:	b580      	push	{r7, lr}
+     3ee:	af00      	add	r7, sp, #0
+    PORT_REGS->GROUP[0].PORT_DIRCLR = PORT_PA15;
+     3f0:	4b25      	ldr	r3, [pc, #148]	@ (488 <buttonInit+0x9c>)
+     3f2:	f44f 4200 	mov.w	r2, #32768	@ 0x8000
+     3f6:	605a      	str	r2, [r3, #4]
+    PORT_REGS->GROUP[0].PORT_PINCFG[15] = PORT_PINCFG_PMUXEN_Msk | PORT_PINCFG_PULLEN_Msk;
+     3f8:	4b23      	ldr	r3, [pc, #140]	@ (488 <buttonInit+0x9c>)
+     3fa:	2205      	movs	r2, #5
+     3fc:	f883 204f 	strb.w	r2, [r3, #79]	@ 0x4f
+    PORT_REGS->GROUP[0].PORT_PMUX[7] = PORT_PMUX_PMUXO_A;
+     400:	4b21      	ldr	r3, [pc, #132]	@ (488 <buttonInit+0x9c>)
+     402:	2200      	movs	r2, #0
+     404:	f883 2037 	strb.w	r2, [r3, #55]	@ 0x37
+    PORT_REGS->GROUP[0].PORT_OUTSET = PORT_PA15;
+     408:	4b1f      	ldr	r3, [pc, #124]	@ (488 <buttonInit+0x9c>)
+     40a:	f44f 4200 	mov.w	r2, #32768	@ 0x8000
+     40e:	619a      	str	r2, [r3, #24]
+
+    PORT_REGS->GROUP[1].PORT_DIRCLR = PORT_PB14;
+     410:	4b1d      	ldr	r3, [pc, #116]	@ (488 <buttonInit+0x9c>)
+     412:	f44f 4280 	mov.w	r2, #16384	@ 0x4000
+     416:	f8c3 2084 	str.w	r2, [r3, #132]	@ 0x84
+    PORT_REGS->GROUP[1].PORT_PINCFG[14] = PORT_PINCFG_PMUXEN_Msk | PORT_PINCFG_PULLEN_Msk;
+     41a:	4b1b      	ldr	r3, [pc, #108]	@ (488 <buttonInit+0x9c>)
+     41c:	2205      	movs	r2, #5
+     41e:	f883 20ce 	strb.w	r2, [r3, #206]	@ 0xce
+    PORT_REGS->GROUP[1].PORT_PMUX[7] = PORT_PMUX_PMUXE_A;
+     422:	4b19      	ldr	r3, [pc, #100]	@ (488 <buttonInit+0x9c>)
+     424:	2200      	movs	r2, #0
+     426:	f883 20b7 	strb.w	r2, [r3, #183]	@ 0xb7
+    PORT_REGS->GROUP[1].PORT_OUTSET = PORT_PB14;
+     42a:	4b17      	ldr	r3, [pc, #92]	@ (488 <buttonInit+0x9c>)
+     42c:	f44f 4280 	mov.w	r2, #16384	@ 0x4000
+     430:	f8c3 2098 	str.w	r2, [r3, #152]	@ 0x98
+
+
+    MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_EIC_Msk;
+     434:	4b15      	ldr	r3, [pc, #84]	@ (48c <buttonInit+0xa0>)
+     436:	695b      	ldr	r3, [r3, #20]
+     438:	4a14      	ldr	r2, [pc, #80]	@ (48c <buttonInit+0xa0>)
+     43a:	f443 6380 	orr.w	r3, r3, #1024	@ 0x400
+     43e:	6153      	str	r3, [r2, #20]
+
+    EIC_REGS->EIC_CONFIG[1] |= EIC_CONFIG_SENSE7_RISE;
+     440:	4b13      	ldr	r3, [pc, #76]	@ (490 <buttonInit+0xa4>)
+     442:	6a1b      	ldr	r3, [r3, #32]
+     444:	4a12      	ldr	r2, [pc, #72]	@ (490 <buttonInit+0xa4>)
+     446:	f043 5380 	orr.w	r3, r3, #268435456	@ 0x10000000
+     44a:	6213      	str	r3, [r2, #32]
+    EIC_REGS->EIC_INTENSET |= PORT_PA15;
+     44c:	4b10      	ldr	r3, [pc, #64]	@ (490 <buttonInit+0xa4>)
+     44e:	691b      	ldr	r3, [r3, #16]
+     450:	4a0f      	ldr	r2, [pc, #60]	@ (490 <buttonInit+0xa4>)
+     452:	f443 4300 	orr.w	r3, r3, #32768	@ 0x8000
+     456:	6113      	str	r3, [r2, #16]
+
+    EIC_REGS->EIC_CONFIG[1] |= EIC_CONFIG_SENSE6_FALL;
+     458:	4b0d      	ldr	r3, [pc, #52]	@ (490 <buttonInit+0xa4>)
+     45a:	6a1b      	ldr	r3, [r3, #32]
+     45c:	4a0c      	ldr	r2, [pc, #48]	@ (490 <buttonInit+0xa4>)
+     45e:	f043 7300 	orr.w	r3, r3, #33554432	@ 0x2000000
+     462:	6213      	str	r3, [r2, #32]
+    EIC_REGS->EIC_INTENSET |= PORT_PB14;
+     464:	4b0a      	ldr	r3, [pc, #40]	@ (490 <buttonInit+0xa4>)
+     466:	691b      	ldr	r3, [r3, #16]
+     468:	4a09      	ldr	r2, [pc, #36]	@ (490 <buttonInit+0xa4>)
+     46a:	f443 4380 	orr.w	r3, r3, #16384	@ 0x4000
+     46e:	6113      	str	r3, [r2, #16]
+
+    NVIC_EnableIRQ(EIC_EXTINT_15_IRQn);
+     470:	201b      	movs	r0, #27
+     472:	f7ff ff3b 	bl	2ec <__NVIC_EnableIRQ>
+    NVIC_EnableIRQ(EIC_EXTINT_14_IRQn);
+     476:	201a      	movs	r0, #26
+     478:	f7ff ff38 	bl	2ec <__NVIC_EnableIRQ>
+
+    EIC_REGS->EIC_CTRLA = EIC_CTRLA_CKSEL_CLK_ULP32K | EIC_CTRLA_ENABLE_Msk;
+     47c:	4b04      	ldr	r3, [pc, #16]	@ (490 <buttonInit+0xa4>)
+     47e:	2212      	movs	r2, #18
+     480:	701a      	strb	r2, [r3, #0]
+}
+     482:	bf00      	nop
+     484:	bd80      	pop	{r7, pc}
+     486:	bf00      	nop
+     488:	41008000 	.word	0x41008000
+     48c:	40000800 	.word	0x40000800
+     490:	40002800 	.word	0x40002800
+
+00000494 <SysTick_Handler>:
+
+void SysTick_Handler() {
+     494:	b480      	push	{r7}
+     496:	af00      	add	r7, sp, #0
+    msCount++;
+     498:	4b04      	ldr	r3, [pc, #16]	@ (4ac <SysTick_Handler+0x18>)
+     49a:	681b      	ldr	r3, [r3, #0]
+     49c:	3301      	adds	r3, #1
+     49e:	4a03      	ldr	r2, [pc, #12]	@ (4ac <SysTick_Handler+0x18>)
+     4a0:	6013      	str	r3, [r2, #0]
+}
+     4a2:	bf00      	nop
+     4a4:	46bd      	mov	sp, r7
+     4a6:	bc80      	pop	{r7}
+     4a8:	4770      	bx	lr
+     4aa:	bf00      	nop
+     4ac:	20000250 	.word	0x20000250
+
+000004b0 <main>:
+
+int main() {
+     4b0:	b598      	push	{r3, r4, r7, lr}
+     4b2:	af00      	add	r7, sp, #0
+    SysTick_Config(48000);
+     4b4:	f64b 3080 	movw	r0, #48000	@ 0xbb80
+     4b8:	f7ff ff5e 	bl	378 <SysTick_Config>
+    NVIC_EnableIRQ(SysTick_IRQn);
+     4bc:	f04f 30ff 	mov.w	r0, #4294967295	@ 0xffffffff
+     4c0:	f7ff ff14 	bl	2ec <__NVIC_EnableIRQ>
+    logInit();
+     4c4:	f000 f87c 	bl	5c0 <logInit>
+    displayInit();
+     4c8:	f000 fa30 	bl	92c <displayInit>
+    joystickInit();
+     4cc:	f000 fb52 	bl	b74 <joystickInit>
+    generateSpaceBackground();
+     4d0:	f000 fb78 	bl	bc4 <generateSpaceBackground>
+    addEnemies();
+     4d4:	f000 fd8e 	bl	ff4 <addEnemies>
+    spawnEnemies();
+     4d8:	f000 fddc 	bl	1094 <spawnEnemies>
+    buttonInit();
+     4dc:	f7ff ff86 	bl	3ec <buttonInit>
+    //     updateDisplay();
+    // logMsg("%2.2f", msCount-start);
+
+
+    while(1) {
+        updateSpacePos(readAxis(X_AXIS),readAxis(Y_AXIS));
+     4e0:	2001      	movs	r0, #1
+     4e2:	f000 fb1d 	bl	b20 <readAxis>
+     4e6:	4603      	mov	r3, r0
+     4e8:	461c      	mov	r4, r3
+     4ea:	2000      	movs	r0, #0
+     4ec:	f000 fb18 	bl	b20 <readAxis>
+     4f0:	4603      	mov	r3, r0
+     4f2:	4619      	mov	r1, r3
+     4f4:	4620      	mov	r0, r4
+     4f6:	f000 fd25 	bl	f44 <updateSpacePos>
+        moveBackground();
+     4fa:	f000 fbe9 	bl	cd0 <moveBackground>
+        updateProjectile();
+     4fe:	f000 ff95 	bl	142c <updateProjectile>
+        updateEnemyProjectile();
+     502:	f001 f9c5 	bl	1890 <updateEnemyProjectile>
+        // if(msCount%50 == 0) {
+            addEnemyProjectile();
+     506:	f001 f8b3 	bl	1670 <addEnemyProjectile>
+        // }
+        spawnEnemies();
+     50a:	f000 fdc3 	bl	1094 <spawnEnemies>
+        addSpaceship();
+     50e:	f000 fc77 	bl	e00 <addSpaceship>
+        updateDisplay();
+     512:	f000 fbbb 	bl	c8c <updateDisplay>
+        updateSpacePos(readAxis(X_AXIS),readAxis(Y_AXIS));
+     516:	bf00      	nop
+     518:	e7e2      	b.n	4e0 <main+0x30>
+	...
+
+0000051c <Reset_Handler>:
+     51c:	b580      	push	{r7, lr}
+     51e:	b082      	sub	sp, #8
+     520:	af00      	add	r7, sp, #0
+     522:	4b1c      	ldr	r3, [pc, #112]	@ (594 <Reset_Handler+0x78>)
+     524:	607b      	str	r3, [r7, #4]
+     526:	4b1c      	ldr	r3, [pc, #112]	@ (598 <Reset_Handler+0x7c>)
+     528:	603b      	str	r3, [r7, #0]
+     52a:	687a      	ldr	r2, [r7, #4]
+     52c:	683b      	ldr	r3, [r7, #0]
+     52e:	429a      	cmp	r2, r3
+     530:	d00c      	beq.n	54c <Reset_Handler+0x30>
+     532:	e007      	b.n	544 <Reset_Handler+0x28>
+     534:	687a      	ldr	r2, [r7, #4]
+     536:	1d13      	adds	r3, r2, #4
+     538:	607b      	str	r3, [r7, #4]
+     53a:	683b      	ldr	r3, [r7, #0]
+     53c:	1d19      	adds	r1, r3, #4
+     53e:	6039      	str	r1, [r7, #0]
+     540:	6812      	ldr	r2, [r2, #0]
+     542:	601a      	str	r2, [r3, #0]
+     544:	683b      	ldr	r3, [r7, #0]
+     546:	4a15      	ldr	r2, [pc, #84]	@ (59c <Reset_Handler+0x80>)
+     548:	4293      	cmp	r3, r2
+     54a:	d3f3      	bcc.n	534 <Reset_Handler+0x18>
+     54c:	4b14      	ldr	r3, [pc, #80]	@ (5a0 <Reset_Handler+0x84>)
+     54e:	603b      	str	r3, [r7, #0]
+     550:	e004      	b.n	55c <Reset_Handler+0x40>
+     552:	683b      	ldr	r3, [r7, #0]
+     554:	1d1a      	adds	r2, r3, #4
+     556:	603a      	str	r2, [r7, #0]
+     558:	2200      	movs	r2, #0
+     55a:	601a      	str	r2, [r3, #0]
+     55c:	683b      	ldr	r3, [r7, #0]
+     55e:	4a11      	ldr	r2, [pc, #68]	@ (5a4 <Reset_Handler+0x88>)
+     560:	4293      	cmp	r3, r2
+     562:	d3f6      	bcc.n	552 <Reset_Handler+0x36>
+     564:	4b10      	ldr	r3, [pc, #64]	@ (5a8 <Reset_Handler+0x8c>)
+     566:	607b      	str	r3, [r7, #4]
+     568:	687b      	ldr	r3, [r7, #4]
+     56a:	4a10      	ldr	r2, [pc, #64]	@ (5ac <Reset_Handler+0x90>)
+     56c:	f023 037f 	bic.w	r3, r3, #127	@ 0x7f
+     570:	6093      	str	r3, [r2, #8]
+     572:	4b0f      	ldr	r3, [pc, #60]	@ (5b0 <Reset_Handler+0x94>)
+     574:	2b00      	cmp	r3, #0
+     576:	d001      	beq.n	57c <Reset_Handler+0x60>
+     578:	4b0d      	ldr	r3, [pc, #52]	@ (5b0 <Reset_Handler+0x94>)
+     57a:	4798      	blx	r3
+     57c:	f001 fb16 	bl	1bac <__libc_init_array>
+     580:	4b0c      	ldr	r3, [pc, #48]	@ (5b4 <Reset_Handler+0x98>)
+     582:	2b00      	cmp	r3, #0
+     584:	d001      	beq.n	58a <Reset_Handler+0x6e>
+     586:	4b0b      	ldr	r3, [pc, #44]	@ (5b4 <Reset_Handler+0x98>)
+     588:	4798      	blx	r3
+     58a:	f7ff ff91 	bl	4b0 <main>
+     58e:	bf00      	nop
+     590:	e7fd      	b.n	58e <Reset_Handler+0x72>
+     592:	bf00      	nop
+     594:	00001e40 	.word	0x00001e40
+     598:	20000000 	.word	0x20000000
+     59c:	20000234 	.word	0x20000234
+     5a0:	20000234 	.word	0x20000234
+     5a4:	2000ae7c 	.word	0x2000ae7c
+     5a8:	00000000 	.word	0x00000000
+     5ac:	e000ed00 	.word	0xe000ed00
+	...
+
+000005b8 <Dummy_Handler>:
+     5b8:	b480      	push	{r7}
+     5ba:	af00      	add	r7, sp, #0
+     5bc:	bf00      	nop
+     5be:	e7fd      	b.n	5bc <Dummy_Handler+0x4>
+
+000005c0 <logInit>:
+     5c0:	b480      	push	{r7}
+     5c2:	af00      	add	r7, sp, #0
+     5c4:	4b2e      	ldr	r3, [pc, #184]	@ (680 <logInit+0xc0>)
+     5c6:	4a2f      	ldr	r2, [pc, #188]	@ (684 <logInit+0xc4>)
+     5c8:	649a      	str	r2, [r3, #72]	@ 0x48
+     5ca:	bf00      	nop
+     5cc:	4b2c      	ldr	r3, [pc, #176]	@ (680 <logInit+0xc0>)
+     5ce:	685b      	ldr	r3, [r3, #4]
+     5d0:	f403 5380 	and.w	r3, r3, #4096	@ 0x1000
+     5d4:	f5b3 5f80 	cmp.w	r3, #4096	@ 0x1000
+     5d8:	d0f8      	beq.n	5cc <logInit+0xc>
+     5da:	4b29      	ldr	r3, [pc, #164]	@ (680 <logInit+0xc0>)
+     5dc:	224a      	movs	r2, #74	@ 0x4a
+     5de:	f8c3 210c 	str.w	r2, [r3, #268]	@ 0x10c
+     5e2:	bf00      	nop
+     5e4:	4b26      	ldr	r3, [pc, #152]	@ (680 <logInit+0xc0>)
+     5e6:	f8d3 310c 	ldr.w	r3, [r3, #268]	@ 0x10c
+     5ea:	f003 0340 	and.w	r3, r3, #64	@ 0x40
+     5ee:	2b40      	cmp	r3, #64	@ 0x40
+     5f0:	d1f8      	bne.n	5e4 <logInit+0x24>
+     5f2:	4b25      	ldr	r3, [pc, #148]	@ (688 <logInit+0xc8>)
+     5f4:	6a1b      	ldr	r3, [r3, #32]
+     5f6:	4a24      	ldr	r2, [pc, #144]	@ (688 <logInit+0xc8>)
+     5f8:	f043 0302 	orr.w	r3, r3, #2
+     5fc:	6213      	str	r3, [r2, #32]
+     5fe:	4b23      	ldr	r3, [pc, #140]	@ (68c <logInit+0xcc>)
+     600:	f893 30d0 	ldrb.w	r3, [r3, #208]	@ 0xd0
+     604:	b2db      	uxtb	r3, r3
+     606:	4a21      	ldr	r2, [pc, #132]	@ (68c <logInit+0xcc>)
+     608:	f043 0301 	orr.w	r3, r3, #1
+     60c:	b2db      	uxtb	r3, r3
+     60e:	f882 30d0 	strb.w	r3, [r2, #208]	@ 0xd0
+     612:	4b1e      	ldr	r3, [pc, #120]	@ (68c <logInit+0xcc>)
+     614:	f893 30b8 	ldrb.w	r3, [r3, #184]	@ 0xb8
+     618:	b2db      	uxtb	r3, r3
+     61a:	4a1c      	ldr	r2, [pc, #112]	@ (68c <logInit+0xcc>)
+     61c:	f043 0302 	orr.w	r3, r3, #2
+     620:	b2db      	uxtb	r3, r3
+     622:	f882 30b8 	strb.w	r3, [r2, #184]	@ 0xb8
+     626:	4b19      	ldr	r3, [pc, #100]	@ (68c <logInit+0xcc>)
+     628:	f893 30d1 	ldrb.w	r3, [r3, #209]	@ 0xd1
+     62c:	b2db      	uxtb	r3, r3
+     62e:	4a17      	ldr	r2, [pc, #92]	@ (68c <logInit+0xcc>)
+     630:	f043 0301 	orr.w	r3, r3, #1
+     634:	b2db      	uxtb	r3, r3
+     636:	f882 30d1 	strb.w	r3, [r2, #209]	@ 0xd1
+     63a:	4b14      	ldr	r3, [pc, #80]	@ (68c <logInit+0xcc>)
+     63c:	f893 30b8 	ldrb.w	r3, [r3, #184]	@ 0xb8
+     640:	b2db      	uxtb	r3, r3
+     642:	4a12      	ldr	r2, [pc, #72]	@ (68c <logInit+0xcc>)
+     644:	f043 0320 	orr.w	r3, r3, #32
+     648:	b2db      	uxtb	r3, r3
+     64a:	f882 30b8 	strb.w	r3, [r2, #184]	@ 0xb8
+     64e:	4b10      	ldr	r3, [pc, #64]	@ (690 <logInit+0xd0>)
+     650:	2200      	movs	r2, #0
+     652:	819a      	strh	r2, [r3, #12]
+     654:	4b0e      	ldr	r3, [pc, #56]	@ (690 <logInit+0xd0>)
+     656:	f44f 3280 	mov.w	r2, #65536	@ 0x10000
+     65a:	605a      	str	r2, [r3, #4]
+     65c:	bf00      	nop
+     65e:	4b0c      	ldr	r3, [pc, #48]	@ (690 <logInit+0xd0>)
+     660:	69db      	ldr	r3, [r3, #28]
+     662:	2b00      	cmp	r3, #0
+     664:	d1fb      	bne.n	65e <logInit+0x9e>
+     666:	4b0a      	ldr	r3, [pc, #40]	@ (690 <logInit+0xd0>)
+     668:	4a0a      	ldr	r2, [pc, #40]	@ (694 <logInit+0xd4>)
+     66a:	601a      	str	r2, [r3, #0]
+     66c:	bf00      	nop
+     66e:	4b08      	ldr	r3, [pc, #32]	@ (690 <logInit+0xd0>)
+     670:	69db      	ldr	r3, [r3, #28]
+     672:	2b00      	cmp	r3, #0
+     674:	d1fb      	bne.n	66e <logInit+0xae>
+     676:	bf00      	nop
+     678:	bf00      	nop
+     67a:	46bd      	mov	sp, r7
+     67c:	bc80      	pop	{r7}
+     67e:	4770      	bx	lr
+     680:	40001c00 	.word	0x40001c00
+     684:	001a0106 	.word	0x001a0106
+     688:	40000800 	.word	0x40000800
+     68c:	41008000 	.word	0x41008000
+     690:	43000400 	.word	0x43000400
+     694:	40100006 	.word	0x40100006
+
+00000698 <spiInit>:
+{
+     698:	b480      	push	{r7}
+     69a:	af00      	add	r7, sp, #0
+  GCLK_REGS->GCLK_GENCTRL[3] = GCLK_GENCTRL_DIV(1) | GCLK_GENCTRL_SRC_DFLL | GCLK_GENCTRL_GENEN_Msk;
+     69c:	4b2d      	ldr	r3, [pc, #180]	@ (754 <spiInit+0xbc>)
+     69e:	4a2e      	ldr	r2, [pc, #184]	@ (758 <spiInit+0xc0>)
+     6a0:	62da      	str	r2, [r3, #44]	@ 0x2c
+  while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK3) == GCLK_SYNCBUSY_GENCTRL_GCLK3)
+     6a2:	bf00      	nop
+     6a4:	4b2b      	ldr	r3, [pc, #172]	@ (754 <spiInit+0xbc>)
+     6a6:	685b      	ldr	r3, [r3, #4]
+     6a8:	f003 0320 	and.w	r3, r3, #32
+     6ac:	2b20      	cmp	r3, #32
+     6ae:	d0f9      	beq.n	6a4 <spiInit+0xc>
+  GCLK_REGS->GCLK_PCHCTRL[8] = GCLK_PCHCTRL_GEN(3) | GCLK_PCHCTRL_CHEN_Msk;
+     6b0:	4b28      	ldr	r3, [pc, #160]	@ (754 <spiInit+0xbc>)
+     6b2:	2243      	movs	r2, #67	@ 0x43
+     6b4:	f8c3 20a0 	str.w	r2, [r3, #160]	@ 0xa0
+  while ((GCLK_REGS->GCLK_PCHCTRL[8] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk)
+     6b8:	bf00      	nop
+     6ba:	4b26      	ldr	r3, [pc, #152]	@ (754 <spiInit+0xbc>)
+     6bc:	f8d3 30a0 	ldr.w	r3, [r3, #160]	@ 0xa0
+     6c0:	f003 0340 	and.w	r3, r3, #64	@ 0x40
+     6c4:	2b40      	cmp	r3, #64	@ 0x40
+     6c6:	d1f8      	bne.n	6ba <spiInit+0x22>
+  MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_SERCOM1_Msk;
+     6c8:	4b24      	ldr	r3, [pc, #144]	@ (75c <spiInit+0xc4>)
+     6ca:	695b      	ldr	r3, [r3, #20]
+     6cc:	4a23      	ldr	r2, [pc, #140]	@ (75c <spiInit+0xc4>)
+     6ce:	f443 5300 	orr.w	r3, r3, #8192	@ 0x2000
+     6d2:	6153      	str	r3, [r2, #20]
+  PORT_REGS->GROUP[0].PORT_PINCFG[16] |= PORT_PINCFG_PMUXEN_Msk;
+     6d4:	4b22      	ldr	r3, [pc, #136]	@ (760 <spiInit+0xc8>)
+     6d6:	f893 3050 	ldrb.w	r3, [r3, #80]	@ 0x50
+     6da:	b2db      	uxtb	r3, r3
+     6dc:	4a20      	ldr	r2, [pc, #128]	@ (760 <spiInit+0xc8>)
+     6de:	f043 0301 	orr.w	r3, r3, #1
+     6e2:	b2db      	uxtb	r3, r3
+     6e4:	f882 3050 	strb.w	r3, [r2, #80]	@ 0x50
+  PORT_REGS->GROUP[0].PORT_PMUX[8] |= PORT_PMUX_PMUXE_C;
+     6e8:	4b1d      	ldr	r3, [pc, #116]	@ (760 <spiInit+0xc8>)
+     6ea:	f893 3038 	ldrb.w	r3, [r3, #56]	@ 0x38
+     6ee:	b2db      	uxtb	r3, r3
+     6f0:	4a1b      	ldr	r2, [pc, #108]	@ (760 <spiInit+0xc8>)
+     6f2:	f043 0302 	orr.w	r3, r3, #2
+     6f6:	b2db      	uxtb	r3, r3
+     6f8:	f882 3038 	strb.w	r3, [r2, #56]	@ 0x38
+  PORT_REGS->GROUP[0].PORT_PINCFG[17] |= PORT_PINCFG_PMUXEN_Msk;
+     6fc:	4b18      	ldr	r3, [pc, #96]	@ (760 <spiInit+0xc8>)
+     6fe:	f893 3051 	ldrb.w	r3, [r3, #81]	@ 0x51
+     702:	b2db      	uxtb	r3, r3
+     704:	4a16      	ldr	r2, [pc, #88]	@ (760 <spiInit+0xc8>)
+     706:	f043 0301 	orr.w	r3, r3, #1
+     70a:	b2db      	uxtb	r3, r3
+     70c:	f882 3051 	strb.w	r3, [r2, #81]	@ 0x51
+  PORT_REGS->GROUP[0].PORT_PMUX[8] |= PORT_PMUX_PMUXO_C;
+     710:	4b13      	ldr	r3, [pc, #76]	@ (760 <spiInit+0xc8>)
+     712:	f893 3038 	ldrb.w	r3, [r3, #56]	@ 0x38
+     716:	b2db      	uxtb	r3, r3
+     718:	4a11      	ldr	r2, [pc, #68]	@ (760 <spiInit+0xc8>)
+     71a:	f043 0320 	orr.w	r3, r3, #32
+     71e:	b2db      	uxtb	r3, r3
+     720:	f882 3038 	strb.w	r3, [r2, #56]	@ 0x38
+  PORT_REGS->GROUP[0].PORT_PINCFG[19] |= PORT_PINCFG_PMUXEN_Msk | PORT_PINCFG_INEN_Msk;
+     724:	4b0e      	ldr	r3, [pc, #56]	@ (760 <spiInit+0xc8>)
+     726:	f893 3053 	ldrb.w	r3, [r3, #83]	@ 0x53
+     72a:	b2db      	uxtb	r3, r3
+     72c:	4a0c      	ldr	r2, [pc, #48]	@ (760 <spiInit+0xc8>)
+     72e:	f043 0303 	orr.w	r3, r3, #3
+     732:	b2db      	uxtb	r3, r3
+     734:	f882 3053 	strb.w	r3, [r2, #83]	@ 0x53
+  PORT_REGS->GROUP[0].PORT_PMUX[9] |= PORT_PMUX_PMUXO_C;
+     738:	4b09      	ldr	r3, [pc, #36]	@ (760 <spiInit+0xc8>)
+     73a:	f893 3039 	ldrb.w	r3, [r3, #57]	@ 0x39
+     73e:	b2db      	uxtb	r3, r3
+     740:	4a07      	ldr	r2, [pc, #28]	@ (760 <spiInit+0xc8>)
+     742:	f043 0320 	orr.w	r3, r3, #32
+     746:	b2db      	uxtb	r3, r3
+     748:	f882 3039 	strb.w	r3, [r2, #57]	@ 0x39
+}
+     74c:	bf00      	nop
+     74e:	46bd      	mov	sp, r7
+     750:	bc80      	pop	{r7}
+     752:	4770      	bx	lr
+     754:	40001c00 	.word	0x40001c00
+     758:	00010106 	.word	0x00010106
+     75c:	40000800 	.word	0x40000800
+     760:	41008000 	.word	0x41008000
+
+00000764 <spiActivate>:
+{
+     764:	b490      	push	{r4, r7}
+     766:	b086      	sub	sp, #24
+     768:	af00      	add	r7, sp, #0
+     76a:	4604      	mov	r4, r0
+     76c:	4608      	mov	r0, r1
+     76e:	4611      	mov	r1, r2
+     770:	461a      	mov	r2, r3
+     772:	4623      	mov	r3, r4
+     774:	71fb      	strb	r3, [r7, #7]
+     776:	4603      	mov	r3, r0
+     778:	71bb      	strb	r3, [r7, #6]
+     77a:	460b      	mov	r3, r1
+     77c:	717b      	strb	r3, [r7, #5]
+     77e:	4613      	mov	r3, r2
+     780:	713b      	strb	r3, [r7, #4]
+  uint32_t idleFlag = (idleHigh ? SERCOM_SPIM_CTRLA_CPOL_IDLE_HIGH : SERCOM_SPIM_CTRLA_CPOL_IDLE_LOW);
+     782:	797b      	ldrb	r3, [r7, #5]
+     784:	2b00      	cmp	r3, #0
+     786:	d002      	beq.n	78e <spiActivate+0x2a>
+     788:	f04f 5300 	mov.w	r3, #536870912	@ 0x20000000
+     78c:	e000      	b.n	790 <spiActivate+0x2c>
+     78e:	2300      	movs	r3, #0
+     790:	617b      	str	r3, [r7, #20]
+  uint32_t phaseFlag = (leadingSample ? SERCOM_SPIM_CTRLA_CPHA_LEADING_EDGE : SERCOM_SPIM_CTRLA_CPHA_TRAILING_EDGE);
+     792:	793b      	ldrb	r3, [r7, #4]
+     794:	2b00      	cmp	r3, #0
+     796:	d001      	beq.n	79c <spiActivate+0x38>
+     798:	2300      	movs	r3, #0
+     79a:	e001      	b.n	7a0 <spiActivate+0x3c>
+     79c:	f04f 5380 	mov.w	r3, #268435456	@ 0x10000000
+     7a0:	613b      	str	r3, [r7, #16]
+  uint32_t recvFlag = (rx ? SERCOM_SPIM_CTRLB_RXEN_Msk : 0);
+     7a2:	79bb      	ldrb	r3, [r7, #6]
+     7a4:	2b00      	cmp	r3, #0
+     7a6:	d002      	beq.n	7ae <spiActivate+0x4a>
+     7a8:	f44f 3300 	mov.w	r3, #131072	@ 0x20000
+     7ac:	e000      	b.n	7b0 <spiActivate+0x4c>
+     7ae:	2300      	movs	r3, #0
+     7b0:	60fb      	str	r3, [r7, #12]
+  if (baud == 0)
+     7b2:	79fb      	ldrb	r3, [r7, #7]
+     7b4:	2b00      	cmp	r3, #0
+     7b6:	d101      	bne.n	7bc <spiActivate+0x58>
+    baud = 1;
+     7b8:	2301      	movs	r3, #1
+     7ba:	71fb      	strb	r3, [r7, #7]
+  SERCOM1_REGS->SPIM.SERCOM_CTRLB = SERCOM_SPIM_CTRLB_CHSIZE_8_BIT | recvFlag;
+     7bc:	4a0f      	ldr	r2, [pc, #60]	@ (7fc <spiActivate+0x98>)
+     7be:	68fb      	ldr	r3, [r7, #12]
+     7c0:	6053      	str	r3, [r2, #4]
+  while((SERCOM1_REGS->SPIM.SERCOM_SYNCBUSY) != 0U)
+     7c2:	bf00      	nop
+     7c4:	4b0d      	ldr	r3, [pc, #52]	@ (7fc <spiActivate+0x98>)
+     7c6:	69db      	ldr	r3, [r3, #28]
+     7c8:	2b00      	cmp	r3, #0
+     7ca:	d1fb      	bne.n	7c4 <spiActivate+0x60>
+  SERCOM1_REGS->SPIM.SERCOM_BAUD = (uint8_t)SERCOM_SPIM_BAUD_BAUD(baud);
+     7cc:	4a0b      	ldr	r2, [pc, #44]	@ (7fc <spiActivate+0x98>)
+     7ce:	79fb      	ldrb	r3, [r7, #7]
+     7d0:	7313      	strb	r3, [r2, #12]
+  SERCOM1_REGS->SPIM.SERCOM_CTRLA = SERCOM_SPIM_CTRLA_DOPO_PAD0 | SERCOM_SPIM_CTRLA_DIPO_PAD3 | SERCOM_SPIM_CTRLA_MODE_SPI_MASTER | idleFlag | phaseFlag | SERCOM_SPIM_CTRLA_DORD_MSB | SERCOM_SPIM_CTRLA_ENABLE_Msk;
+     7d2:	697a      	ldr	r2, [r7, #20]
+     7d4:	693b      	ldr	r3, [r7, #16]
+     7d6:	4313      	orrs	r3, r2
+     7d8:	4a08      	ldr	r2, [pc, #32]	@ (7fc <spiActivate+0x98>)
+     7da:	f443 1340 	orr.w	r3, r3, #3145728	@ 0x300000
+     7de:	f043 030e 	orr.w	r3, r3, #14
+     7e2:	6013      	str	r3, [r2, #0]
+  while((SERCOM1_REGS->SPIM.SERCOM_SYNCBUSY) != 0)
+     7e4:	bf00      	nop
+     7e6:	4b05      	ldr	r3, [pc, #20]	@ (7fc <spiActivate+0x98>)
+     7e8:	69db      	ldr	r3, [r3, #28]
+     7ea:	2b00      	cmp	r3, #0
+     7ec:	d1fb      	bne.n	7e6 <spiActivate+0x82>
+}
+     7ee:	bf00      	nop
+     7f0:	bf00      	nop
+     7f2:	3718      	adds	r7, #24
+     7f4:	46bd      	mov	sp, r7
+     7f6:	bc90      	pop	{r4, r7}
+     7f8:	4770      	bx	lr
+     7fa:	bf00      	nop
+     7fc:	40003400 	.word	0x40003400
+
+00000800 <spiDeactivate>:
+{
+     800:	b480      	push	{r7}
+     802:	af00      	add	r7, sp, #0
+  SERCOM1_REGS->SPIM.SERCOM_CTRLA = 0;
+     804:	4b07      	ldr	r3, [pc, #28]	@ (824 <spiDeactivate+0x24>)
+     806:	2200      	movs	r2, #0
+     808:	601a      	str	r2, [r3, #0]
+  SERCOM1_REGS->SPIM.SERCOM_CTRLB = 0;
+     80a:	4b06      	ldr	r3, [pc, #24]	@ (824 <spiDeactivate+0x24>)
+     80c:	2200      	movs	r2, #0
+     80e:	605a      	str	r2, [r3, #4]
+  while((SERCOM1_REGS->SPIM.SERCOM_SYNCBUSY) != 0)
+     810:	bf00      	nop
+     812:	4b04      	ldr	r3, [pc, #16]	@ (824 <spiDeactivate+0x24>)
+     814:	69db      	ldr	r3, [r3, #28]
+     816:	2b00      	cmp	r3, #0
+     818:	d1fb      	bne.n	812 <spiDeactivate+0x12>
+}
+     81a:	bf00      	nop
+     81c:	bf00      	nop
+     81e:	46bd      	mov	sp, r7
+     820:	bc80      	pop	{r7}
+     822:	4770      	bx	lr
+     824:	40003400 	.word	0x40003400
+
+00000828 <spiReadByte>:
+    dummy = SERCOM1_REGS->SPIM.SERCOM_DATA;
+  (void)dummy; // hack to get rid of the unused var warning 
+}
+
+uint8_t spiReadByte()
+{
+     828:	b480      	push	{r7}
+     82a:	b083      	sub	sp, #12
+     82c:	af00      	add	r7, sp, #0
+  uint32_t value = 0;
+     82e:	2300      	movs	r3, #0
+     830:	607b      	str	r3, [r7, #4]
+
+  // wait until byte is ready
+  while ((SERCOM1_REGS->SPIM.SERCOM_INTFLAG & SERCOM_SPIM_INTFLAG_RXC_Msk) != SERCOM_SPIM_INTFLAG_RXC_Msk)
+     832:	bf00      	nop
+     834:	4b08      	ldr	r3, [pc, #32]	@ (858 <spiReadByte+0x30>)
+     836:	7e1b      	ldrb	r3, [r3, #24]
+     838:	b2db      	uxtb	r3, r3
+     83a:	f003 0304 	and.w	r3, r3, #4
+     83e:	2b04      	cmp	r3, #4
+     840:	d1f8      	bne.n	834 <spiReadByte+0xc>
+    ;
+
+  value = SERCOM1_REGS->SPIM.SERCOM_DATA;
+     842:	4b05      	ldr	r3, [pc, #20]	@ (858 <spiReadByte+0x30>)
+     844:	6a9b      	ldr	r3, [r3, #40]	@ 0x28
+     846:	607b      	str	r3, [r7, #4]
+
+  return (uint8_t)value;
+     848:	687b      	ldr	r3, [r7, #4]
+     84a:	b2db      	uxtb	r3, r3
+}
+     84c:	4618      	mov	r0, r3
+     84e:	370c      	adds	r7, #12
+     850:	46bd      	mov	sp, r7
+     852:	bc80      	pop	{r7}
+     854:	4770      	bx	lr
+     856:	bf00      	nop
+     858:	40003400 	.word	0x40003400
+
+0000085c <spiWriteByte>:
+
+void spiWriteByte(uint8_t value)
+{
+     85c:	b480      	push	{r7}
+     85e:	b083      	sub	sp, #12
+     860:	af00      	add	r7, sp, #0
+     862:	4603      	mov	r3, r0
+     864:	71fb      	strb	r3, [r7, #7]
+  // clear any interrupts!
+  SERCOM1_REGS->SPIM.SERCOM_STATUS = (uint16_t)SERCOM_SPIM_STATUS_BUFOVF_Msk;
+     866:	4b0b      	ldr	r3, [pc, #44]	@ (894 <spiWriteByte+0x38>)
+     868:	2204      	movs	r2, #4
+     86a:	835a      	strh	r2, [r3, #26]
+  SERCOM1_REGS->SPIM.SERCOM_INTFLAG = (uint8_t)SERCOM_SPIM_INTFLAG_ERROR_Msk;
+     86c:	4b09      	ldr	r3, [pc, #36]	@ (894 <spiWriteByte+0x38>)
+     86e:	2280      	movs	r2, #128	@ 0x80
+     870:	761a      	strb	r2, [r3, #24]
+
+  SERCOM1_REGS->SPIM.SERCOM_DATA = value;
+     872:	4a08      	ldr	r2, [pc, #32]	@ (894 <spiWriteByte+0x38>)
+     874:	79fb      	ldrb	r3, [r7, #7]
+     876:	6293      	str	r3, [r2, #40]	@ 0x28
+
+  // wait until done
+  while ((SERCOM1_REGS->SPIM.SERCOM_INTFLAG & SERCOM_SPIM_INTFLAG_TXC_Msk) == 0)
+     878:	bf00      	nop
+     87a:	4b06      	ldr	r3, [pc, #24]	@ (894 <spiWriteByte+0x38>)
+     87c:	7e1b      	ldrb	r3, [r3, #24]
+     87e:	b2db      	uxtb	r3, r3
+     880:	f003 0302 	and.w	r3, r3, #2
+     884:	2b00      	cmp	r3, #0
+     886:	d0f8      	beq.n	87a <spiWriteByte+0x1e>
+    ;
+}
+     888:	bf00      	nop
+     88a:	bf00      	nop
+     88c:	370c      	adds	r7, #12
+     88e:	46bd      	mov	sp, r7
+     890:	bc80      	pop	{r7}
+     892:	4770      	bx	lr
+     894:	40003400 	.word	0x40003400
+
+00000898 <activate>:
+void activate() {
+     898:	b580      	push	{r7, lr}
+     89a:	af00      	add	r7, sp, #0
+    spiActivate(1,0,0,1);
+     89c:	2301      	movs	r3, #1
+     89e:	2200      	movs	r2, #0
+     8a0:	2100      	movs	r1, #0
+     8a2:	2001      	movs	r0, #1
+     8a4:	f7ff ff5e 	bl	764 <spiActivate>
+    low(CS_PIN);
+     8a8:	4b02      	ldr	r3, [pc, #8]	@ (8b4 <activate+0x1c>)
+     8aa:	2210      	movs	r2, #16
+     8ac:	f8c3 2094 	str.w	r2, [r3, #148]	@ 0x94
+}
+     8b0:	bf00      	nop
+     8b2:	bd80      	pop	{r7, pc}
+     8b4:	41008000 	.word	0x41008000
+
+000008b8 <deactivate>:
+void deactivate() {
+     8b8:	b580      	push	{r7, lr}
+     8ba:	af00      	add	r7, sp, #0
+    spiDeactivate();
+     8bc:	f7ff ffa0 	bl	800 <spiDeactivate>
+    high(CS_PIN);
+     8c0:	4b02      	ldr	r3, [pc, #8]	@ (8cc <deactivate+0x14>)
+     8c2:	2210      	movs	r2, #16
+     8c4:	f8c3 2098 	str.w	r2, [r3, #152]	@ 0x98
+}
+     8c8:	bf00      	nop
+     8ca:	bd80      	pop	{r7, pc}
+     8cc:	41008000 	.word	0x41008000
+
+000008d0 <cmd>:
+void cmd(uint8_t c) {
+     8d0:	b580      	push	{r7, lr}
+     8d2:	b082      	sub	sp, #8
+     8d4:	af00      	add	r7, sp, #0
+     8d6:	4603      	mov	r3, r0
+     8d8:	71fb      	strb	r3, [r7, #7]
+    low(DC_PIN);
+     8da:	4b09      	ldr	r3, [pc, #36]	@ (900 <cmd+0x30>)
+     8dc:	f44f 7200 	mov.w	r2, #512	@ 0x200
+     8e0:	f8c3 2094 	str.w	r2, [r3, #148]	@ 0x94
+    spiWriteByte(c);
+     8e4:	79fb      	ldrb	r3, [r7, #7]
+     8e6:	4618      	mov	r0, r3
+     8e8:	f7ff ffb8 	bl	85c <spiWriteByte>
+    high(DC_PIN);
+     8ec:	4b04      	ldr	r3, [pc, #16]	@ (900 <cmd+0x30>)
+     8ee:	f44f 7200 	mov.w	r2, #512	@ 0x200
+     8f2:	f8c3 2098 	str.w	r2, [r3, #152]	@ 0x98
+}
+     8f6:	bf00      	nop
+     8f8:	3708      	adds	r7, #8
+     8fa:	46bd      	mov	sp, r7
+     8fc:	bd80      	pop	{r7, pc}
+     8fe:	bf00      	nop
+     900:	41008000 	.word	0x41008000
+
+00000904 <data>:
+void data(uint8_t d) {
+     904:	b580      	push	{r7, lr}
+     906:	b082      	sub	sp, #8
+     908:	af00      	add	r7, sp, #0
+     90a:	4603      	mov	r3, r0
+     90c:	71fb      	strb	r3, [r7, #7]
+    high(DC_PIN);
+     90e:	4b06      	ldr	r3, [pc, #24]	@ (928 <data+0x24>)
+     910:	f44f 7200 	mov.w	r2, #512	@ 0x200
+     914:	f8c3 2098 	str.w	r2, [r3, #152]	@ 0x98
+    spiWriteByte(d);
+     918:	79fb      	ldrb	r3, [r7, #7]
+     91a:	4618      	mov	r0, r3
+     91c:	f7ff ff9e 	bl	85c <spiWriteByte>
+}
+     920:	bf00      	nop
+     922:	3708      	adds	r7, #8
+     924:	46bd      	mov	sp, r7
+     926:	bd80      	pop	{r7, pc}
+     928:	41008000 	.word	0x41008000
+
+0000092c <displayInit>:
+void displayInit(void) {
+     92c:	b580      	push	{r7, lr}
+     92e:	b082      	sub	sp, #8
+     930:	af00      	add	r7, sp, #0
+    spiInit();
+     932:	f7ff feb1 	bl	698 <spiInit>
+    PORT_REGS->GROUP[1].PORT_DIRSET = DC_PIN | RST_PIN | CS_PIN | EN_PIN;
+     936:	4b39      	ldr	r3, [pc, #228]	@ (a1c <displayInit+0xf0>)
+     938:	f44f 7234 	mov.w	r2, #720	@ 0x2d0
+     93c:	f8c3 2088 	str.w	r2, [r3, #136]	@ 0x88
+    high(DC_PIN | RST_PIN | EN_PIN);
+     940:	4b36      	ldr	r3, [pc, #216]	@ (a1c <displayInit+0xf0>)
+     942:	f44f 7230 	mov.w	r2, #704	@ 0x2c0
+     946:	f8c3 2098 	str.w	r2, [r3, #152]	@ 0x98
+    low(CS_PIN);
+     94a:	4b34      	ldr	r3, [pc, #208]	@ (a1c <displayInit+0xf0>)
+     94c:	2210      	movs	r2, #16
+     94e:	f8c3 2094 	str.w	r2, [r3, #148]	@ 0x94
+    activate();
+     952:	f7ff ffa1 	bl	898 <activate>
+    cmd(CMD_DISPLAYON);
+     956:	20af      	movs	r0, #175	@ 0xaf
+     958:	f7ff ffba 	bl	8d0 <cmd>
+    cmd(CMD_DISPLAYMODE);
+     95c:	20a6      	movs	r0, #166	@ 0xa6
+     95e:	f7ff ffb7 	bl	8d0 <cmd>
+    cmd(CMD_STARTLINE);         data(0x00);
+     962:	20a1      	movs	r0, #161	@ 0xa1
+     964:	f7ff ffb4 	bl	8d0 <cmd>
+     968:	2000      	movs	r0, #0
+     96a:	f7ff ffcb 	bl	904 <data>
+    cmd(CMD_DISPLAYUNLOCK);     data(0x12);
+     96e:	20fd      	movs	r0, #253	@ 0xfd
+     970:	f7ff ffae 	bl	8d0 <cmd>
+     974:	2012      	movs	r0, #18
+     976:	f7ff ffc5 	bl	904 <data>
+    cmd(CMD_DISPLAYUNLOCK);     data(0xB1);
+     97a:	20fd      	movs	r0, #253	@ 0xfd
+     97c:	f7ff ffa8 	bl	8d0 <cmd>
+     980:	20b1      	movs	r0, #177	@ 0xb1
+     982:	f7ff ffbf 	bl	904 <data>
+    cmd(CMD_OFFSET);            data(0x00);
+     986:	20a2      	movs	r0, #162	@ 0xa2
+     988:	f7ff ffa2 	bl	8d0 <cmd>
+     98c:	2000      	movs	r0, #0
+     98e:	f7ff ffb9 	bl	904 <data>
+    cmd(CMD_REMAP);             data(0x31);
+     992:	20a0      	movs	r0, #160	@ 0xa0
+     994:	f7ff ff9c 	bl	8d0 <cmd>
+     998:	2031      	movs	r0, #49	@ 0x31
+     99a:	f7ff ffb3 	bl	904 <data>
+    cmd(CMD_DISPLAYENHANCE);    data(0x00); data(0x00);
+     99e:	20b2      	movs	r0, #178	@ 0xb2
+     9a0:	f7ff ff96 	bl	8d0 <cmd>
+     9a4:	2000      	movs	r0, #0
+     9a6:	f7ff ffad 	bl	904 <data>
+     9aa:	2000      	movs	r0, #0
+     9ac:	f7ff ffaa 	bl	904 <data>
+    cmd(CMD_COL); data(0x00); data(127);
+     9b0:	2015      	movs	r0, #21
+     9b2:	f7ff ff8d 	bl	8d0 <cmd>
+     9b6:	2000      	movs	r0, #0
+     9b8:	f7ff ffa4 	bl	904 <data>
+     9bc:	207f      	movs	r0, #127	@ 0x7f
+     9be:	f7ff ffa1 	bl	904 <data>
+    cmd(CMD_ROW); data(0x00); data(127);
+     9c2:	2075      	movs	r0, #117	@ 0x75
+     9c4:	f7ff ff84 	bl	8d0 <cmd>
+     9c8:	2000      	movs	r0, #0
+     9ca:	f7ff ff9b 	bl	904 <data>
+     9ce:	207f      	movs	r0, #127	@ 0x7f
+     9d0:	f7ff ff98 	bl	904 <data>
+    cmd(CMD_RAM);
+     9d4:	205c      	movs	r0, #92	@ 0x5c
+     9d6:	f7ff ff7b 	bl	8d0 <cmd>
+    for (int i = 0; i < 128*128; i++) {
+     9da:	2300      	movs	r3, #0
+     9dc:	607b      	str	r3, [r7, #4]
+     9de:	e008      	b.n	9f2 <displayInit+0xc6>
+        data(0x00); data(0x00); // black pixel
+     9e0:	2000      	movs	r0, #0
+     9e2:	f7ff ff8f 	bl	904 <data>
+     9e6:	2000      	movs	r0, #0
+     9e8:	f7ff ff8c 	bl	904 <data>
+    for (int i = 0; i < 128*128; i++) {
+     9ec:	687b      	ldr	r3, [r7, #4]
+     9ee:	3301      	adds	r3, #1
+     9f0:	607b      	str	r3, [r7, #4]
+     9f2:	687b      	ldr	r3, [r7, #4]
+     9f4:	f5b3 4f80 	cmp.w	r3, #16384	@ 0x4000
+     9f8:	dbf2      	blt.n	9e0 <displayInit+0xb4>
+    deactivate();
+     9fa:	f7ff ff5d 	bl	8b8 <deactivate>
+    wait(1000000);
+     9fe:	2300      	movs	r3, #0
+     a00:	603b      	str	r3, [r7, #0]
+     a02:	e002      	b.n	a0a <displayInit+0xde>
+     a04:	683b      	ldr	r3, [r7, #0]
+     a06:	3301      	adds	r3, #1
+     a08:	603b      	str	r3, [r7, #0]
+     a0a:	683b      	ldr	r3, [r7, #0]
+     a0c:	4a04      	ldr	r2, [pc, #16]	@ (a20 <displayInit+0xf4>)
+     a0e:	4293      	cmp	r3, r2
+     a10:	ddf8      	ble.n	a04 <displayInit+0xd8>
+}
+     a12:	bf00      	nop
+     a14:	bf00      	nop
+     a16:	3708      	adds	r7, #8
+     a18:	46bd      	mov	sp, r7
+     a1a:	bd80      	pop	{r7, pc}
+     a1c:	41008000 	.word	0x41008000
+     a20:	000f423f 	.word	0x000f423f
+
+00000a24 <drawArray>:
+
+void drawArray(uint8_t x, uint8_t X_size, uint8_t y, uint8_t Y_size, uint16_t *color) {
+     a24:	b590      	push	{r4, r7, lr}
+     a26:	b085      	sub	sp, #20
+     a28:	af00      	add	r7, sp, #0
+     a2a:	4604      	mov	r4, r0
+     a2c:	4608      	mov	r0, r1
+     a2e:	4611      	mov	r1, r2
+     a30:	461a      	mov	r2, r3
+     a32:	4623      	mov	r3, r4
+     a34:	71fb      	strb	r3, [r7, #7]
+     a36:	4603      	mov	r3, r0
+     a38:	71bb      	strb	r3, [r7, #6]
+     a3a:	460b      	mov	r3, r1
+     a3c:	717b      	strb	r3, [r7, #5]
+     a3e:	4613      	mov	r3, r2
+     a40:	713b      	strb	r3, [r7, #4]
+    activate();
+     a42:	f7ff ff29 	bl	898 <activate>
+
+    cmd(CMD_COL); data(x+X_OFFSET); data(x+X_OFFSET+(X_size - 1));
+     a46:	2015      	movs	r0, #21
+     a48:	f7ff ff42 	bl	8d0 <cmd>
+     a4c:	79fb      	ldrb	r3, [r7, #7]
+     a4e:	3310      	adds	r3, #16
+     a50:	b2db      	uxtb	r3, r3
+     a52:	4618      	mov	r0, r3
+     a54:	f7ff ff56 	bl	904 <data>
+     a58:	79fa      	ldrb	r2, [r7, #7]
+     a5a:	79bb      	ldrb	r3, [r7, #6]
+     a5c:	4413      	add	r3, r2
+     a5e:	b2db      	uxtb	r3, r3
+     a60:	330f      	adds	r3, #15
+     a62:	b2db      	uxtb	r3, r3
+     a64:	4618      	mov	r0, r3
+     a66:	f7ff ff4d 	bl	904 <data>
+    cmd(CMD_ROW); data(y); data(y+(Y_size - 1));
+     a6a:	2075      	movs	r0, #117	@ 0x75
+     a6c:	f7ff ff30 	bl	8d0 <cmd>
+     a70:	797b      	ldrb	r3, [r7, #5]
+     a72:	4618      	mov	r0, r3
+     a74:	f7ff ff46 	bl	904 <data>
+     a78:	793a      	ldrb	r2, [r7, #4]
+     a7a:	797b      	ldrb	r3, [r7, #5]
+     a7c:	4413      	add	r3, r2
+     a7e:	b2db      	uxtb	r3, r3
+     a80:	3b01      	subs	r3, #1
+     a82:	b2db      	uxtb	r3, r3
+     a84:	4618      	mov	r0, r3
+     a86:	f7ff ff3d 	bl	904 <data>
+    cmd(CMD_RAM);
+     a8a:	205c      	movs	r0, #92	@ 0x5c
+     a8c:	f7ff ff20 	bl	8d0 <cmd>
+
+    int location = 0;
+     a90:	2300      	movs	r3, #0
+     a92:	60fb      	str	r3, [r7, #12]
+    for(int i = 0; i < X_size*Y_size; i++) {
+     a94:	2300      	movs	r3, #0
+     a96:	60bb      	str	r3, [r7, #8]
+     a98:	e019      	b.n	ace <drawArray+0xaa>
+        data(color[location] >> 8);
+     a9a:	68fb      	ldr	r3, [r7, #12]
+     a9c:	005b      	lsls	r3, r3, #1
+     a9e:	6a3a      	ldr	r2, [r7, #32]
+     aa0:	4413      	add	r3, r2
+     aa2:	881b      	ldrh	r3, [r3, #0]
+     aa4:	0a1b      	lsrs	r3, r3, #8
+     aa6:	b29b      	uxth	r3, r3
+     aa8:	b2db      	uxtb	r3, r3
+     aaa:	4618      	mov	r0, r3
+     aac:	f7ff ff2a 	bl	904 <data>
+        data(color[location] & 0xFF);
+     ab0:	68fb      	ldr	r3, [r7, #12]
+     ab2:	005b      	lsls	r3, r3, #1
+     ab4:	6a3a      	ldr	r2, [r7, #32]
+     ab6:	4413      	add	r3, r2
+     ab8:	881b      	ldrh	r3, [r3, #0]
+     aba:	b2db      	uxtb	r3, r3
+     abc:	4618      	mov	r0, r3
+     abe:	f7ff ff21 	bl	904 <data>
+        location++;
+     ac2:	68fb      	ldr	r3, [r7, #12]
+     ac4:	3301      	adds	r3, #1
+     ac6:	60fb      	str	r3, [r7, #12]
+    for(int i = 0; i < X_size*Y_size; i++) {
+     ac8:	68bb      	ldr	r3, [r7, #8]
+     aca:	3301      	adds	r3, #1
+     acc:	60bb      	str	r3, [r7, #8]
+     ace:	79bb      	ldrb	r3, [r7, #6]
+     ad0:	793a      	ldrb	r2, [r7, #4]
+     ad2:	fb02 f303 	mul.w	r3, r2, r3
+     ad6:	68ba      	ldr	r2, [r7, #8]
+     ad8:	429a      	cmp	r2, r3
+     ada:	dbde      	blt.n	a9a <drawArray+0x76>
+    }
+    
+    deactivate();
+     adc:	f7ff feec 	bl	8b8 <deactivate>
+     ae0:	bf00      	nop
+     ae2:	3714      	adds	r7, #20
+     ae4:	46bd      	mov	sp, r7
+     ae6:	bd90      	pop	{r4, r7, pc}
+
+00000ae8 <activateJoy>:
+
+#define CS_PIN          PORT_PB05
+#define SET_CS_LOW      PORT_REGS->GROUP[1].PORT_OUTCLR = CS_PIN
+#define SET_CS_HIGH     PORT_REGS->GROUP[1].PORT_OUTSET = CS_PIN
+
+void activateJoy() {
+     ae8:	b580      	push	{r7, lr}
+     aea:	af00      	add	r7, sp, #0
+    spiActivate(1,1,0,1);
+     aec:	2301      	movs	r3, #1
+     aee:	2200      	movs	r2, #0
+     af0:	2101      	movs	r1, #1
+     af2:	2001      	movs	r0, #1
+     af4:	f7ff fe36 	bl	764 <spiActivate>
+    SET_CS_LOW;
+     af8:	4b02      	ldr	r3, [pc, #8]	@ (b04 <activateJoy+0x1c>)
+     afa:	2220      	movs	r2, #32
+     afc:	f8c3 2094 	str.w	r2, [r3, #148]	@ 0x94
+}
+     b00:	bf00      	nop
+     b02:	bd80      	pop	{r7, pc}
+     b04:	41008000 	.word	0x41008000
+
+00000b08 <deactivateJoy>:
+
+void deactivateJoy() {
+     b08:	b580      	push	{r7, lr}
+     b0a:	af00      	add	r7, sp, #0
+    spiDeactivate();
+     b0c:	f7ff fe78 	bl	800 <spiDeactivate>
+    SET_CS_HIGH;
+     b10:	4b02      	ldr	r3, [pc, #8]	@ (b1c <deactivateJoy+0x14>)
+     b12:	2220      	movs	r2, #32
+     b14:	f8c3 2098 	str.w	r2, [r3, #152]	@ 0x98
+}
+     b18:	bf00      	nop
+     b1a:	bd80      	pop	{r7, pc}
+     b1c:	41008000 	.word	0x41008000
+
+00000b20 <readAxis>:
+
+uint8_t readAxis(uint8_t ch) {
+     b20:	b580      	push	{r7, lr}
+     b22:	b084      	sub	sp, #16
+     b24:	af00      	add	r7, sp, #0
+     b26:	4603      	mov	r3, r0
+     b28:	71fb      	strb	r3, [r7, #7]
+    uint8_t cmd = 0x6 | (ch >> 2);
+     b2a:	79fb      	ldrb	r3, [r7, #7]
+     b2c:	089b      	lsrs	r3, r3, #2
+     b2e:	b2db      	uxtb	r3, r3
+     b30:	f043 0306 	orr.w	r3, r3, #6
+     b34:	73fb      	strb	r3, [r7, #15]
+    uint8_t cmd2 = (ch & 0x3) << 6;
+     b36:	79fb      	ldrb	r3, [r7, #7]
+     b38:	019b      	lsls	r3, r3, #6
+     b3a:	73bb      	strb	r3, [r7, #14]
+
+    activateJoy();
+     b3c:	f7ff ffd4 	bl	ae8 <activateJoy>
+
+    spiWriteByte(cmd);
+     b40:	7bfb      	ldrb	r3, [r7, #15]
+     b42:	4618      	mov	r0, r3
+     b44:	f7ff fe8a 	bl	85c <spiWriteByte>
+    spiWriteByte(cmd2);
+     b48:	7bbb      	ldrb	r3, [r7, #14]
+     b4a:	4618      	mov	r0, r3
+     b4c:	f7ff fe86 	bl	85c <spiWriteByte>
+    uint8_t empty = spiReadByte();//these bits are read to remove them since they are not needed
+     b50:	f7ff fe6a 	bl	828 <spiReadByte>
+     b54:	4603      	mov	r3, r0
+     b56:	737b      	strb	r3, [r7, #13]
+    uint8_t result = spiReadByte() & 0x7;//these bits are read since they are needed but only the last three bits are required. others are too jumpy and not needed
+     b58:	f7ff fe66 	bl	828 <spiReadByte>
+     b5c:	4603      	mov	r3, r0
+     b5e:	f003 0307 	and.w	r3, r3, #7
+     b62:	733b      	strb	r3, [r7, #12]
+
+    deactivateJoy();
+     b64:	f7ff ffd0 	bl	b08 <deactivateJoy>
+    return result;
+     b68:	7b3b      	ldrb	r3, [r7, #12]
+}
+     b6a:	4618      	mov	r0, r3
+     b6c:	3710      	adds	r7, #16
+     b6e:	46bd      	mov	sp, r7
+     b70:	bd80      	pop	{r7, pc}
+	...
+
+00000b74 <joystickInit>:
+
+void joystickInit() {
+     b74:	b580      	push	{r7, lr}
+     b76:	af00      	add	r7, sp, #0
+    spiInit();
+     b78:	f7ff fd8e 	bl	698 <spiInit>
+    PORT_REGS->GROUP[1].PORT_DIRSET = CS_PIN;
+     b7c:	4b04      	ldr	r3, [pc, #16]	@ (b90 <joystickInit+0x1c>)
+     b7e:	2220      	movs	r2, #32
+     b80:	f8c3 2088 	str.w	r2, [r3, #136]	@ 0x88
+    SET_CS_HIGH;
+     b84:	4b02      	ldr	r3, [pc, #8]	@ (b90 <joystickInit+0x1c>)
+     b86:	2220      	movs	r2, #32
+     b88:	f8c3 2098 	str.w	r2, [r3, #152]	@ 0x98
+     b8c:	bf00      	nop
+     b8e:	bd80      	pop	{r7, pc}
+     b90:	41008000 	.word	0x41008000
+
+00000b94 <randRange>:
+uint16_t background[MEMORY_SIZE][DISPLAY_SIZE] = {0};
+uint8_t backgroundStart = 0;
+uint16_t screen[DISPLAY_SIZE][DISPLAY_SIZE];
+
+
+int randRange(int min, int max) {
+     b94:	b580      	push	{r7, lr}
+     b96:	b082      	sub	sp, #8
+     b98:	af00      	add	r7, sp, #0
+     b9a:	6078      	str	r0, [r7, #4]
+     b9c:	6039      	str	r1, [r7, #0]
+    return min + (rand() % (max - min + 1));
+     b9e:	f000 ffe9 	bl	1b74 <rand>
+     ba2:	4602      	mov	r2, r0
+     ba4:	6839      	ldr	r1, [r7, #0]
+     ba6:	687b      	ldr	r3, [r7, #4]
+     ba8:	1acb      	subs	r3, r1, r3
+     baa:	3301      	adds	r3, #1
+     bac:	fb92 f1f3 	sdiv	r1, r2, r3
+     bb0:	fb01 f303 	mul.w	r3, r1, r3
+     bb4:	1ad2      	subs	r2, r2, r3
+     bb6:	687b      	ldr	r3, [r7, #4]
+     bb8:	4413      	add	r3, r2
+}
+     bba:	4618      	mov	r0, r3
+     bbc:	3708      	adds	r7, #8
+     bbe:	46bd      	mov	sp, r7
+     bc0:	bd80      	pop	{r7, pc}
+	...
+
+00000bc4 <generateSpaceBackground>:
+
+void generateSpaceBackground() {
+     bc4:	b580      	push	{r7, lr}
+     bc6:	b084      	sub	sp, #16
+     bc8:	af00      	add	r7, sp, #0
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+     bca:	2300      	movs	r3, #0
+     bcc:	60fb      	str	r3, [r7, #12]
+     bce:	e02a      	b.n	c26 <generateSpaceBackground+0x62>
+        for (int j = 0; j < DISPLAY_SIZE; j++) {
+     bd0:	2300      	movs	r3, #0
+     bd2:	60bb      	str	r3, [r7, #8]
+     bd4:	e021      	b.n	c1a <generateSpaceBackground+0x56>
+            if(randRange(0, DISPLAY_SIZE) > 95)   background[i][j] = WHITE;
+     bd6:	2160      	movs	r1, #96	@ 0x60
+     bd8:	2000      	movs	r0, #0
+     bda:	f7ff ffdb 	bl	b94 <randRange>
+     bde:	4603      	mov	r3, r0
+     be0:	2b5f      	cmp	r3, #95	@ 0x5f
+     be2:	dd0c      	ble.n	bfe <generateSpaceBackground+0x3a>
+     be4:	4927      	ldr	r1, [pc, #156]	@ (c84 <generateSpaceBackground+0xc0>)
+     be6:	68fa      	ldr	r2, [r7, #12]
+     be8:	4613      	mov	r3, r2
+     bea:	005b      	lsls	r3, r3, #1
+     bec:	4413      	add	r3, r2
+     bee:	015b      	lsls	r3, r3, #5
+     bf0:	68ba      	ldr	r2, [r7, #8]
+     bf2:	4413      	add	r3, r2
+     bf4:	f64f 72ff 	movw	r2, #65535	@ 0xffff
+     bf8:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+     bfc:	e00a      	b.n	c14 <generateSpaceBackground+0x50>
+            else            background[i][j] = BLACK;
+     bfe:	4921      	ldr	r1, [pc, #132]	@ (c84 <generateSpaceBackground+0xc0>)
+     c00:	68fa      	ldr	r2, [r7, #12]
+     c02:	4613      	mov	r3, r2
+     c04:	005b      	lsls	r3, r3, #1
+     c06:	4413      	add	r3, r2
+     c08:	015b      	lsls	r3, r3, #5
+     c0a:	68ba      	ldr	r2, [r7, #8]
+     c0c:	4413      	add	r3, r2
+     c0e:	2200      	movs	r2, #0
+     c10:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+        for (int j = 0; j < DISPLAY_SIZE; j++) {
+     c14:	68bb      	ldr	r3, [r7, #8]
+     c16:	3301      	adds	r3, #1
+     c18:	60bb      	str	r3, [r7, #8]
+     c1a:	68bb      	ldr	r3, [r7, #8]
+     c1c:	2b5f      	cmp	r3, #95	@ 0x5f
+     c1e:	ddda      	ble.n	bd6 <generateSpaceBackground+0x12>
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+     c20:	68fb      	ldr	r3, [r7, #12]
+     c22:	3301      	adds	r3, #1
+     c24:	60fb      	str	r3, [r7, #12]
+     c26:	68fb      	ldr	r3, [r7, #12]
+     c28:	2b7f      	cmp	r3, #127	@ 0x7f
+     c2a:	ddd1      	ble.n	bd0 <generateSpaceBackground+0xc>
+        }
+    }
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+     c2c:	2300      	movs	r3, #0
+     c2e:	607b      	str	r3, [r7, #4]
+     c30:	e020      	b.n	c74 <generateSpaceBackground+0xb0>
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+     c32:	2300      	movs	r3, #0
+     c34:	603b      	str	r3, [r7, #0]
+     c36:	e017      	b.n	c68 <generateSpaceBackground+0xa4>
+            screen[i][j] = background[i][j];
+     c38:	4912      	ldr	r1, [pc, #72]	@ (c84 <generateSpaceBackground+0xc0>)
+     c3a:	687a      	ldr	r2, [r7, #4]
+     c3c:	4613      	mov	r3, r2
+     c3e:	005b      	lsls	r3, r3, #1
+     c40:	4413      	add	r3, r2
+     c42:	015b      	lsls	r3, r3, #5
+     c44:	683a      	ldr	r2, [r7, #0]
+     c46:	4413      	add	r3, r2
+     c48:	f831 0013 	ldrh.w	r0, [r1, r3, lsl #1]
+     c4c:	490e      	ldr	r1, [pc, #56]	@ (c88 <generateSpaceBackground+0xc4>)
+     c4e:	687a      	ldr	r2, [r7, #4]
+     c50:	4613      	mov	r3, r2
+     c52:	005b      	lsls	r3, r3, #1
+     c54:	4413      	add	r3, r2
+     c56:	015b      	lsls	r3, r3, #5
+     c58:	683a      	ldr	r2, [r7, #0]
+     c5a:	4413      	add	r3, r2
+     c5c:	4602      	mov	r2, r0
+     c5e:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+     c62:	683b      	ldr	r3, [r7, #0]
+     c64:	3301      	adds	r3, #1
+     c66:	603b      	str	r3, [r7, #0]
+     c68:	683b      	ldr	r3, [r7, #0]
+     c6a:	2b5f      	cmp	r3, #95	@ 0x5f
+     c6c:	dde4      	ble.n	c38 <generateSpaceBackground+0x74>
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+     c6e:	687b      	ldr	r3, [r7, #4]
+     c70:	3301      	adds	r3, #1
+     c72:	607b      	str	r3, [r7, #4]
+     c74:	687b      	ldr	r3, [r7, #4]
+     c76:	2b5f      	cmp	r3, #95	@ 0x5f
+     c78:	dddb      	ble.n	c32 <generateSpaceBackground+0x6e>
+        }
+    }
+}
+     c7a:	bf00      	nop
+     c7c:	bf00      	nop
+     c7e:	3710      	adds	r7, #16
+     c80:	46bd      	mov	sp, r7
+     c82:	bd80      	pop	{r7, pc}
+     c84:	20000258 	.word	0x20000258
+     c88:	2000625c 	.word	0x2000625c
+
+00000c8c <updateDisplay>:
+
+void updateDisplay() {
+     c8c:	b580      	push	{r7, lr}
+     c8e:	b082      	sub	sp, #8
+     c90:	af02      	add	r7, sp, #8
+    if (display_update_needed && !gameOver) {
+     c92:	4b0c      	ldr	r3, [pc, #48]	@ (cc4 <updateDisplay+0x38>)
+     c94:	781b      	ldrb	r3, [r3, #0]
+     c96:	2b00      	cmp	r3, #0
+     c98:	d011      	beq.n	cbe <updateDisplay+0x32>
+     c9a:	4b0b      	ldr	r3, [pc, #44]	@ (cc8 <updateDisplay+0x3c>)
+     c9c:	781b      	ldrb	r3, [r3, #0]
+     c9e:	f083 0301 	eor.w	r3, r3, #1
+     ca2:	b2db      	uxtb	r3, r3
+     ca4:	2b00      	cmp	r3, #0
+     ca6:	d00a      	beq.n	cbe <updateDisplay+0x32>
+        drawArray(0, DISPLAY_SIZE, 0, DISPLAY_SIZE, *screen);
+     ca8:	4b08      	ldr	r3, [pc, #32]	@ (ccc <updateDisplay+0x40>)
+     caa:	9300      	str	r3, [sp, #0]
+     cac:	2360      	movs	r3, #96	@ 0x60
+     cae:	2200      	movs	r2, #0
+     cb0:	2160      	movs	r1, #96	@ 0x60
+     cb2:	2000      	movs	r0, #0
+     cb4:	f7ff feb6 	bl	a24 <drawArray>
+        display_update_needed = false;
+     cb8:	4b02      	ldr	r3, [pc, #8]	@ (cc4 <updateDisplay+0x38>)
+     cba:	2200      	movs	r2, #0
+     cbc:	701a      	strb	r2, [r3, #0]
+    }
+}
+     cbe:	bf00      	nop
+     cc0:	46bd      	mov	sp, r7
+     cc2:	bd80      	pop	{r7, pc}
+     cc4:	20000000 	.word	0x20000000
+     cc8:	20000254 	.word	0x20000254
+     ccc:	2000625c 	.word	0x2000625c
+
+00000cd0 <moveBackground>:
+
+void moveBackground() {
+     cd0:	b480      	push	{r7}
+     cd2:	b083      	sub	sp, #12
+     cd4:	af00      	add	r7, sp, #0
+    backgroundStart = (backgroundStart - 1) % MEMORY_SIZE;
+     cd6:	4b22      	ldr	r3, [pc, #136]	@ (d60 <moveBackground+0x90>)
+     cd8:	781b      	ldrb	r3, [r3, #0]
+     cda:	3b01      	subs	r3, #1
+     cdc:	425a      	negs	r2, r3
+     cde:	f003 037f 	and.w	r3, r3, #127	@ 0x7f
+     ce2:	f002 027f 	and.w	r2, r2, #127	@ 0x7f
+     ce6:	bf58      	it	pl
+     ce8:	4253      	negpl	r3, r2
+     cea:	b2da      	uxtb	r2, r3
+     cec:	4b1c      	ldr	r3, [pc, #112]	@ (d60 <moveBackground+0x90>)
+     cee:	701a      	strb	r2, [r3, #0]
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+     cf0:	2300      	movs	r3, #0
+     cf2:	607b      	str	r3, [r7, #4]
+     cf4:	e02b      	b.n	d4e <moveBackground+0x7e>
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+     cf6:	2300      	movs	r3, #0
+     cf8:	603b      	str	r3, [r7, #0]
+     cfa:	e022      	b.n	d42 <moveBackground+0x72>
+            screen[i][j] = background[(i+backgroundStart)%MEMORY_SIZE][j];
+     cfc:	4b18      	ldr	r3, [pc, #96]	@ (d60 <moveBackground+0x90>)
+     cfe:	781b      	ldrb	r3, [r3, #0]
+     d00:	461a      	mov	r2, r3
+     d02:	687b      	ldr	r3, [r7, #4]
+     d04:	4413      	add	r3, r2
+     d06:	4259      	negs	r1, r3
+     d08:	f003 027f 	and.w	r2, r3, #127	@ 0x7f
+     d0c:	f001 037f 	and.w	r3, r1, #127	@ 0x7f
+     d10:	bf58      	it	pl
+     d12:	425a      	negpl	r2, r3
+     d14:	4913      	ldr	r1, [pc, #76]	@ (d64 <moveBackground+0x94>)
+     d16:	4613      	mov	r3, r2
+     d18:	005b      	lsls	r3, r3, #1
+     d1a:	4413      	add	r3, r2
+     d1c:	015b      	lsls	r3, r3, #5
+     d1e:	683a      	ldr	r2, [r7, #0]
+     d20:	4413      	add	r3, r2
+     d22:	f831 0013 	ldrh.w	r0, [r1, r3, lsl #1]
+     d26:	4910      	ldr	r1, [pc, #64]	@ (d68 <moveBackground+0x98>)
+     d28:	687a      	ldr	r2, [r7, #4]
+     d2a:	4613      	mov	r3, r2
+     d2c:	005b      	lsls	r3, r3, #1
+     d2e:	4413      	add	r3, r2
+     d30:	015b      	lsls	r3, r3, #5
+     d32:	683a      	ldr	r2, [r7, #0]
+     d34:	4413      	add	r3, r2
+     d36:	4602      	mov	r2, r0
+     d38:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+     d3c:	683b      	ldr	r3, [r7, #0]
+     d3e:	3301      	adds	r3, #1
+     d40:	603b      	str	r3, [r7, #0]
+     d42:	683b      	ldr	r3, [r7, #0]
+     d44:	2b5f      	cmp	r3, #95	@ 0x5f
+     d46:	ddd9      	ble.n	cfc <moveBackground+0x2c>
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+     d48:	687b      	ldr	r3, [r7, #4]
+     d4a:	3301      	adds	r3, #1
+     d4c:	607b      	str	r3, [r7, #4]
+     d4e:	687b      	ldr	r3, [r7, #4]
+     d50:	2b5f      	cmp	r3, #95	@ 0x5f
+     d52:	ddd0      	ble.n	cf6 <moveBackground+0x26>
+        }
+    }
+}
+     d54:	bf00      	nop
+     d56:	bf00      	nop
+     d58:	370c      	adds	r7, #12
+     d5a:	46bd      	mov	sp, r7
+     d5c:	bc80      	pop	{r7}
+     d5e:	4770      	bx	lr
+     d60:	20006258 	.word	0x20006258
+     d64:	20000258 	.word	0x20000258
+     d68:	2000625c 	.word	0x2000625c
+
+00000d6c <intersects>:
+
+
+//---------------------------------Collision detection---------------------------------
+bool intersects(int c, int d, int cs, int ds, int a, int b, int as, int bs) {
+     d6c:	b480      	push	{r7}
+     d6e:	b087      	sub	sp, #28
+     d70:	af00      	add	r7, sp, #0
+     d72:	60f8      	str	r0, [r7, #12]
+     d74:	60b9      	str	r1, [r7, #8]
+     d76:	607a      	str	r2, [r7, #4]
+     d78:	603b      	str	r3, [r7, #0]
+    bool x_axis = (c >= a) && (c <= a+as);
+     d7a:	68fa      	ldr	r2, [r7, #12]
+     d7c:	6a3b      	ldr	r3, [r7, #32]
+     d7e:	429a      	cmp	r2, r3
+     d80:	db07      	blt.n	d92 <intersects+0x26>
+     d82:	6a3a      	ldr	r2, [r7, #32]
+     d84:	6abb      	ldr	r3, [r7, #40]	@ 0x28
+     d86:	4413      	add	r3, r2
+     d88:	68fa      	ldr	r2, [r7, #12]
+     d8a:	429a      	cmp	r2, r3
+     d8c:	dc01      	bgt.n	d92 <intersects+0x26>
+     d8e:	2301      	movs	r3, #1
+     d90:	e000      	b.n	d94 <intersects+0x28>
+     d92:	2300      	movs	r3, #0
+     d94:	75fb      	strb	r3, [r7, #23]
+     d96:	7dfb      	ldrb	r3, [r7, #23]
+     d98:	f003 0301 	and.w	r3, r3, #1
+     d9c:	75fb      	strb	r3, [r7, #23]
+    bool y_axis = ((d >= b) && (d <= b+bs)) || ((d+ds >= b) && (d+ds <= b+bs));
+     d9e:	68ba      	ldr	r2, [r7, #8]
+     da0:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
+     da2:	429a      	cmp	r2, r3
+     da4:	db05      	blt.n	db2 <intersects+0x46>
+     da6:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+     da8:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+     daa:	4413      	add	r3, r2
+     dac:	68ba      	ldr	r2, [r7, #8]
+     dae:	429a      	cmp	r2, r3
+     db0:	dd0d      	ble.n	dce <intersects+0x62>
+     db2:	68ba      	ldr	r2, [r7, #8]
+     db4:	683b      	ldr	r3, [r7, #0]
+     db6:	4413      	add	r3, r2
+     db8:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+     dba:	429a      	cmp	r2, r3
+     dbc:	dc09      	bgt.n	dd2 <intersects+0x66>
+     dbe:	68ba      	ldr	r2, [r7, #8]
+     dc0:	683b      	ldr	r3, [r7, #0]
+     dc2:	441a      	add	r2, r3
+     dc4:	6a79      	ldr	r1, [r7, #36]	@ 0x24
+     dc6:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+     dc8:	440b      	add	r3, r1
+     dca:	429a      	cmp	r2, r3
+     dcc:	dc01      	bgt.n	dd2 <intersects+0x66>
+     dce:	2301      	movs	r3, #1
+     dd0:	e000      	b.n	dd4 <intersects+0x68>
+     dd2:	2300      	movs	r3, #0
+     dd4:	75bb      	strb	r3, [r7, #22]
+     dd6:	7dbb      	ldrb	r3, [r7, #22]
+     dd8:	f003 0301 	and.w	r3, r3, #1
+     ddc:	75bb      	strb	r3, [r7, #22]
+    return x_axis && y_axis;
+     dde:	7dfb      	ldrb	r3, [r7, #23]
+     de0:	2b00      	cmp	r3, #0
+     de2:	d004      	beq.n	dee <intersects+0x82>
+     de4:	7dbb      	ldrb	r3, [r7, #22]
+     de6:	2b00      	cmp	r3, #0
+     de8:	d001      	beq.n	dee <intersects+0x82>
+     dea:	2301      	movs	r3, #1
+     dec:	e000      	b.n	df0 <intersects+0x84>
+     dee:	2300      	movs	r3, #0
+     df0:	f003 0301 	and.w	r3, r3, #1
+     df4:	b2db      	uxtb	r3, r3
+}
+     df6:	4618      	mov	r0, r3
+     df8:	371c      	adds	r7, #28
+     dfa:	46bd      	mov	sp, r7
+     dfc:	bc80      	pop	{r7}
+     dfe:	4770      	bx	lr
+
+00000e00 <addSpaceship>:
+    {GREEN,BLACK,BLACK,RED,RED,BLACK,BLACK,GREEN},
+    {BLACK,BLACK,BLACK,RED,RED,BLACK,BLACK,BLACK},
+};
+
+
+void addSpaceship() {
+     e00:	b490      	push	{r4, r7}
+     e02:	b082      	sub	sp, #8
+     e04:	af00      	add	r7, sp, #0
+    for (int i = 0; i < SHIP_SIZE_X; i++) {
+     e06:	2300      	movs	r3, #0
+     e08:	607b      	str	r3, [r7, #4]
+     e0a:	e02e      	b.n	e6a <addSpaceship+0x6a>
+        for (int j = 0; j < SHIP_SIZE_Y; j++) {
+     e0c:	2300      	movs	r3, #0
+     e0e:	603b      	str	r3, [r7, #0]
+     e10:	e025      	b.n	e5e <addSpaceship+0x5e>
+            if (spaceship[i][j] != 0)
+     e12:	491b      	ldr	r1, [pc, #108]	@ (e80 <addSpaceship+0x80>)
+     e14:	687b      	ldr	r3, [r7, #4]
+     e16:	00da      	lsls	r2, r3, #3
+     e18:	683b      	ldr	r3, [r7, #0]
+     e1a:	4413      	add	r3, r2
+     e1c:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+     e20:	2b00      	cmp	r3, #0
+     e22:	d019      	beq.n	e58 <addSpaceship+0x58>
+                screen[spaceX + i][spaceY + j] = spaceship[i][j];
+     e24:	4b17      	ldr	r3, [pc, #92]	@ (e84 <addSpaceship+0x84>)
+     e26:	781b      	ldrb	r3, [r3, #0]
+     e28:	461a      	mov	r2, r3
+     e2a:	687b      	ldr	r3, [r7, #4]
+     e2c:	441a      	add	r2, r3
+     e2e:	4b16      	ldr	r3, [pc, #88]	@ (e88 <addSpaceship+0x88>)
+     e30:	781b      	ldrb	r3, [r3, #0]
+     e32:	4619      	mov	r1, r3
+     e34:	683b      	ldr	r3, [r7, #0]
+     e36:	4419      	add	r1, r3
+     e38:	4c11      	ldr	r4, [pc, #68]	@ (e80 <addSpaceship+0x80>)
+     e3a:	687b      	ldr	r3, [r7, #4]
+     e3c:	00d8      	lsls	r0, r3, #3
+     e3e:	683b      	ldr	r3, [r7, #0]
+     e40:	4403      	add	r3, r0
+     e42:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+     e46:	4811      	ldr	r0, [pc, #68]	@ (e8c <addSpaceship+0x8c>)
+     e48:	4613      	mov	r3, r2
+     e4a:	005b      	lsls	r3, r3, #1
+     e4c:	4413      	add	r3, r2
+     e4e:	015b      	lsls	r3, r3, #5
+     e50:	440b      	add	r3, r1
+     e52:	4622      	mov	r2, r4
+     e54:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+        for (int j = 0; j < SHIP_SIZE_Y; j++) {
+     e58:	683b      	ldr	r3, [r7, #0]
+     e5a:	3301      	adds	r3, #1
+     e5c:	603b      	str	r3, [r7, #0]
+     e5e:	683b      	ldr	r3, [r7, #0]
+     e60:	2b07      	cmp	r3, #7
+     e62:	ddd6      	ble.n	e12 <addSpaceship+0x12>
+    for (int i = 0; i < SHIP_SIZE_X; i++) {
+     e64:	687b      	ldr	r3, [r7, #4]
+     e66:	3301      	adds	r3, #1
+     e68:	607b      	str	r3, [r7, #4]
+     e6a:	687b      	ldr	r3, [r7, #4]
+     e6c:	2b0c      	cmp	r3, #12
+     e6e:	ddcd      	ble.n	e0c <addSpaceship+0xc>
+        }
+    }
+    display_update_needed = true;
+     e70:	4b07      	ldr	r3, [pc, #28]	@ (e90 <addSpaceship+0x90>)
+     e72:	2201      	movs	r2, #1
+     e74:	701a      	strb	r2, [r3, #0]
+}
+     e76:	bf00      	nop
+     e78:	3708      	adds	r7, #8
+     e7a:	46bd      	mov	sp, r7
+     e7c:	bc90      	pop	{r4, r7}
+     e7e:	4770      	bx	lr
+     e80:	00001ccc 	.word	0x00001ccc
+     e84:	20000001 	.word	0x20000001
+     e88:	20000002 	.word	0x20000002
+     e8c:	2000625c 	.word	0x2000625c
+     e90:	20000000 	.word	0x20000000
+
+00000e94 <removeSpaceship>:
+
+void removeSpaceship() {
+     e94:	b4b0      	push	{r4, r5, r7}
+     e96:	b083      	sub	sp, #12
+     e98:	af00      	add	r7, sp, #0
+    for (int i = 0; i < SHIP_SIZE_X; i++) {
+     e9a:	2300      	movs	r3, #0
+     e9c:	607b      	str	r3, [r7, #4]
+     e9e:	e039      	b.n	f14 <removeSpaceship+0x80>
+        for (int j = 0; j < SHIP_SIZE_Y; j++) {
+     ea0:	2300      	movs	r3, #0
+     ea2:	603b      	str	r3, [r7, #0]
+     ea4:	e030      	b.n	f08 <removeSpaceship+0x74>
+            if (spaceship[i][j] != 0)
+     ea6:	4921      	ldr	r1, [pc, #132]	@ (f2c <removeSpaceship+0x98>)
+     ea8:	687b      	ldr	r3, [r7, #4]
+     eaa:	00da      	lsls	r2, r3, #3
+     eac:	683b      	ldr	r3, [r7, #0]
+     eae:	4413      	add	r3, r2
+     eb0:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+     eb4:	2b00      	cmp	r3, #0
+     eb6:	d024      	beq.n	f02 <removeSpaceship+0x6e>
+                screen[spaceX + i][spaceY + j] = background[spaceX + i][spaceY + j];
+     eb8:	4b1d      	ldr	r3, [pc, #116]	@ (f30 <removeSpaceship+0x9c>)
+     eba:	781b      	ldrb	r3, [r3, #0]
+     ebc:	461a      	mov	r2, r3
+     ebe:	687b      	ldr	r3, [r7, #4]
+     ec0:	18d1      	adds	r1, r2, r3
+     ec2:	4b1c      	ldr	r3, [pc, #112]	@ (f34 <removeSpaceship+0xa0>)
+     ec4:	781b      	ldrb	r3, [r3, #0]
+     ec6:	461a      	mov	r2, r3
+     ec8:	683b      	ldr	r3, [r7, #0]
+     eca:	18d4      	adds	r4, r2, r3
+     ecc:	4b18      	ldr	r3, [pc, #96]	@ (f30 <removeSpaceship+0x9c>)
+     ece:	781b      	ldrb	r3, [r3, #0]
+     ed0:	461a      	mov	r2, r3
+     ed2:	687b      	ldr	r3, [r7, #4]
+     ed4:	441a      	add	r2, r3
+     ed6:	4b17      	ldr	r3, [pc, #92]	@ (f34 <removeSpaceship+0xa0>)
+     ed8:	781b      	ldrb	r3, [r3, #0]
+     eda:	4618      	mov	r0, r3
+     edc:	683b      	ldr	r3, [r7, #0]
+     ede:	4418      	add	r0, r3
+     ee0:	4d15      	ldr	r5, [pc, #84]	@ (f38 <removeSpaceship+0xa4>)
+     ee2:	460b      	mov	r3, r1
+     ee4:	005b      	lsls	r3, r3, #1
+     ee6:	440b      	add	r3, r1
+     ee8:	015b      	lsls	r3, r3, #5
+     eea:	4423      	add	r3, r4
+     eec:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+     ef0:	4912      	ldr	r1, [pc, #72]	@ (f3c <removeSpaceship+0xa8>)
+     ef2:	4613      	mov	r3, r2
+     ef4:	005b      	lsls	r3, r3, #1
+     ef6:	4413      	add	r3, r2
+     ef8:	015b      	lsls	r3, r3, #5
+     efa:	4403      	add	r3, r0
+     efc:	4622      	mov	r2, r4
+     efe:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+        for (int j = 0; j < SHIP_SIZE_Y; j++) {
+     f02:	683b      	ldr	r3, [r7, #0]
+     f04:	3301      	adds	r3, #1
+     f06:	603b      	str	r3, [r7, #0]
+     f08:	683b      	ldr	r3, [r7, #0]
+     f0a:	2b07      	cmp	r3, #7
+     f0c:	ddcb      	ble.n	ea6 <removeSpaceship+0x12>
+    for (int i = 0; i < SHIP_SIZE_X; i++) {
+     f0e:	687b      	ldr	r3, [r7, #4]
+     f10:	3301      	adds	r3, #1
+     f12:	607b      	str	r3, [r7, #4]
+     f14:	687b      	ldr	r3, [r7, #4]
+     f16:	2b0c      	cmp	r3, #12
+     f18:	ddc2      	ble.n	ea0 <removeSpaceship+0xc>
+        }
+    }
+    display_update_needed = true;
+     f1a:	4b09      	ldr	r3, [pc, #36]	@ (f40 <removeSpaceship+0xac>)
+     f1c:	2201      	movs	r2, #1
+     f1e:	701a      	strb	r2, [r3, #0]
+}
+     f20:	bf00      	nop
+     f22:	370c      	adds	r7, #12
+     f24:	46bd      	mov	sp, r7
+     f26:	bcb0      	pop	{r4, r5, r7}
+     f28:	4770      	bx	lr
+     f2a:	bf00      	nop
+     f2c:	00001ccc 	.word	0x00001ccc
+     f30:	20000001 	.word	0x20000001
+     f34:	20000002 	.word	0x20000002
+     f38:	20000258 	.word	0x20000258
+     f3c:	2000625c 	.word	0x2000625c
+     f40:	20000000 	.word	0x20000000
+
+00000f44 <updateSpacePos>:
+
+void updateSpacePos(uint8_t joyX, uint8_t joyY) {
+     f44:	b580      	push	{r7, lr}
+     f46:	b084      	sub	sp, #16
+     f48:	af00      	add	r7, sp, #0
+     f4a:	4603      	mov	r3, r0
+     f4c:	460a      	mov	r2, r1
+     f4e:	71fb      	strb	r3, [r7, #7]
+     f50:	4613      	mov	r3, r2
+     f52:	71bb      	strb	r3, [r7, #6]
+    int x = 3 - joyX;
+     f54:	79fb      	ldrb	r3, [r7, #7]
+     f56:	f1c3 0303 	rsb	r3, r3, #3
+     f5a:	60fb      	str	r3, [r7, #12]
+    int y = joyY - 3;
+     f5c:	79bb      	ldrb	r3, [r7, #6]
+     f5e:	3b03      	subs	r3, #3
+     f60:	60bb      	str	r3, [r7, #8]
+
+    if (x || y) {
+     f62:	68fb      	ldr	r3, [r7, #12]
+     f64:	2b00      	cmp	r3, #0
+     f66:	d102      	bne.n	f6e <updateSpacePos+0x2a>
+     f68:	68bb      	ldr	r3, [r7, #8]
+     f6a:	2b00      	cmp	r3, #0
+     f6c:	d039      	beq.n	fe2 <updateSpacePos+0x9e>
+        x = (int)spaceX + x;
+     f6e:	4b1f      	ldr	r3, [pc, #124]	@ (fec <updateSpacePos+0xa8>)
+     f70:	781b      	ldrb	r3, [r3, #0]
+     f72:	461a      	mov	r2, r3
+     f74:	68fb      	ldr	r3, [r7, #12]
+     f76:	4413      	add	r3, r2
+     f78:	60fb      	str	r3, [r7, #12]
+        y = (int)spaceY + y;
+     f7a:	4b1d      	ldr	r3, [pc, #116]	@ (ff0 <updateSpacePos+0xac>)
+     f7c:	781b      	ldrb	r3, [r3, #0]
+     f7e:	461a      	mov	r2, r3
+     f80:	68bb      	ldr	r3, [r7, #8]
+     f82:	4413      	add	r3, r2
+     f84:	60bb      	str	r3, [r7, #8]
+
+        if (x < 0)              x = 0;
+     f86:	68fb      	ldr	r3, [r7, #12]
+     f88:	2b00      	cmp	r3, #0
+     f8a:	da02      	bge.n	f92 <updateSpacePos+0x4e>
+     f8c:	2300      	movs	r3, #0
+     f8e:	60fb      	str	r3, [r7, #12]
+     f90:	e004      	b.n	f9c <updateSpacePos+0x58>
+        else if (x > MAX_SHIP_POS_X)     x = MAX_SHIP_POS_X;
+     f92:	68fb      	ldr	r3, [r7, #12]
+     f94:	2b53      	cmp	r3, #83	@ 0x53
+     f96:	dd01      	ble.n	f9c <updateSpacePos+0x58>
+     f98:	2353      	movs	r3, #83	@ 0x53
+     f9a:	60fb      	str	r3, [r7, #12]
+
+        if (y < 0)              y = 0;
+     f9c:	68bb      	ldr	r3, [r7, #8]
+     f9e:	2b00      	cmp	r3, #0
+     fa0:	da02      	bge.n	fa8 <updateSpacePos+0x64>
+     fa2:	2300      	movs	r3, #0
+     fa4:	60bb      	str	r3, [r7, #8]
+     fa6:	e004      	b.n	fb2 <updateSpacePos+0x6e>
+        else if (y > MAX_SHIP_POS_Y)     y = MAX_SHIP_POS_Y;
+     fa8:	68bb      	ldr	r3, [r7, #8]
+     faa:	2b58      	cmp	r3, #88	@ 0x58
+     fac:	dd01      	ble.n	fb2 <updateSpacePos+0x6e>
+     fae:	2358      	movs	r3, #88	@ 0x58
+     fb0:	60bb      	str	r3, [r7, #8]
+
+        if (x != spaceX || y != spaceY) {
+     fb2:	4b0e      	ldr	r3, [pc, #56]	@ (fec <updateSpacePos+0xa8>)
+     fb4:	781b      	ldrb	r3, [r3, #0]
+     fb6:	461a      	mov	r2, r3
+     fb8:	68fb      	ldr	r3, [r7, #12]
+     fba:	4293      	cmp	r3, r2
+     fbc:	d105      	bne.n	fca <updateSpacePos+0x86>
+     fbe:	4b0c      	ldr	r3, [pc, #48]	@ (ff0 <updateSpacePos+0xac>)
+     fc0:	781b      	ldrb	r3, [r3, #0]
+     fc2:	461a      	mov	r2, r3
+     fc4:	68bb      	ldr	r3, [r7, #8]
+     fc6:	4293      	cmp	r3, r2
+     fc8:	d00b      	beq.n	fe2 <updateSpacePos+0x9e>
+            removeSpaceship();
+     fca:	f7ff ff63 	bl	e94 <removeSpaceship>
+            spaceX = (uint8_t)x;
+     fce:	68fb      	ldr	r3, [r7, #12]
+     fd0:	b2da      	uxtb	r2, r3
+     fd2:	4b06      	ldr	r3, [pc, #24]	@ (fec <updateSpacePos+0xa8>)
+     fd4:	701a      	strb	r2, [r3, #0]
+            spaceY = (uint8_t)y;
+     fd6:	68bb      	ldr	r3, [r7, #8]
+     fd8:	b2da      	uxtb	r2, r3
+     fda:	4b05      	ldr	r3, [pc, #20]	@ (ff0 <updateSpacePos+0xac>)
+     fdc:	701a      	strb	r2, [r3, #0]
+            addSpaceship();
+     fde:	f7ff ff0f 	bl	e00 <addSpaceship>
+        }
+    }
+}
+     fe2:	bf00      	nop
+     fe4:	3710      	adds	r7, #16
+     fe6:	46bd      	mov	sp, r7
+     fe8:	bd80      	pop	{r7, pc}
+     fea:	bf00      	nop
+     fec:	20000001 	.word	0x20000001
+     ff0:	20000002 	.word	0x20000002
+
+00000ff4 <addEnemies>:
+    {BLACK, BLACK, YELLOW, BLACK, BLACK, YELLOW, BLACK, BLACK}
+};
+uint8_t activeEnemyCount = 0;
+
+
+void addEnemies() {
+     ff4:	b580      	push	{r7, lr}
+     ff6:	b082      	sub	sp, #8
+     ff8:	af00      	add	r7, sp, #0
+    activeEnemyCount = ENEMY_COUNT;
+     ffa:	4b23      	ldr	r3, [pc, #140]	@ (1088 <addEnemies+0x94>)
+     ffc:	220c      	movs	r2, #12
+     ffe:	701a      	strb	r2, [r3, #0]
+
+    for (int i = 0; i < ENEMY_COUNT; i++) {
+    1000:	2300      	movs	r3, #0
+    1002:	607b      	str	r3, [r7, #4]
+    1004:	e036      	b.n	1074 <addEnemies+0x80>
+        if(!enemyPositions[i][2]) {
+    1006:	4921      	ldr	r1, [pc, #132]	@ (108c <addEnemies+0x98>)
+    1008:	687a      	ldr	r2, [r7, #4]
+    100a:	4613      	mov	r3, r2
+    100c:	005b      	lsls	r3, r3, #1
+    100e:	4413      	add	r3, r2
+    1010:	440b      	add	r3, r1
+    1012:	3302      	adds	r3, #2
+    1014:	781b      	ldrb	r3, [r3, #0]
+    1016:	2b00      	cmp	r3, #0
+    1018:	d129      	bne.n	106e <addEnemies+0x7a>
+            enemyPositions[i][0] = randRange(0, ENEMY_BORDER);
+    101a:	2118      	movs	r1, #24
+    101c:	2000      	movs	r0, #0
+    101e:	f7ff fdb9 	bl	b94 <randRange>
+    1022:	4603      	mov	r3, r0
+    1024:	b2d8      	uxtb	r0, r3
+    1026:	4919      	ldr	r1, [pc, #100]	@ (108c <addEnemies+0x98>)
+    1028:	687a      	ldr	r2, [r7, #4]
+    102a:	4613      	mov	r3, r2
+    102c:	005b      	lsls	r3, r3, #1
+    102e:	4413      	add	r3, r2
+    1030:	440b      	add	r3, r1
+    1032:	4602      	mov	r2, r0
+    1034:	701a      	strb	r2, [r3, #0]
+            enemyPositions[i][1] = randRange(i*ENEMY_BLOCKS, i*ENEMY_BLOCKS);
+    1036:	687b      	ldr	r3, [r7, #4]
+    1038:	00da      	lsls	r2, r3, #3
+    103a:	687b      	ldr	r3, [r7, #4]
+    103c:	00db      	lsls	r3, r3, #3
+    103e:	4619      	mov	r1, r3
+    1040:	4610      	mov	r0, r2
+    1042:	f7ff fda7 	bl	b94 <randRange>
+    1046:	4603      	mov	r3, r0
+    1048:	b2d8      	uxtb	r0, r3
+    104a:	4910      	ldr	r1, [pc, #64]	@ (108c <addEnemies+0x98>)
+    104c:	687a      	ldr	r2, [r7, #4]
+    104e:	4613      	mov	r3, r2
+    1050:	005b      	lsls	r3, r3, #1
+    1052:	4413      	add	r3, r2
+    1054:	440b      	add	r3, r1
+    1056:	3301      	adds	r3, #1
+    1058:	4602      	mov	r2, r0
+    105a:	701a      	strb	r2, [r3, #0]
+            enemyPositions[i][2] = true;
+    105c:	490b      	ldr	r1, [pc, #44]	@ (108c <addEnemies+0x98>)
+    105e:	687a      	ldr	r2, [r7, #4]
+    1060:	4613      	mov	r3, r2
+    1062:	005b      	lsls	r3, r3, #1
+    1064:	4413      	add	r3, r2
+    1066:	440b      	add	r3, r1
+    1068:	3302      	adds	r3, #2
+    106a:	2201      	movs	r2, #1
+    106c:	701a      	strb	r2, [r3, #0]
+    for (int i = 0; i < ENEMY_COUNT; i++) {
+    106e:	687b      	ldr	r3, [r7, #4]
+    1070:	3301      	adds	r3, #1
+    1072:	607b      	str	r3, [r7, #4]
+    1074:	687b      	ldr	r3, [r7, #4]
+    1076:	2b0b      	cmp	r3, #11
+    1078:	ddc5      	ble.n	1006 <addEnemies+0x12>
+        }
+    }
+
+    display_update_needed = true;
+    107a:	4b05      	ldr	r3, [pc, #20]	@ (1090 <addEnemies+0x9c>)
+    107c:	2201      	movs	r2, #1
+    107e:	701a      	strb	r2, [r3, #0]
+}
+    1080:	bf00      	nop
+    1082:	3708      	adds	r7, #8
+    1084:	46bd      	mov	sp, r7
+    1086:	bd80      	pop	{r7, pc}
+    1088:	2000aa80 	.word	0x2000aa80
+    108c:	2000aa5c 	.word	0x2000aa5c
+    1090:	20000000 	.word	0x20000000
+
+00001094 <spawnEnemies>:
+
+void spawnEnemies() {
+    1094:	b490      	push	{r4, r7}
+    1096:	b086      	sub	sp, #24
+    1098:	af00      	add	r7, sp, #0
+    for (int enemy = 0; enemy < activeEnemyCount; enemy++) {
+    109a:	2300      	movs	r3, #0
+    109c:	617b      	str	r3, [r7, #20]
+    109e:	e068      	b.n	1172 <spawnEnemies+0xde>
+
+        if(enemyPositions[enemy][2]) {
+    10a0:	493a      	ldr	r1, [pc, #232]	@ (118c <spawnEnemies+0xf8>)
+    10a2:	697a      	ldr	r2, [r7, #20]
+    10a4:	4613      	mov	r3, r2
+    10a6:	005b      	lsls	r3, r3, #1
+    10a8:	4413      	add	r3, r2
+    10aa:	440b      	add	r3, r1
+    10ac:	3302      	adds	r3, #2
+    10ae:	781b      	ldrb	r3, [r3, #0]
+    10b0:	2b00      	cmp	r3, #0
+    10b2:	d05b      	beq.n	116c <spawnEnemies+0xd8>
+            uint8_t enemyX = enemyPositions[enemy][0];
+    10b4:	4935      	ldr	r1, [pc, #212]	@ (118c <spawnEnemies+0xf8>)
+    10b6:	697a      	ldr	r2, [r7, #20]
+    10b8:	4613      	mov	r3, r2
+    10ba:	005b      	lsls	r3, r3, #1
+    10bc:	4413      	add	r3, r2
+    10be:	440b      	add	r3, r1
+    10c0:	781b      	ldrb	r3, [r3, #0]
+    10c2:	72fb      	strb	r3, [r7, #11]
+            uint8_t enemyY = enemyPositions[enemy][1];
+    10c4:	4931      	ldr	r1, [pc, #196]	@ (118c <spawnEnemies+0xf8>)
+    10c6:	697a      	ldr	r2, [r7, #20]
+    10c8:	4613      	mov	r3, r2
+    10ca:	005b      	lsls	r3, r3, #1
+    10cc:	4413      	add	r3, r2
+    10ce:	440b      	add	r3, r1
+    10d0:	3301      	adds	r3, #1
+    10d2:	781b      	ldrb	r3, [r3, #0]
+    10d4:	72bb      	strb	r3, [r7, #10]
+
+            for (int i = 0; i < ENEMY_SIZE; i++) {
+    10d6:	2300      	movs	r3, #0
+    10d8:	613b      	str	r3, [r7, #16]
+    10da:	e038      	b.n	114e <spawnEnemies+0xba>
+                for (int j = 0; j < ENEMY_SIZE; j++) {
+    10dc:	2300      	movs	r3, #0
+    10de:	60fb      	str	r3, [r7, #12]
+    10e0:	e02f      	b.n	1142 <spawnEnemies+0xae>
+                    if (enemyShip[i][j] != BLACK) {
+    10e2:	492b      	ldr	r1, [pc, #172]	@ (1190 <spawnEnemies+0xfc>)
+    10e4:	693b      	ldr	r3, [r7, #16]
+    10e6:	00da      	lsls	r2, r3, #3
+    10e8:	68fb      	ldr	r3, [r7, #12]
+    10ea:	4413      	add	r3, r2
+    10ec:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    10f0:	2b00      	cmp	r3, #0
+    10f2:	d023      	beq.n	113c <spawnEnemies+0xa8>
+                        uint16_t x = enemyX + i;
+    10f4:	7afb      	ldrb	r3, [r7, #11]
+    10f6:	b29a      	uxth	r2, r3
+    10f8:	693b      	ldr	r3, [r7, #16]
+    10fa:	b29b      	uxth	r3, r3
+    10fc:	4413      	add	r3, r2
+    10fe:	813b      	strh	r3, [r7, #8]
+                        uint16_t y = enemyY + j;
+    1100:	7abb      	ldrb	r3, [r7, #10]
+    1102:	b29a      	uxth	r2, r3
+    1104:	68fb      	ldr	r3, [r7, #12]
+    1106:	b29b      	uxth	r3, r3
+    1108:	4413      	add	r3, r2
+    110a:	80fb      	strh	r3, [r7, #6]
+                        if (x < DISPLAY_SIZE && y < DISPLAY_SIZE) {
+    110c:	893b      	ldrh	r3, [r7, #8]
+    110e:	2b5f      	cmp	r3, #95	@ 0x5f
+    1110:	d814      	bhi.n	113c <spawnEnemies+0xa8>
+    1112:	88fb      	ldrh	r3, [r7, #6]
+    1114:	2b5f      	cmp	r3, #95	@ 0x5f
+    1116:	d811      	bhi.n	113c <spawnEnemies+0xa8>
+                            screen[x][y] = enemyShip[i][j];
+    1118:	893a      	ldrh	r2, [r7, #8]
+    111a:	88f9      	ldrh	r1, [r7, #6]
+    111c:	4c1c      	ldr	r4, [pc, #112]	@ (1190 <spawnEnemies+0xfc>)
+    111e:	693b      	ldr	r3, [r7, #16]
+    1120:	00d8      	lsls	r0, r3, #3
+    1122:	68fb      	ldr	r3, [r7, #12]
+    1124:	4403      	add	r3, r0
+    1126:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    112a:	481a      	ldr	r0, [pc, #104]	@ (1194 <spawnEnemies+0x100>)
+    112c:	4613      	mov	r3, r2
+    112e:	005b      	lsls	r3, r3, #1
+    1130:	4413      	add	r3, r2
+    1132:	015b      	lsls	r3, r3, #5
+    1134:	440b      	add	r3, r1
+    1136:	4622      	mov	r2, r4
+    1138:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+                for (int j = 0; j < ENEMY_SIZE; j++) {
+    113c:	68fb      	ldr	r3, [r7, #12]
+    113e:	3301      	adds	r3, #1
+    1140:	60fb      	str	r3, [r7, #12]
+    1142:	68fb      	ldr	r3, [r7, #12]
+    1144:	2b07      	cmp	r3, #7
+    1146:	ddcc      	ble.n	10e2 <spawnEnemies+0x4e>
+            for (int i = 0; i < ENEMY_SIZE; i++) {
+    1148:	693b      	ldr	r3, [r7, #16]
+    114a:	3301      	adds	r3, #1
+    114c:	613b      	str	r3, [r7, #16]
+    114e:	693b      	ldr	r3, [r7, #16]
+    1150:	2b07      	cmp	r3, #7
+    1152:	ddc3      	ble.n	10dc <spawnEnemies+0x48>
+                        }
+                    }
+                }
+            }
+            enemyPositions[enemy][2] = true;
+    1154:	490d      	ldr	r1, [pc, #52]	@ (118c <spawnEnemies+0xf8>)
+    1156:	697a      	ldr	r2, [r7, #20]
+    1158:	4613      	mov	r3, r2
+    115a:	005b      	lsls	r3, r3, #1
+    115c:	4413      	add	r3, r2
+    115e:	440b      	add	r3, r1
+    1160:	3302      	adds	r3, #2
+    1162:	2201      	movs	r2, #1
+    1164:	701a      	strb	r2, [r3, #0]
+            display_update_needed = true;
+    1166:	4b0c      	ldr	r3, [pc, #48]	@ (1198 <spawnEnemies+0x104>)
+    1168:	2201      	movs	r2, #1
+    116a:	701a      	strb	r2, [r3, #0]
+    for (int enemy = 0; enemy < activeEnemyCount; enemy++) {
+    116c:	697b      	ldr	r3, [r7, #20]
+    116e:	3301      	adds	r3, #1
+    1170:	617b      	str	r3, [r7, #20]
+    1172:	4b0a      	ldr	r3, [pc, #40]	@ (119c <spawnEnemies+0x108>)
+    1174:	781b      	ldrb	r3, [r3, #0]
+    1176:	461a      	mov	r2, r3
+    1178:	697b      	ldr	r3, [r7, #20]
+    117a:	4293      	cmp	r3, r2
+    117c:	db90      	blt.n	10a0 <spawnEnemies+0xc>
+        }
+    }
+}
+    117e:	bf00      	nop
+    1180:	bf00      	nop
+    1182:	3718      	adds	r7, #24
+    1184:	46bd      	mov	sp, r7
+    1186:	bc90      	pop	{r4, r7}
+    1188:	4770      	bx	lr
+    118a:	bf00      	nop
+    118c:	2000aa5c 	.word	0x2000aa5c
+    1190:	00001d9c 	.word	0x00001d9c
+    1194:	2000625c 	.word	0x2000625c
+    1198:	20000000 	.word	0x20000000
+    119c:	2000aa80 	.word	0x2000aa80
+
+000011a0 <removeEnemy>:
+
+void removeEnemy(int i) {
+    11a0:	b4b0      	push	{r4, r5, r7}
+    11a2:	b087      	sub	sp, #28
+    11a4:	af00      	add	r7, sp, #0
+    11a6:	6078      	str	r0, [r7, #4]
+    uint8_t enemyX = enemyPositions[i][0];
+    11a8:	4928      	ldr	r1, [pc, #160]	@ (124c <removeEnemy+0xac>)
+    11aa:	687a      	ldr	r2, [r7, #4]
+    11ac:	4613      	mov	r3, r2
+    11ae:	005b      	lsls	r3, r3, #1
+    11b0:	4413      	add	r3, r2
+    11b2:	440b      	add	r3, r1
+    11b4:	781b      	ldrb	r3, [r3, #0]
+    11b6:	73fb      	strb	r3, [r7, #15]
+    uint8_t enemyY = enemyPositions[i][1];
+    11b8:	4924      	ldr	r1, [pc, #144]	@ (124c <removeEnemy+0xac>)
+    11ba:	687a      	ldr	r2, [r7, #4]
+    11bc:	4613      	mov	r3, r2
+    11be:	005b      	lsls	r3, r3, #1
+    11c0:	4413      	add	r3, r2
+    11c2:	440b      	add	r3, r1
+    11c4:	3301      	adds	r3, #1
+    11c6:	781b      	ldrb	r3, [r3, #0]
+    11c8:	73bb      	strb	r3, [r7, #14]
+    for(int i = 0; i < ENEMY_SIZE; i++)
+    11ca:	2300      	movs	r3, #0
+    11cc:	617b      	str	r3, [r7, #20]
+    11ce:	e031      	b.n	1234 <removeEnemy+0x94>
+        for (int j = 0; j < ENEMY_SIZE; j++) {
+    11d0:	2300      	movs	r3, #0
+    11d2:	613b      	str	r3, [r7, #16]
+    11d4:	e028      	b.n	1228 <removeEnemy+0x88>
+            if (enemyShip[i][j] != 0)
+    11d6:	491e      	ldr	r1, [pc, #120]	@ (1250 <removeEnemy+0xb0>)
+    11d8:	697b      	ldr	r3, [r7, #20]
+    11da:	00da      	lsls	r2, r3, #3
+    11dc:	693b      	ldr	r3, [r7, #16]
+    11de:	4413      	add	r3, r2
+    11e0:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    11e4:	2b00      	cmp	r3, #0
+    11e6:	d01c      	beq.n	1222 <removeEnemy+0x82>
+                screen[enemyX + i][enemyY + j] = background[enemyX + i][enemyY + j];
+    11e8:	7bfa      	ldrb	r2, [r7, #15]
+    11ea:	697b      	ldr	r3, [r7, #20]
+    11ec:	18d1      	adds	r1, r2, r3
+    11ee:	7bba      	ldrb	r2, [r7, #14]
+    11f0:	693b      	ldr	r3, [r7, #16]
+    11f2:	18d4      	adds	r4, r2, r3
+    11f4:	7bfa      	ldrb	r2, [r7, #15]
+    11f6:	697b      	ldr	r3, [r7, #20]
+    11f8:	441a      	add	r2, r3
+    11fa:	7bb8      	ldrb	r0, [r7, #14]
+    11fc:	693b      	ldr	r3, [r7, #16]
+    11fe:	4418      	add	r0, r3
+    1200:	4d14      	ldr	r5, [pc, #80]	@ (1254 <removeEnemy+0xb4>)
+    1202:	460b      	mov	r3, r1
+    1204:	005b      	lsls	r3, r3, #1
+    1206:	440b      	add	r3, r1
+    1208:	015b      	lsls	r3, r3, #5
+    120a:	4423      	add	r3, r4
+    120c:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+    1210:	4911      	ldr	r1, [pc, #68]	@ (1258 <removeEnemy+0xb8>)
+    1212:	4613      	mov	r3, r2
+    1214:	005b      	lsls	r3, r3, #1
+    1216:	4413      	add	r3, r2
+    1218:	015b      	lsls	r3, r3, #5
+    121a:	4403      	add	r3, r0
+    121c:	4622      	mov	r2, r4
+    121e:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+        for (int j = 0; j < ENEMY_SIZE; j++) {
+    1222:	693b      	ldr	r3, [r7, #16]
+    1224:	3301      	adds	r3, #1
+    1226:	613b      	str	r3, [r7, #16]
+    1228:	693b      	ldr	r3, [r7, #16]
+    122a:	2b07      	cmp	r3, #7
+    122c:	ddd3      	ble.n	11d6 <removeEnemy+0x36>
+    for(int i = 0; i < ENEMY_SIZE; i++)
+    122e:	697b      	ldr	r3, [r7, #20]
+    1230:	3301      	adds	r3, #1
+    1232:	617b      	str	r3, [r7, #20]
+    1234:	697b      	ldr	r3, [r7, #20]
+    1236:	2b07      	cmp	r3, #7
+    1238:	ddca      	ble.n	11d0 <removeEnemy+0x30>
+        }
+    display_update_needed = true;
+    123a:	4b08      	ldr	r3, [pc, #32]	@ (125c <removeEnemy+0xbc>)
+    123c:	2201      	movs	r2, #1
+    123e:	701a      	strb	r2, [r3, #0]
+}
+    1240:	bf00      	nop
+    1242:	371c      	adds	r7, #28
+    1244:	46bd      	mov	sp, r7
+    1246:	bcb0      	pop	{r4, r5, r7}
+    1248:	4770      	bx	lr
+    124a:	bf00      	nop
+    124c:	2000aa5c 	.word	0x2000aa5c
+    1250:	00001d9c 	.word	0x00001d9c
+    1254:	20000258 	.word	0x20000258
+    1258:	2000625c 	.word	0x2000625c
+    125c:	20000000 	.word	0x20000000
+
+00001260 <addProjectile>:
+    {CYAN,  CYAN, CYAN,  CYAN},
+    {CYAN,  CYAN, CYAN,  CYAN},
+    {BLACK,  CYAN, CYAN,  BLACK},
+};
+
+void addProjectile() {
+    1260:	b490      	push	{r4, r7}
+    1262:	b084      	sub	sp, #16
+    1264:	af00      	add	r7, sp, #0
+    if(canAddProject) {
+    1266:	4b40      	ldr	r3, [pc, #256]	@ (1368 <addProjectile+0x108>)
+    1268:	781b      	ldrb	r3, [r3, #0]
+    126a:	2b00      	cmp	r3, #0
+    126c:	d077      	beq.n	135e <addProjectile+0xfe>
+        int projectX = spaceX-PROJECTILE_SIZE;
+    126e:	4b3f      	ldr	r3, [pc, #252]	@ (136c <addProjectile+0x10c>)
+    1270:	781b      	ldrb	r3, [r3, #0]
+    1272:	3b04      	subs	r3, #4
+    1274:	607b      	str	r3, [r7, #4]
+        int projectY = spaceY+PROJECTILE_SIZE/2;
+    1276:	4b3e      	ldr	r3, [pc, #248]	@ (1370 <addProjectile+0x110>)
+    1278:	781b      	ldrb	r3, [r3, #0]
+    127a:	3302      	adds	r3, #2
+    127c:	603b      	str	r3, [r7, #0]
+        
+        for(int i = 0; i < PROJECTILE_SIZE; i++) {
+    127e:	2300      	movs	r3, #0
+    1280:	60fb      	str	r3, [r7, #12]
+    1282:	e02f      	b.n	12e4 <addProjectile+0x84>
+            for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    1284:	2300      	movs	r3, #0
+    1286:	60bb      	str	r3, [r7, #8]
+    1288:	e026      	b.n	12d8 <addProjectile+0x78>
+                    if (projectileDesign[i][j] != 0 && projectX+i >= 0)
+    128a:	493a      	ldr	r1, [pc, #232]	@ (1374 <addProjectile+0x114>)
+    128c:	68fb      	ldr	r3, [r7, #12]
+    128e:	009a      	lsls	r2, r3, #2
+    1290:	68bb      	ldr	r3, [r7, #8]
+    1292:	4413      	add	r3, r2
+    1294:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    1298:	2b00      	cmp	r3, #0
+    129a:	d01a      	beq.n	12d2 <addProjectile+0x72>
+    129c:	687a      	ldr	r2, [r7, #4]
+    129e:	68fb      	ldr	r3, [r7, #12]
+    12a0:	4413      	add	r3, r2
+    12a2:	2b00      	cmp	r3, #0
+    12a4:	db15      	blt.n	12d2 <addProjectile+0x72>
+                        screen[projectX + i][projectY + j] = projectileDesign[i][j];
+    12a6:	687a      	ldr	r2, [r7, #4]
+    12a8:	68fb      	ldr	r3, [r7, #12]
+    12aa:	441a      	add	r2, r3
+    12ac:	6839      	ldr	r1, [r7, #0]
+    12ae:	68bb      	ldr	r3, [r7, #8]
+    12b0:	4419      	add	r1, r3
+    12b2:	4c30      	ldr	r4, [pc, #192]	@ (1374 <addProjectile+0x114>)
+    12b4:	68fb      	ldr	r3, [r7, #12]
+    12b6:	0098      	lsls	r0, r3, #2
+    12b8:	68bb      	ldr	r3, [r7, #8]
+    12ba:	4403      	add	r3, r0
+    12bc:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    12c0:	482d      	ldr	r0, [pc, #180]	@ (1378 <addProjectile+0x118>)
+    12c2:	4613      	mov	r3, r2
+    12c4:	005b      	lsls	r3, r3, #1
+    12c6:	4413      	add	r3, r2
+    12c8:	015b      	lsls	r3, r3, #5
+    12ca:	440b      	add	r3, r1
+    12cc:	4622      	mov	r2, r4
+    12ce:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+            for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    12d2:	68bb      	ldr	r3, [r7, #8]
+    12d4:	3301      	adds	r3, #1
+    12d6:	60bb      	str	r3, [r7, #8]
+    12d8:	68bb      	ldr	r3, [r7, #8]
+    12da:	2b03      	cmp	r3, #3
+    12dc:	ddd5      	ble.n	128a <addProjectile+0x2a>
+        for(int i = 0; i < PROJECTILE_SIZE; i++) {
+    12de:	68fb      	ldr	r3, [r7, #12]
+    12e0:	3301      	adds	r3, #1
+    12e2:	60fb      	str	r3, [r7, #12]
+    12e4:	68fb      	ldr	r3, [r7, #12]
+    12e6:	2b03      	cmp	r3, #3
+    12e8:	ddcc      	ble.n	1284 <addProjectile+0x24>
+            }
+        }
+        projectiles[newProjectileIndex][0] = projectX;
+    12ea:	4b24      	ldr	r3, [pc, #144]	@ (137c <addProjectile+0x11c>)
+    12ec:	681a      	ldr	r2, [r3, #0]
+    12ee:	4924      	ldr	r1, [pc, #144]	@ (1380 <addProjectile+0x120>)
+    12f0:	4613      	mov	r3, r2
+    12f2:	005b      	lsls	r3, r3, #1
+    12f4:	4413      	add	r3, r2
+    12f6:	009b      	lsls	r3, r3, #2
+    12f8:	440b      	add	r3, r1
+    12fa:	687a      	ldr	r2, [r7, #4]
+    12fc:	601a      	str	r2, [r3, #0]
+        projectiles[newProjectileIndex][1] = projectY;
+    12fe:	4b1f      	ldr	r3, [pc, #124]	@ (137c <addProjectile+0x11c>)
+    1300:	681a      	ldr	r2, [r3, #0]
+    1302:	491f      	ldr	r1, [pc, #124]	@ (1380 <addProjectile+0x120>)
+    1304:	4613      	mov	r3, r2
+    1306:	005b      	lsls	r3, r3, #1
+    1308:	4413      	add	r3, r2
+    130a:	009b      	lsls	r3, r3, #2
+    130c:	440b      	add	r3, r1
+    130e:	3304      	adds	r3, #4
+    1310:	683a      	ldr	r2, [r7, #0]
+    1312:	601a      	str	r2, [r3, #0]
+        projectiles[newProjectileIndex][2] = true;
+    1314:	4b19      	ldr	r3, [pc, #100]	@ (137c <addProjectile+0x11c>)
+    1316:	681a      	ldr	r2, [r3, #0]
+    1318:	4919      	ldr	r1, [pc, #100]	@ (1380 <addProjectile+0x120>)
+    131a:	4613      	mov	r3, r2
+    131c:	005b      	lsls	r3, r3, #1
+    131e:	4413      	add	r3, r2
+    1320:	009b      	lsls	r3, r3, #2
+    1322:	440b      	add	r3, r1
+    1324:	3308      	adds	r3, #8
+    1326:	2201      	movs	r2, #1
+    1328:	601a      	str	r2, [r3, #0]
+
+        newProjectileIndex = (newProjectileIndex+1) % PROJECTILE_NUM;
+    132a:	4b14      	ldr	r3, [pc, #80]	@ (137c <addProjectile+0x11c>)
+    132c:	681b      	ldr	r3, [r3, #0]
+    132e:	1c59      	adds	r1, r3, #1
+    1330:	4b14      	ldr	r3, [pc, #80]	@ (1384 <addProjectile+0x124>)
+    1332:	fb83 2301 	smull	r2, r3, r3, r1
+    1336:	105a      	asrs	r2, r3, #1
+    1338:	17cb      	asrs	r3, r1, #31
+    133a:	1ad2      	subs	r2, r2, r3
+    133c:	4613      	mov	r3, r2
+    133e:	005b      	lsls	r3, r3, #1
+    1340:	4413      	add	r3, r2
+    1342:	009b      	lsls	r3, r3, #2
+    1344:	1aca      	subs	r2, r1, r3
+    1346:	4b0d      	ldr	r3, [pc, #52]	@ (137c <addProjectile+0x11c>)
+    1348:	601a      	str	r2, [r3, #0]
+        if(newProjectileIndex == 0) {
+    134a:	4b0c      	ldr	r3, [pc, #48]	@ (137c <addProjectile+0x11c>)
+    134c:	681b      	ldr	r3, [r3, #0]
+    134e:	2b00      	cmp	r3, #0
+    1350:	d102      	bne.n	1358 <addProjectile+0xf8>
+            canAddProject = false;
+    1352:	4b05      	ldr	r3, [pc, #20]	@ (1368 <addProjectile+0x108>)
+    1354:	2200      	movs	r2, #0
+    1356:	701a      	strb	r2, [r3, #0]
+        }
+        
+        display_update_needed = true;
+    1358:	4b0b      	ldr	r3, [pc, #44]	@ (1388 <addProjectile+0x128>)
+    135a:	2201      	movs	r2, #1
+    135c:	701a      	strb	r2, [r3, #0]
+    }
+}
+    135e:	bf00      	nop
+    1360:	3710      	adds	r7, #16
+    1362:	46bd      	mov	sp, r7
+    1364:	bc90      	pop	{r4, r7}
+    1366:	4770      	bx	lr
+    1368:	20000003 	.word	0x20000003
+    136c:	20000001 	.word	0x20000001
+    1370:	20000002 	.word	0x20000002
+    1374:	20000004 	.word	0x20000004
+    1378:	2000625c 	.word	0x2000625c
+    137c:	2000ab14 	.word	0x2000ab14
+    1380:	2000aa84 	.word	0x2000aa84
+    1384:	2aaaaaab 	.word	0x2aaaaaab
+    1388:	20000000 	.word	0x20000000
+
+0000138c <removeProjectile>:
+
+void removeProjectile(int index, int projectX, int projectY) {
+    138c:	b4b0      	push	{r4, r5, r7}
+    138e:	b087      	sub	sp, #28
+    1390:	af00      	add	r7, sp, #0
+    1392:	60f8      	str	r0, [r7, #12]
+    1394:	60b9      	str	r1, [r7, #8]
+    1396:	607a      	str	r2, [r7, #4]
+    for(int i = 0; i < PROJECTILE_SIZE; i++) {
+    1398:	2300      	movs	r3, #0
+    139a:	617b      	str	r3, [r7, #20]
+    139c:	e036      	b.n	140c <removeProjectile+0x80>
+        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    139e:	2300      	movs	r3, #0
+    13a0:	613b      	str	r3, [r7, #16]
+    13a2:	e02d      	b.n	1400 <removeProjectile+0x74>
+                if (projectileDesign[i][j] != 0 && projectX+i >= 0)
+    13a4:	491e      	ldr	r1, [pc, #120]	@ (1420 <removeProjectile+0x94>)
+    13a6:	697b      	ldr	r3, [r7, #20]
+    13a8:	009a      	lsls	r2, r3, #2
+    13aa:	693b      	ldr	r3, [r7, #16]
+    13ac:	4413      	add	r3, r2
+    13ae:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    13b2:	2b00      	cmp	r3, #0
+    13b4:	d021      	beq.n	13fa <removeProjectile+0x6e>
+    13b6:	68ba      	ldr	r2, [r7, #8]
+    13b8:	697b      	ldr	r3, [r7, #20]
+    13ba:	4413      	add	r3, r2
+    13bc:	2b00      	cmp	r3, #0
+    13be:	db1c      	blt.n	13fa <removeProjectile+0x6e>
+                    screen[projectX + i][projectY + j] = background[projectX + i][projectY + j];
+    13c0:	68ba      	ldr	r2, [r7, #8]
+    13c2:	697b      	ldr	r3, [r7, #20]
+    13c4:	18d1      	adds	r1, r2, r3
+    13c6:	687a      	ldr	r2, [r7, #4]
+    13c8:	693b      	ldr	r3, [r7, #16]
+    13ca:	18d4      	adds	r4, r2, r3
+    13cc:	68ba      	ldr	r2, [r7, #8]
+    13ce:	697b      	ldr	r3, [r7, #20]
+    13d0:	441a      	add	r2, r3
+    13d2:	6878      	ldr	r0, [r7, #4]
+    13d4:	693b      	ldr	r3, [r7, #16]
+    13d6:	4418      	add	r0, r3
+    13d8:	4d12      	ldr	r5, [pc, #72]	@ (1424 <removeProjectile+0x98>)
+    13da:	460b      	mov	r3, r1
+    13dc:	005b      	lsls	r3, r3, #1
+    13de:	440b      	add	r3, r1
+    13e0:	015b      	lsls	r3, r3, #5
+    13e2:	4423      	add	r3, r4
+    13e4:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+    13e8:	490f      	ldr	r1, [pc, #60]	@ (1428 <removeProjectile+0x9c>)
+    13ea:	4613      	mov	r3, r2
+    13ec:	005b      	lsls	r3, r3, #1
+    13ee:	4413      	add	r3, r2
+    13f0:	015b      	lsls	r3, r3, #5
+    13f2:	4403      	add	r3, r0
+    13f4:	4622      	mov	r2, r4
+    13f6:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    13fa:	693b      	ldr	r3, [r7, #16]
+    13fc:	3301      	adds	r3, #1
+    13fe:	613b      	str	r3, [r7, #16]
+    1400:	693b      	ldr	r3, [r7, #16]
+    1402:	2b03      	cmp	r3, #3
+    1404:	ddce      	ble.n	13a4 <removeProjectile+0x18>
+    for(int i = 0; i < PROJECTILE_SIZE; i++) {
+    1406:	697b      	ldr	r3, [r7, #20]
+    1408:	3301      	adds	r3, #1
+    140a:	617b      	str	r3, [r7, #20]
+    140c:	697b      	ldr	r3, [r7, #20]
+    140e:	2b03      	cmp	r3, #3
+    1410:	ddc5      	ble.n	139e <removeProjectile+0x12>
+        }
+    }
+}
+    1412:	bf00      	nop
+    1414:	bf00      	nop
+    1416:	371c      	adds	r7, #28
+    1418:	46bd      	mov	sp, r7
+    141a:	bcb0      	pop	{r4, r5, r7}
+    141c:	4770      	bx	lr
+    141e:	bf00      	nop
+    1420:	20000004 	.word	0x20000004
+    1424:	20000258 	.word	0x20000258
+    1428:	2000625c 	.word	0x2000625c
+
+0000142c <updateProjectile>:
+
+void updateProjectile() {
+    142c:	b5b0      	push	{r4, r5, r7, lr}
+    142e:	b090      	sub	sp, #64	@ 0x40
+    1430:	af04      	add	r7, sp, #16
+    for(int i = 0; i < PROJECTILE_NUM; i++) {
+    1432:	2300      	movs	r3, #0
+    1434:	62fb      	str	r3, [r7, #44]	@ 0x2c
+    1436:	e102      	b.n	163e <updateProjectile+0x212>
+        if(projectiles[i][2]) {
+    1438:	4986      	ldr	r1, [pc, #536]	@ (1654 <updateProjectile+0x228>)
+    143a:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    143c:	4613      	mov	r3, r2
+    143e:	005b      	lsls	r3, r3, #1
+    1440:	4413      	add	r3, r2
+    1442:	009b      	lsls	r3, r3, #2
+    1444:	440b      	add	r3, r1
+    1446:	3308      	adds	r3, #8
+    1448:	681b      	ldr	r3, [r3, #0]
+    144a:	2b00      	cmp	r3, #0
+    144c:	f000 80f4 	beq.w	1638 <updateProjectile+0x20c>
+            int projectX = projectiles[i][0];
+    1450:	4980      	ldr	r1, [pc, #512]	@ (1654 <updateProjectile+0x228>)
+    1452:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    1454:	4613      	mov	r3, r2
+    1456:	005b      	lsls	r3, r3, #1
+    1458:	4413      	add	r3, r2
+    145a:	009b      	lsls	r3, r3, #2
+    145c:	440b      	add	r3, r1
+    145e:	681b      	ldr	r3, [r3, #0]
+    1460:	613b      	str	r3, [r7, #16]
+            int projectY = projectiles[i][1];
+    1462:	497c      	ldr	r1, [pc, #496]	@ (1654 <updateProjectile+0x228>)
+    1464:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    1466:	4613      	mov	r3, r2
+    1468:	005b      	lsls	r3, r3, #1
+    146a:	4413      	add	r3, r2
+    146c:	009b      	lsls	r3, r3, #2
+    146e:	440b      	add	r3, r1
+    1470:	3304      	adds	r3, #4
+    1472:	681b      	ldr	r3, [r3, #0]
+    1474:	60fb      	str	r3, [r7, #12]
+
+            removeProjectile(i, projectX, projectY);
+    1476:	68fa      	ldr	r2, [r7, #12]
+    1478:	6939      	ldr	r1, [r7, #16]
+    147a:	6af8      	ldr	r0, [r7, #44]	@ 0x2c
+    147c:	f7ff ff86 	bl	138c <removeProjectile>
+
+            bool process = true;
+    1480:	2301      	movs	r3, #1
+    1482:	f887 302b 	strb.w	r3, [r7, #43]	@ 0x2b
+            for (int j = 0; j < ENEMY_COUNT; j++) {
+    1486:	2300      	movs	r3, #0
+    1488:	627b      	str	r3, [r7, #36]	@ 0x24
+    148a:	e07a      	b.n	1582 <updateProjectile+0x156>
+                if (enemyPositions[j][2]) {
+    148c:	4972      	ldr	r1, [pc, #456]	@ (1658 <updateProjectile+0x22c>)
+    148e:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+    1490:	4613      	mov	r3, r2
+    1492:	005b      	lsls	r3, r3, #1
+    1494:	4413      	add	r3, r2
+    1496:	440b      	add	r3, r1
+    1498:	3302      	adds	r3, #2
+    149a:	781b      	ldrb	r3, [r3, #0]
+    149c:	2b00      	cmp	r3, #0
+    149e:	d06d      	beq.n	157c <updateProjectile+0x150>
+                    int ex = enemyPositions[j][0];
+    14a0:	496d      	ldr	r1, [pc, #436]	@ (1658 <updateProjectile+0x22c>)
+    14a2:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+    14a4:	4613      	mov	r3, r2
+    14a6:	005b      	lsls	r3, r3, #1
+    14a8:	4413      	add	r3, r2
+    14aa:	440b      	add	r3, r1
+    14ac:	781b      	ldrb	r3, [r3, #0]
+    14ae:	60bb      	str	r3, [r7, #8]
+                    int ey = enemyPositions[j][1];
+    14b0:	4969      	ldr	r1, [pc, #420]	@ (1658 <updateProjectile+0x22c>)
+    14b2:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+    14b4:	4613      	mov	r3, r2
+    14b6:	005b      	lsls	r3, r3, #1
+    14b8:	4413      	add	r3, r2
+    14ba:	440b      	add	r3, r1
+    14bc:	3301      	adds	r3, #1
+    14be:	781b      	ldrb	r3, [r3, #0]
+    14c0:	607b      	str	r3, [r7, #4]
+
+                    if (intersects(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, ex, ey, ENEMY_SIZE, ENEMY_SIZE)) {
+    14c2:	2308      	movs	r3, #8
+    14c4:	9303      	str	r3, [sp, #12]
+    14c6:	2308      	movs	r3, #8
+    14c8:	9302      	str	r3, [sp, #8]
+    14ca:	687b      	ldr	r3, [r7, #4]
+    14cc:	9301      	str	r3, [sp, #4]
+    14ce:	68bb      	ldr	r3, [r7, #8]
+    14d0:	9300      	str	r3, [sp, #0]
+    14d2:	2304      	movs	r3, #4
+    14d4:	2204      	movs	r2, #4
+    14d6:	68f9      	ldr	r1, [r7, #12]
+    14d8:	6938      	ldr	r0, [r7, #16]
+    14da:	f7ff fc47 	bl	d6c <intersects>
+    14de:	4603      	mov	r3, r0
+    14e0:	2b00      	cmp	r3, #0
+    14e2:	d04b      	beq.n	157c <updateProjectile+0x150>
+                        enemyPositions[j][2] = false;
+    14e4:	495c      	ldr	r1, [pc, #368]	@ (1658 <updateProjectile+0x22c>)
+    14e6:	6a7a      	ldr	r2, [r7, #36]	@ 0x24
+    14e8:	4613      	mov	r3, r2
+    14ea:	005b      	lsls	r3, r3, #1
+    14ec:	4413      	add	r3, r2
+    14ee:	440b      	add	r3, r1
+    14f0:	3302      	adds	r3, #2
+    14f2:	2200      	movs	r2, #0
+    14f4:	701a      	strb	r2, [r3, #0]
+                        removeEnemy(j);
+    14f6:	6a78      	ldr	r0, [r7, #36]	@ 0x24
+    14f8:	f7ff fe52 	bl	11a0 <removeEnemy>
+
+                        for (int k = 0; k < ENEMY_SIZE; k++)
+    14fc:	2300      	movs	r3, #0
+    14fe:	623b      	str	r3, [r7, #32]
+    1500:	e028      	b.n	1554 <updateProjectile+0x128>
+                            for (int l = 0; l < ENEMY_SIZE; l++)
+    1502:	2300      	movs	r3, #0
+    1504:	61fb      	str	r3, [r7, #28]
+    1506:	e01f      	b.n	1548 <updateProjectile+0x11c>
+                                screen[ey + k][ex + l] = background[ey + k][ex + l];
+    1508:	687a      	ldr	r2, [r7, #4]
+    150a:	6a3b      	ldr	r3, [r7, #32]
+    150c:	18d1      	adds	r1, r2, r3
+    150e:	68ba      	ldr	r2, [r7, #8]
+    1510:	69fb      	ldr	r3, [r7, #28]
+    1512:	18d4      	adds	r4, r2, r3
+    1514:	687a      	ldr	r2, [r7, #4]
+    1516:	6a3b      	ldr	r3, [r7, #32]
+    1518:	441a      	add	r2, r3
+    151a:	68b8      	ldr	r0, [r7, #8]
+    151c:	69fb      	ldr	r3, [r7, #28]
+    151e:	4418      	add	r0, r3
+    1520:	4d4e      	ldr	r5, [pc, #312]	@ (165c <updateProjectile+0x230>)
+    1522:	460b      	mov	r3, r1
+    1524:	005b      	lsls	r3, r3, #1
+    1526:	440b      	add	r3, r1
+    1528:	015b      	lsls	r3, r3, #5
+    152a:	4423      	add	r3, r4
+    152c:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+    1530:	494b      	ldr	r1, [pc, #300]	@ (1660 <updateProjectile+0x234>)
+    1532:	4613      	mov	r3, r2
+    1534:	005b      	lsls	r3, r3, #1
+    1536:	4413      	add	r3, r2
+    1538:	015b      	lsls	r3, r3, #5
+    153a:	4403      	add	r3, r0
+    153c:	4622      	mov	r2, r4
+    153e:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+                            for (int l = 0; l < ENEMY_SIZE; l++)
+    1542:	69fb      	ldr	r3, [r7, #28]
+    1544:	3301      	adds	r3, #1
+    1546:	61fb      	str	r3, [r7, #28]
+    1548:	69fb      	ldr	r3, [r7, #28]
+    154a:	2b07      	cmp	r3, #7
+    154c:	dddc      	ble.n	1508 <updateProjectile+0xdc>
+                        for (int k = 0; k < ENEMY_SIZE; k++)
+    154e:	6a3b      	ldr	r3, [r7, #32]
+    1550:	3301      	adds	r3, #1
+    1552:	623b      	str	r3, [r7, #32]
+    1554:	6a3b      	ldr	r3, [r7, #32]
+    1556:	2b07      	cmp	r3, #7
+    1558:	ddd3      	ble.n	1502 <updateProjectile+0xd6>
+
+                        projectiles[i][2] = false;
+    155a:	493e      	ldr	r1, [pc, #248]	@ (1654 <updateProjectile+0x228>)
+    155c:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    155e:	4613      	mov	r3, r2
+    1560:	005b      	lsls	r3, r3, #1
+    1562:	4413      	add	r3, r2
+    1564:	009b      	lsls	r3, r3, #2
+    1566:	440b      	add	r3, r1
+    1568:	3308      	adds	r3, #8
+    156a:	2200      	movs	r2, #0
+    156c:	601a      	str	r2, [r3, #0]
+                        canAddProject = true;
+    156e:	4b3d      	ldr	r3, [pc, #244]	@ (1664 <updateProjectile+0x238>)
+    1570:	2201      	movs	r2, #1
+    1572:	701a      	strb	r2, [r3, #0]
+
+                        process = false;
+    1574:	2300      	movs	r3, #0
+    1576:	f887 302b 	strb.w	r3, [r7, #43]	@ 0x2b
+                        break;
+    157a:	e005      	b.n	1588 <updateProjectile+0x15c>
+            for (int j = 0; j < ENEMY_COUNT; j++) {
+    157c:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
+    157e:	3301      	adds	r3, #1
+    1580:	627b      	str	r3, [r7, #36]	@ 0x24
+    1582:	6a7b      	ldr	r3, [r7, #36]	@ 0x24
+    1584:	2b0b      	cmp	r3, #11
+    1586:	dd81      	ble.n	148c <updateProjectile+0x60>
+                    }
+                }
+            }
+
+            if(process) {
+    1588:	f897 302b 	ldrb.w	r3, [r7, #43]	@ 0x2b
+    158c:	2b00      	cmp	r3, #0
+    158e:	d053      	beq.n	1638 <updateProjectile+0x20c>
+                projectX += PLAYER_DIRECTION;
+    1590:	693b      	ldr	r3, [r7, #16]
+    1592:	3b05      	subs	r3, #5
+    1594:	613b      	str	r3, [r7, #16]
+                if(projectX+PROJECTILE_SIZE > 0) {
+    1596:	693b      	ldr	r3, [r7, #16]
+    1598:	f113 0f03 	cmn.w	r3, #3
+    159c:	db3f      	blt.n	161e <updateProjectile+0x1f2>
+                    for(int k = 0; k < PROJECTILE_SIZE; k++) {
+    159e:	2300      	movs	r3, #0
+    15a0:	61bb      	str	r3, [r7, #24]
+    15a2:	e02f      	b.n	1604 <updateProjectile+0x1d8>
+                        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    15a4:	2300      	movs	r3, #0
+    15a6:	617b      	str	r3, [r7, #20]
+    15a8:	e026      	b.n	15f8 <updateProjectile+0x1cc>
+                            if (projectileDesign[k][j] != 0 && projectX+k >= 0)
+    15aa:	492f      	ldr	r1, [pc, #188]	@ (1668 <updateProjectile+0x23c>)
+    15ac:	69bb      	ldr	r3, [r7, #24]
+    15ae:	009a      	lsls	r2, r3, #2
+    15b0:	697b      	ldr	r3, [r7, #20]
+    15b2:	4413      	add	r3, r2
+    15b4:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    15b8:	2b00      	cmp	r3, #0
+    15ba:	d01a      	beq.n	15f2 <updateProjectile+0x1c6>
+    15bc:	693a      	ldr	r2, [r7, #16]
+    15be:	69bb      	ldr	r3, [r7, #24]
+    15c0:	4413      	add	r3, r2
+    15c2:	2b00      	cmp	r3, #0
+    15c4:	db15      	blt.n	15f2 <updateProjectile+0x1c6>
+                                screen[projectX + k][projectY + j] = projectileDesign[k][j];
+    15c6:	693a      	ldr	r2, [r7, #16]
+    15c8:	69bb      	ldr	r3, [r7, #24]
+    15ca:	441a      	add	r2, r3
+    15cc:	68f9      	ldr	r1, [r7, #12]
+    15ce:	697b      	ldr	r3, [r7, #20]
+    15d0:	4419      	add	r1, r3
+    15d2:	4c25      	ldr	r4, [pc, #148]	@ (1668 <updateProjectile+0x23c>)
+    15d4:	69bb      	ldr	r3, [r7, #24]
+    15d6:	0098      	lsls	r0, r3, #2
+    15d8:	697b      	ldr	r3, [r7, #20]
+    15da:	4403      	add	r3, r0
+    15dc:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    15e0:	481f      	ldr	r0, [pc, #124]	@ (1660 <updateProjectile+0x234>)
+    15e2:	4613      	mov	r3, r2
+    15e4:	005b      	lsls	r3, r3, #1
+    15e6:	4413      	add	r3, r2
+    15e8:	015b      	lsls	r3, r3, #5
+    15ea:	440b      	add	r3, r1
+    15ec:	4622      	mov	r2, r4
+    15ee:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+                        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    15f2:	697b      	ldr	r3, [r7, #20]
+    15f4:	3301      	adds	r3, #1
+    15f6:	617b      	str	r3, [r7, #20]
+    15f8:	697b      	ldr	r3, [r7, #20]
+    15fa:	2b03      	cmp	r3, #3
+    15fc:	ddd5      	ble.n	15aa <updateProjectile+0x17e>
+                    for(int k = 0; k < PROJECTILE_SIZE; k++) {
+    15fe:	69bb      	ldr	r3, [r7, #24]
+    1600:	3301      	adds	r3, #1
+    1602:	61bb      	str	r3, [r7, #24]
+    1604:	69bb      	ldr	r3, [r7, #24]
+    1606:	2b03      	cmp	r3, #3
+    1608:	ddcc      	ble.n	15a4 <updateProjectile+0x178>
+                        }
+                    }
+                    projectiles[i][0] = projectX;
+    160a:	4912      	ldr	r1, [pc, #72]	@ (1654 <updateProjectile+0x228>)
+    160c:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    160e:	4613      	mov	r3, r2
+    1610:	005b      	lsls	r3, r3, #1
+    1612:	4413      	add	r3, r2
+    1614:	009b      	lsls	r3, r3, #2
+    1616:	440b      	add	r3, r1
+    1618:	693a      	ldr	r2, [r7, #16]
+    161a:	601a      	str	r2, [r3, #0]
+    161c:	e00c      	b.n	1638 <updateProjectile+0x20c>
+                }
+                else {
+                    projectiles[i][2] = false;
+    161e:	490d      	ldr	r1, [pc, #52]	@ (1654 <updateProjectile+0x228>)
+    1620:	6afa      	ldr	r2, [r7, #44]	@ 0x2c
+    1622:	4613      	mov	r3, r2
+    1624:	005b      	lsls	r3, r3, #1
+    1626:	4413      	add	r3, r2
+    1628:	009b      	lsls	r3, r3, #2
+    162a:	440b      	add	r3, r1
+    162c:	3308      	adds	r3, #8
+    162e:	2200      	movs	r2, #0
+    1630:	601a      	str	r2, [r3, #0]
+                    canAddProject = true;
+    1632:	4b0c      	ldr	r3, [pc, #48]	@ (1664 <updateProjectile+0x238>)
+    1634:	2201      	movs	r2, #1
+    1636:	701a      	strb	r2, [r3, #0]
+    for(int i = 0; i < PROJECTILE_NUM; i++) {
+    1638:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+    163a:	3301      	adds	r3, #1
+    163c:	62fb      	str	r3, [r7, #44]	@ 0x2c
+    163e:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+    1640:	2b0b      	cmp	r3, #11
+    1642:	f77f aef9 	ble.w	1438 <updateProjectile+0xc>
+                }
+            }
+        }
+    }
+    display_update_needed = true;
+    1646:	4b09      	ldr	r3, [pc, #36]	@ (166c <updateProjectile+0x240>)
+    1648:	2201      	movs	r2, #1
+    164a:	701a      	strb	r2, [r3, #0]
+}
+    164c:	bf00      	nop
+    164e:	3730      	adds	r7, #48	@ 0x30
+    1650:	46bd      	mov	sp, r7
+    1652:	bdb0      	pop	{r4, r5, r7, pc}
+    1654:	2000aa84 	.word	0x2000aa84
+    1658:	2000aa5c 	.word	0x2000aa5c
+    165c:	20000258 	.word	0x20000258
+    1660:	2000625c 	.word	0x2000625c
+    1664:	20000003 	.word	0x20000003
+    1668:	20000004 	.word	0x20000004
+    166c:	20000000 	.word	0x20000000
+
+00001670 <addEnemyProjectile>:
+
+int enemyProjectiles[ENEMY_COUNT][3];
+int newEnemyProjectile = 0;
+bool canAddEnemyProject = true;
+
+void addEnemyProjectile() {
+    1670:	b590      	push	{r4, r7, lr}
+    1672:	b089      	sub	sp, #36	@ 0x24
+    1674:	af00      	add	r7, sp, #0
+    for(int i = 0; i < ENEMY_PROJECTILE_NUM && canAddEnemyProject; i++) {
+    1676:	2300      	movs	r3, #0
+    1678:	61fb      	str	r3, [r7, #28]
+    167a:	e0a0      	b.n	17be <addEnemyProjectile+0x14e>
+        int enemy = -1;
+    167c:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+    1680:	61bb      	str	r3, [r7, #24]
+        for(int i = 0; i < ENEMY_PROJECTILE_NUM; i++) {
+    1682:	2300      	movs	r3, #0
+    1684:	617b      	str	r3, [r7, #20]
+    1686:	e012      	b.n	16ae <addEnemyProjectile+0x3e>
+            enemy = randRange(0,ENEMY_COUNT-1);
+    1688:	210b      	movs	r1, #11
+    168a:	2000      	movs	r0, #0
+    168c:	f7ff fa82 	bl	b94 <randRange>
+    1690:	61b8      	str	r0, [r7, #24]
+            if(!enemyProjectiles[enemy][2]) break;
+    1692:	4951      	ldr	r1, [pc, #324]	@ (17d8 <addEnemyProjectile+0x168>)
+    1694:	69ba      	ldr	r2, [r7, #24]
+    1696:	4613      	mov	r3, r2
+    1698:	005b      	lsls	r3, r3, #1
+    169a:	4413      	add	r3, r2
+    169c:	009b      	lsls	r3, r3, #2
+    169e:	440b      	add	r3, r1
+    16a0:	3308      	adds	r3, #8
+    16a2:	681b      	ldr	r3, [r3, #0]
+    16a4:	2b00      	cmp	r3, #0
+    16a6:	d006      	beq.n	16b6 <addEnemyProjectile+0x46>
+        for(int i = 0; i < ENEMY_PROJECTILE_NUM; i++) {
+    16a8:	697b      	ldr	r3, [r7, #20]
+    16aa:	3301      	adds	r3, #1
+    16ac:	617b      	str	r3, [r7, #20]
+    16ae:	697b      	ldr	r3, [r7, #20]
+    16b0:	2b05      	cmp	r3, #5
+    16b2:	dde9      	ble.n	1688 <addEnemyProjectile+0x18>
+    16b4:	e000      	b.n	16b8 <addEnemyProjectile+0x48>
+            if(!enemyProjectiles[enemy][2]) break;
+    16b6:	bf00      	nop
+        }
+        if(!enemyProjectiles[enemy][2]) {
+    16b8:	4947      	ldr	r1, [pc, #284]	@ (17d8 <addEnemyProjectile+0x168>)
+    16ba:	69ba      	ldr	r2, [r7, #24]
+    16bc:	4613      	mov	r3, r2
+    16be:	005b      	lsls	r3, r3, #1
+    16c0:	4413      	add	r3, r2
+    16c2:	009b      	lsls	r3, r3, #2
+    16c4:	440b      	add	r3, r1
+    16c6:	3308      	adds	r3, #8
+    16c8:	681b      	ldr	r3, [r3, #0]
+    16ca:	2b00      	cmp	r3, #0
+    16cc:	d174      	bne.n	17b8 <addEnemyProjectile+0x148>
+            int projectX = enemyPositions[enemy][0]+ENEMY_SIZE;
+    16ce:	4943      	ldr	r1, [pc, #268]	@ (17dc <addEnemyProjectile+0x16c>)
+    16d0:	69ba      	ldr	r2, [r7, #24]
+    16d2:	4613      	mov	r3, r2
+    16d4:	005b      	lsls	r3, r3, #1
+    16d6:	4413      	add	r3, r2
+    16d8:	440b      	add	r3, r1
+    16da:	781b      	ldrb	r3, [r3, #0]
+    16dc:	3308      	adds	r3, #8
+    16de:	60bb      	str	r3, [r7, #8]
+            int projectY = enemyPositions[enemy][1]+PROJECTILE_SIZE/2;
+    16e0:	493e      	ldr	r1, [pc, #248]	@ (17dc <addEnemyProjectile+0x16c>)
+    16e2:	69ba      	ldr	r2, [r7, #24]
+    16e4:	4613      	mov	r3, r2
+    16e6:	005b      	lsls	r3, r3, #1
+    16e8:	4413      	add	r3, r2
+    16ea:	440b      	add	r3, r1
+    16ec:	3301      	adds	r3, #1
+    16ee:	781b      	ldrb	r3, [r3, #0]
+    16f0:	3302      	adds	r3, #2
+    16f2:	607b      	str	r3, [r7, #4]
+            
+            for(int i = 0; i < PROJECTILE_SIZE; i++) {
+    16f4:	2300      	movs	r3, #0
+    16f6:	613b      	str	r3, [r7, #16]
+    16f8:	e02f      	b.n	175a <addEnemyProjectile+0xea>
+                for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    16fa:	2300      	movs	r3, #0
+    16fc:	60fb      	str	r3, [r7, #12]
+    16fe:	e026      	b.n	174e <addEnemyProjectile+0xde>
+                        if (projectileDesign[i][j] != 0 && projectX+i >= 0)
+    1700:	4937      	ldr	r1, [pc, #220]	@ (17e0 <addEnemyProjectile+0x170>)
+    1702:	693b      	ldr	r3, [r7, #16]
+    1704:	009a      	lsls	r2, r3, #2
+    1706:	68fb      	ldr	r3, [r7, #12]
+    1708:	4413      	add	r3, r2
+    170a:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    170e:	2b00      	cmp	r3, #0
+    1710:	d01a      	beq.n	1748 <addEnemyProjectile+0xd8>
+    1712:	68ba      	ldr	r2, [r7, #8]
+    1714:	693b      	ldr	r3, [r7, #16]
+    1716:	4413      	add	r3, r2
+    1718:	2b00      	cmp	r3, #0
+    171a:	db15      	blt.n	1748 <addEnemyProjectile+0xd8>
+                            screen[projectX + i][projectY + j] = projectileDesign[i][j];
+    171c:	68ba      	ldr	r2, [r7, #8]
+    171e:	693b      	ldr	r3, [r7, #16]
+    1720:	441a      	add	r2, r3
+    1722:	6879      	ldr	r1, [r7, #4]
+    1724:	68fb      	ldr	r3, [r7, #12]
+    1726:	4419      	add	r1, r3
+    1728:	4c2d      	ldr	r4, [pc, #180]	@ (17e0 <addEnemyProjectile+0x170>)
+    172a:	693b      	ldr	r3, [r7, #16]
+    172c:	0098      	lsls	r0, r3, #2
+    172e:	68fb      	ldr	r3, [r7, #12]
+    1730:	4403      	add	r3, r0
+    1732:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    1736:	482b      	ldr	r0, [pc, #172]	@ (17e4 <addEnemyProjectile+0x174>)
+    1738:	4613      	mov	r3, r2
+    173a:	005b      	lsls	r3, r3, #1
+    173c:	4413      	add	r3, r2
+    173e:	015b      	lsls	r3, r3, #5
+    1740:	440b      	add	r3, r1
+    1742:	4622      	mov	r2, r4
+    1744:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+                for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    1748:	68fb      	ldr	r3, [r7, #12]
+    174a:	3301      	adds	r3, #1
+    174c:	60fb      	str	r3, [r7, #12]
+    174e:	68fb      	ldr	r3, [r7, #12]
+    1750:	2b03      	cmp	r3, #3
+    1752:	ddd5      	ble.n	1700 <addEnemyProjectile+0x90>
+            for(int i = 0; i < PROJECTILE_SIZE; i++) {
+    1754:	693b      	ldr	r3, [r7, #16]
+    1756:	3301      	adds	r3, #1
+    1758:	613b      	str	r3, [r7, #16]
+    175a:	693b      	ldr	r3, [r7, #16]
+    175c:	2b03      	cmp	r3, #3
+    175e:	ddcc      	ble.n	16fa <addEnemyProjectile+0x8a>
+                }
+            }
+            enemyProjectiles[enemy][0] = projectX;
+    1760:	491d      	ldr	r1, [pc, #116]	@ (17d8 <addEnemyProjectile+0x168>)
+    1762:	69ba      	ldr	r2, [r7, #24]
+    1764:	4613      	mov	r3, r2
+    1766:	005b      	lsls	r3, r3, #1
+    1768:	4413      	add	r3, r2
+    176a:	009b      	lsls	r3, r3, #2
+    176c:	440b      	add	r3, r1
+    176e:	68ba      	ldr	r2, [r7, #8]
+    1770:	601a      	str	r2, [r3, #0]
+            enemyProjectiles[enemy][1] = projectY;
+    1772:	4919      	ldr	r1, [pc, #100]	@ (17d8 <addEnemyProjectile+0x168>)
+    1774:	69ba      	ldr	r2, [r7, #24]
+    1776:	4613      	mov	r3, r2
+    1778:	005b      	lsls	r3, r3, #1
+    177a:	4413      	add	r3, r2
+    177c:	009b      	lsls	r3, r3, #2
+    177e:	440b      	add	r3, r1
+    1780:	3304      	adds	r3, #4
+    1782:	687a      	ldr	r2, [r7, #4]
+    1784:	601a      	str	r2, [r3, #0]
+            enemyProjectiles[enemy][2] = true;
+    1786:	4914      	ldr	r1, [pc, #80]	@ (17d8 <addEnemyProjectile+0x168>)
+    1788:	69ba      	ldr	r2, [r7, #24]
+    178a:	4613      	mov	r3, r2
+    178c:	005b      	lsls	r3, r3, #1
+    178e:	4413      	add	r3, r2
+    1790:	009b      	lsls	r3, r3, #2
+    1792:	440b      	add	r3, r1
+    1794:	3308      	adds	r3, #8
+    1796:	2201      	movs	r2, #1
+    1798:	601a      	str	r2, [r3, #0]
+
+            newEnemyProjectile = newEnemyProjectile + 1;
+    179a:	4b13      	ldr	r3, [pc, #76]	@ (17e8 <addEnemyProjectile+0x178>)
+    179c:	681b      	ldr	r3, [r3, #0]
+    179e:	3301      	adds	r3, #1
+    17a0:	4a11      	ldr	r2, [pc, #68]	@ (17e8 <addEnemyProjectile+0x178>)
+    17a2:	6013      	str	r3, [r2, #0]
+            if(newEnemyProjectile == ENEMY_PROJECTILE_NUM) {
+    17a4:	4b10      	ldr	r3, [pc, #64]	@ (17e8 <addEnemyProjectile+0x178>)
+    17a6:	681b      	ldr	r3, [r3, #0]
+    17a8:	2b06      	cmp	r3, #6
+    17aa:	d102      	bne.n	17b2 <addEnemyProjectile+0x142>
+                canAddEnemyProject = false;
+    17ac:	4b0f      	ldr	r3, [pc, #60]	@ (17ec <addEnemyProjectile+0x17c>)
+    17ae:	2200      	movs	r2, #0
+    17b0:	701a      	strb	r2, [r3, #0]
+            }
+            
+            display_update_needed = true;
+    17b2:	4b0f      	ldr	r3, [pc, #60]	@ (17f0 <addEnemyProjectile+0x180>)
+    17b4:	2201      	movs	r2, #1
+    17b6:	701a      	strb	r2, [r3, #0]
+    for(int i = 0; i < ENEMY_PROJECTILE_NUM && canAddEnemyProject; i++) {
+    17b8:	69fb      	ldr	r3, [r7, #28]
+    17ba:	3301      	adds	r3, #1
+    17bc:	61fb      	str	r3, [r7, #28]
+    17be:	69fb      	ldr	r3, [r7, #28]
+    17c0:	2b05      	cmp	r3, #5
+    17c2:	dc04      	bgt.n	17ce <addEnemyProjectile+0x15e>
+    17c4:	4b09      	ldr	r3, [pc, #36]	@ (17ec <addEnemyProjectile+0x17c>)
+    17c6:	781b      	ldrb	r3, [r3, #0]
+    17c8:	2b00      	cmp	r3, #0
+    17ca:	f47f af57 	bne.w	167c <addEnemyProjectile+0xc>
+        }
+    }
+}
+    17ce:	bf00      	nop
+    17d0:	3724      	adds	r7, #36	@ 0x24
+    17d2:	46bd      	mov	sp, r7
+    17d4:	bd90      	pop	{r4, r7, pc}
+    17d6:	bf00      	nop
+    17d8:	2000ab18 	.word	0x2000ab18
+    17dc:	2000aa5c 	.word	0x2000aa5c
+    17e0:	20000004 	.word	0x20000004
+    17e4:	2000625c 	.word	0x2000625c
+    17e8:	2000aba8 	.word	0x2000aba8
+    17ec:	20000024 	.word	0x20000024
+    17f0:	20000000 	.word	0x20000000
+
+000017f4 <removeEnemyProjectile>:
+
+void removeEnemyProjectile(int projectX, int projectY) {
+    17f4:	b4b0      	push	{r4, r5, r7}
+    17f6:	b085      	sub	sp, #20
+    17f8:	af00      	add	r7, sp, #0
+    17fa:	6078      	str	r0, [r7, #4]
+    17fc:	6039      	str	r1, [r7, #0]
+    for(int i = 0; i < PROJECTILE_SIZE; i++) {
+    17fe:	2300      	movs	r3, #0
+    1800:	60fb      	str	r3, [r7, #12]
+    1802:	e036      	b.n	1872 <removeEnemyProjectile+0x7e>
+        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    1804:	2300      	movs	r3, #0
+    1806:	60bb      	str	r3, [r7, #8]
+    1808:	e02d      	b.n	1866 <removeEnemyProjectile+0x72>
+                if (projectileDesign[i][j] != 0 && projectX+i >= 0)
+    180a:	491e      	ldr	r1, [pc, #120]	@ (1884 <removeEnemyProjectile+0x90>)
+    180c:	68fb      	ldr	r3, [r7, #12]
+    180e:	009a      	lsls	r2, r3, #2
+    1810:	68bb      	ldr	r3, [r7, #8]
+    1812:	4413      	add	r3, r2
+    1814:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    1818:	2b00      	cmp	r3, #0
+    181a:	d021      	beq.n	1860 <removeEnemyProjectile+0x6c>
+    181c:	687a      	ldr	r2, [r7, #4]
+    181e:	68fb      	ldr	r3, [r7, #12]
+    1820:	4413      	add	r3, r2
+    1822:	2b00      	cmp	r3, #0
+    1824:	db1c      	blt.n	1860 <removeEnemyProjectile+0x6c>
+                    screen[projectX + i][projectY + j] = background[projectX + i][projectY + j];
+    1826:	687a      	ldr	r2, [r7, #4]
+    1828:	68fb      	ldr	r3, [r7, #12]
+    182a:	18d1      	adds	r1, r2, r3
+    182c:	683a      	ldr	r2, [r7, #0]
+    182e:	68bb      	ldr	r3, [r7, #8]
+    1830:	18d4      	adds	r4, r2, r3
+    1832:	687a      	ldr	r2, [r7, #4]
+    1834:	68fb      	ldr	r3, [r7, #12]
+    1836:	441a      	add	r2, r3
+    1838:	6838      	ldr	r0, [r7, #0]
+    183a:	68bb      	ldr	r3, [r7, #8]
+    183c:	4418      	add	r0, r3
+    183e:	4d12      	ldr	r5, [pc, #72]	@ (1888 <removeEnemyProjectile+0x94>)
+    1840:	460b      	mov	r3, r1
+    1842:	005b      	lsls	r3, r3, #1
+    1844:	440b      	add	r3, r1
+    1846:	015b      	lsls	r3, r3, #5
+    1848:	4423      	add	r3, r4
+    184a:	f835 4013 	ldrh.w	r4, [r5, r3, lsl #1]
+    184e:	490f      	ldr	r1, [pc, #60]	@ (188c <removeEnemyProjectile+0x98>)
+    1850:	4613      	mov	r3, r2
+    1852:	005b      	lsls	r3, r3, #1
+    1854:	4413      	add	r3, r2
+    1856:	015b      	lsls	r3, r3, #5
+    1858:	4403      	add	r3, r0
+    185a:	4622      	mov	r2, r4
+    185c:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    1860:	68bb      	ldr	r3, [r7, #8]
+    1862:	3301      	adds	r3, #1
+    1864:	60bb      	str	r3, [r7, #8]
+    1866:	68bb      	ldr	r3, [r7, #8]
+    1868:	2b03      	cmp	r3, #3
+    186a:	ddce      	ble.n	180a <removeEnemyProjectile+0x16>
+    for(int i = 0; i < PROJECTILE_SIZE; i++) {
+    186c:	68fb      	ldr	r3, [r7, #12]
+    186e:	3301      	adds	r3, #1
+    1870:	60fb      	str	r3, [r7, #12]
+    1872:	68fb      	ldr	r3, [r7, #12]
+    1874:	2b03      	cmp	r3, #3
+    1876:	ddc5      	ble.n	1804 <removeEnemyProjectile+0x10>
+        }
+    }
+}
+    1878:	bf00      	nop
+    187a:	bf00      	nop
+    187c:	3714      	adds	r7, #20
+    187e:	46bd      	mov	sp, r7
+    1880:	bcb0      	pop	{r4, r5, r7}
+    1882:	4770      	bx	lr
+    1884:	20000004 	.word	0x20000004
+    1888:	20000258 	.word	0x20000258
+    188c:	2000625c 	.word	0x2000625c
+
+00001890 <updateEnemyProjectile>:
+
+void updateEnemyProjectile() {
+    1890:	b590      	push	{r4, r7, lr}
+    1892:	b08b      	sub	sp, #44	@ 0x2c
+    1894:	af04      	add	r7, sp, #16
+    for(int i = 0; i < ENEMY_COUNT; i++) {
+    1896:	2300      	movs	r3, #0
+    1898:	617b      	str	r3, [r7, #20]
+    189a:	e0ad      	b.n	19f8 <updateEnemyProjectile+0x168>
+        if(enemyProjectiles[i][2]) {
+    189c:	495c      	ldr	r1, [pc, #368]	@ (1a10 <updateEnemyProjectile+0x180>)
+    189e:	697a      	ldr	r2, [r7, #20]
+    18a0:	4613      	mov	r3, r2
+    18a2:	005b      	lsls	r3, r3, #1
+    18a4:	4413      	add	r3, r2
+    18a6:	009b      	lsls	r3, r3, #2
+    18a8:	440b      	add	r3, r1
+    18aa:	3308      	adds	r3, #8
+    18ac:	681b      	ldr	r3, [r3, #0]
+    18ae:	2b00      	cmp	r3, #0
+    18b0:	f000 809f 	beq.w	19f2 <updateEnemyProjectile+0x162>
+            int projectX = enemyProjectiles[i][0];
+    18b4:	4956      	ldr	r1, [pc, #344]	@ (1a10 <updateEnemyProjectile+0x180>)
+    18b6:	697a      	ldr	r2, [r7, #20]
+    18b8:	4613      	mov	r3, r2
+    18ba:	005b      	lsls	r3, r3, #1
+    18bc:	4413      	add	r3, r2
+    18be:	009b      	lsls	r3, r3, #2
+    18c0:	440b      	add	r3, r1
+    18c2:	681b      	ldr	r3, [r3, #0]
+    18c4:	607b      	str	r3, [r7, #4]
+            int projectY = enemyProjectiles[i][1];
+    18c6:	4952      	ldr	r1, [pc, #328]	@ (1a10 <updateEnemyProjectile+0x180>)
+    18c8:	697a      	ldr	r2, [r7, #20]
+    18ca:	4613      	mov	r3, r2
+    18cc:	005b      	lsls	r3, r3, #1
+    18ce:	4413      	add	r3, r2
+    18d0:	009b      	lsls	r3, r3, #2
+    18d2:	440b      	add	r3, r1
+    18d4:	3304      	adds	r3, #4
+    18d6:	681b      	ldr	r3, [r3, #0]
+    18d8:	603b      	str	r3, [r7, #0]
+
+            removeEnemyProjectile(projectX, projectY);
+    18da:	6839      	ldr	r1, [r7, #0]
+    18dc:	6878      	ldr	r0, [r7, #4]
+    18de:	f7ff ff89 	bl	17f4 <removeEnemyProjectile>
+
+            bool process = true;
+    18e2:	2301      	movs	r3, #1
+    18e4:	74fb      	strb	r3, [r7, #19]
+
+            if (intersects(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE)) {
+    18e6:	4b4b      	ldr	r3, [pc, #300]	@ (1a14 <updateEnemyProjectile+0x184>)
+    18e8:	781b      	ldrb	r3, [r3, #0]
+    18ea:	4618      	mov	r0, r3
+    18ec:	4b4a      	ldr	r3, [pc, #296]	@ (1a18 <updateEnemyProjectile+0x188>)
+    18ee:	781b      	ldrb	r3, [r3, #0]
+    18f0:	4619      	mov	r1, r3
+    18f2:	2304      	movs	r3, #4
+    18f4:	9303      	str	r3, [sp, #12]
+    18f6:	2304      	movs	r3, #4
+    18f8:	9302      	str	r3, [sp, #8]
+    18fa:	683b      	ldr	r3, [r7, #0]
+    18fc:	9301      	str	r3, [sp, #4]
+    18fe:	687b      	ldr	r3, [r7, #4]
+    1900:	9300      	str	r3, [sp, #0]
+    1902:	2308      	movs	r3, #8
+    1904:	220d      	movs	r2, #13
+    1906:	f7ff fa31 	bl	d6c <intersects>
+    190a:	4603      	mov	r3, r0
+    190c:	2b00      	cmp	r3, #0
+    190e:	d015      	beq.n	193c <updateEnemyProjectile+0xac>
+                removeSpaceship();
+    1910:	f7ff fac0 	bl	e94 <removeSpaceship>
+
+                enemyProjectiles[i][2] = false;
+    1914:	493e      	ldr	r1, [pc, #248]	@ (1a10 <updateEnemyProjectile+0x180>)
+    1916:	697a      	ldr	r2, [r7, #20]
+    1918:	4613      	mov	r3, r2
+    191a:	005b      	lsls	r3, r3, #1
+    191c:	4413      	add	r3, r2
+    191e:	009b      	lsls	r3, r3, #2
+    1920:	440b      	add	r3, r1
+    1922:	3308      	adds	r3, #8
+    1924:	2200      	movs	r2, #0
+    1926:	601a      	str	r2, [r3, #0]
+                canAddEnemyProject = false;
+    1928:	4b3c      	ldr	r3, [pc, #240]	@ (1a1c <updateEnemyProjectile+0x18c>)
+    192a:	2200      	movs	r2, #0
+    192c:	701a      	strb	r2, [r3, #0]
+                newEnemyProjectile--;
+    192e:	4b3c      	ldr	r3, [pc, #240]	@ (1a20 <updateEnemyProjectile+0x190>)
+    1930:	681b      	ldr	r3, [r3, #0]
+    1932:	3b01      	subs	r3, #1
+    1934:	4a3a      	ldr	r2, [pc, #232]	@ (1a20 <updateEnemyProjectile+0x190>)
+    1936:	6013      	str	r3, [r2, #0]
+
+                process = false;
+    1938:	2300      	movs	r3, #0
+    193a:	74fb      	strb	r3, [r7, #19]
+            }
+
+            if(process) {
+    193c:	7cfb      	ldrb	r3, [r7, #19]
+    193e:	2b00      	cmp	r3, #0
+    1940:	d057      	beq.n	19f2 <updateEnemyProjectile+0x162>
+                projectX += ENEMY_DIRECTION;
+    1942:	687b      	ldr	r3, [r7, #4]
+    1944:	3303      	adds	r3, #3
+    1946:	607b      	str	r3, [r7, #4]
+                if(projectX+PROJECTILE_SIZE < DISPLAY_SIZE) {
+    1948:	687b      	ldr	r3, [r7, #4]
+    194a:	2b5b      	cmp	r3, #91	@ 0x5b
+    194c:	dc3f      	bgt.n	19ce <updateEnemyProjectile+0x13e>
+                    for(int k = 0; k < PROJECTILE_SIZE; k++) {
+    194e:	2300      	movs	r3, #0
+    1950:	60fb      	str	r3, [r7, #12]
+    1952:	e02f      	b.n	19b4 <updateEnemyProjectile+0x124>
+                        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    1954:	2300      	movs	r3, #0
+    1956:	60bb      	str	r3, [r7, #8]
+    1958:	e026      	b.n	19a8 <updateEnemyProjectile+0x118>
+                            if (projectileDesign[k][j] != 0 && projectX+k < DISPLAY_SIZE)
+    195a:	4932      	ldr	r1, [pc, #200]	@ (1a24 <updateEnemyProjectile+0x194>)
+    195c:	68fb      	ldr	r3, [r7, #12]
+    195e:	009a      	lsls	r2, r3, #2
+    1960:	68bb      	ldr	r3, [r7, #8]
+    1962:	4413      	add	r3, r2
+    1964:	f831 3013 	ldrh.w	r3, [r1, r3, lsl #1]
+    1968:	2b00      	cmp	r3, #0
+    196a:	d01a      	beq.n	19a2 <updateEnemyProjectile+0x112>
+    196c:	687a      	ldr	r2, [r7, #4]
+    196e:	68fb      	ldr	r3, [r7, #12]
+    1970:	4413      	add	r3, r2
+    1972:	2b5f      	cmp	r3, #95	@ 0x5f
+    1974:	dc15      	bgt.n	19a2 <updateEnemyProjectile+0x112>
+                                screen[projectX + k][projectY + j] = projectileDesign[k][j];
+    1976:	687a      	ldr	r2, [r7, #4]
+    1978:	68fb      	ldr	r3, [r7, #12]
+    197a:	441a      	add	r2, r3
+    197c:	6839      	ldr	r1, [r7, #0]
+    197e:	68bb      	ldr	r3, [r7, #8]
+    1980:	4419      	add	r1, r3
+    1982:	4c28      	ldr	r4, [pc, #160]	@ (1a24 <updateEnemyProjectile+0x194>)
+    1984:	68fb      	ldr	r3, [r7, #12]
+    1986:	0098      	lsls	r0, r3, #2
+    1988:	68bb      	ldr	r3, [r7, #8]
+    198a:	4403      	add	r3, r0
+    198c:	f834 4013 	ldrh.w	r4, [r4, r3, lsl #1]
+    1990:	4825      	ldr	r0, [pc, #148]	@ (1a28 <updateEnemyProjectile+0x198>)
+    1992:	4613      	mov	r3, r2
+    1994:	005b      	lsls	r3, r3, #1
+    1996:	4413      	add	r3, r2
+    1998:	015b      	lsls	r3, r3, #5
+    199a:	440b      	add	r3, r1
+    199c:	4622      	mov	r2, r4
+    199e:	f820 2013 	strh.w	r2, [r0, r3, lsl #1]
+                        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+    19a2:	68bb      	ldr	r3, [r7, #8]
+    19a4:	3301      	adds	r3, #1
+    19a6:	60bb      	str	r3, [r7, #8]
+    19a8:	68bb      	ldr	r3, [r7, #8]
+    19aa:	2b03      	cmp	r3, #3
+    19ac:	ddd5      	ble.n	195a <updateEnemyProjectile+0xca>
+                    for(int k = 0; k < PROJECTILE_SIZE; k++) {
+    19ae:	68fb      	ldr	r3, [r7, #12]
+    19b0:	3301      	adds	r3, #1
+    19b2:	60fb      	str	r3, [r7, #12]
+    19b4:	68fb      	ldr	r3, [r7, #12]
+    19b6:	2b03      	cmp	r3, #3
+    19b8:	ddcc      	ble.n	1954 <updateEnemyProjectile+0xc4>
+                        }
+                    }
+                    enemyProjectiles[i][0] = projectX;
+    19ba:	4915      	ldr	r1, [pc, #84]	@ (1a10 <updateEnemyProjectile+0x180>)
+    19bc:	697a      	ldr	r2, [r7, #20]
+    19be:	4613      	mov	r3, r2
+    19c0:	005b      	lsls	r3, r3, #1
+    19c2:	4413      	add	r3, r2
+    19c4:	009b      	lsls	r3, r3, #2
+    19c6:	440b      	add	r3, r1
+    19c8:	687a      	ldr	r2, [r7, #4]
+    19ca:	601a      	str	r2, [r3, #0]
+    19cc:	e011      	b.n	19f2 <updateEnemyProjectile+0x162>
+                }
+                else {
+                    enemyProjectiles[i][2] = false;
+    19ce:	4910      	ldr	r1, [pc, #64]	@ (1a10 <updateEnemyProjectile+0x180>)
+    19d0:	697a      	ldr	r2, [r7, #20]
+    19d2:	4613      	mov	r3, r2
+    19d4:	005b      	lsls	r3, r3, #1
+    19d6:	4413      	add	r3, r2
+    19d8:	009b      	lsls	r3, r3, #2
+    19da:	440b      	add	r3, r1
+    19dc:	3308      	adds	r3, #8
+    19de:	2200      	movs	r2, #0
+    19e0:	601a      	str	r2, [r3, #0]
+                    canAddEnemyProject = true;
+    19e2:	4b0e      	ldr	r3, [pc, #56]	@ (1a1c <updateEnemyProjectile+0x18c>)
+    19e4:	2201      	movs	r2, #1
+    19e6:	701a      	strb	r2, [r3, #0]
+                    newEnemyProjectile--;
+    19e8:	4b0d      	ldr	r3, [pc, #52]	@ (1a20 <updateEnemyProjectile+0x190>)
+    19ea:	681b      	ldr	r3, [r3, #0]
+    19ec:	3b01      	subs	r3, #1
+    19ee:	4a0c      	ldr	r2, [pc, #48]	@ (1a20 <updateEnemyProjectile+0x190>)
+    19f0:	6013      	str	r3, [r2, #0]
+    for(int i = 0; i < ENEMY_COUNT; i++) {
+    19f2:	697b      	ldr	r3, [r7, #20]
+    19f4:	3301      	adds	r3, #1
+    19f6:	617b      	str	r3, [r7, #20]
+    19f8:	697b      	ldr	r3, [r7, #20]
+    19fa:	2b0b      	cmp	r3, #11
+    19fc:	f77f af4e 	ble.w	189c <updateEnemyProjectile+0xc>
+                }
+            }
+        }
+    }
+    display_update_needed = true;
+    1a00:	4b0a      	ldr	r3, [pc, #40]	@ (1a2c <updateEnemyProjectile+0x19c>)
+    1a02:	2201      	movs	r2, #1
+    1a04:	701a      	strb	r2, [r3, #0]
+}
+    1a06:	bf00      	nop
+    1a08:	371c      	adds	r7, #28
+    1a0a:	46bd      	mov	sp, r7
+    1a0c:	bd90      	pop	{r4, r7, pc}
+    1a0e:	bf00      	nop
+    1a10:	2000ab18 	.word	0x2000ab18
+    1a14:	20000001 	.word	0x20000001
+    1a18:	20000002 	.word	0x20000002
+    1a1c:	20000024 	.word	0x20000024
+    1a20:	2000aba8 	.word	0x2000aba8
+    1a24:	20000004 	.word	0x20000004
+    1a28:	2000625c 	.word	0x2000625c
+    1a2c:	20000000 	.word	0x20000000
+
+00001a30 <resetGame>:
+
+
+void resetGame() {
+    1a30:	b580      	push	{r7, lr}
+    1a32:	b084      	sub	sp, #16
+    1a34:	af00      	add	r7, sp, #0
+    spaceX = DEFAULT_SHIP_X;
+    1a36:	4b41      	ldr	r3, [pc, #260]	@ (1b3c <resetGame+0x10c>)
+    1a38:	224c      	movs	r2, #76	@ 0x4c
+    1a3a:	701a      	strb	r2, [r3, #0]
+    spaceY = DEFAULT_SHIP_Y;
+    1a3c:	4b40      	ldr	r3, [pc, #256]	@ (1b40 <resetGame+0x110>)
+    1a3e:	222c      	movs	r2, #44	@ 0x2c
+    1a40:	701a      	strb	r2, [r3, #0]
+
+    for(int i = 0; i < ENEMY_COUNT; i++) {
+    1a42:	2300      	movs	r3, #0
+    1a44:	60fb      	str	r3, [r7, #12]
+    1a46:	e01f      	b.n	1a88 <resetGame+0x58>
+        enemyPositions[i][2] = 0;
+    1a48:	493e      	ldr	r1, [pc, #248]	@ (1b44 <resetGame+0x114>)
+    1a4a:	68fa      	ldr	r2, [r7, #12]
+    1a4c:	4613      	mov	r3, r2
+    1a4e:	005b      	lsls	r3, r3, #1
+    1a50:	4413      	add	r3, r2
+    1a52:	440b      	add	r3, r1
+    1a54:	3302      	adds	r3, #2
+    1a56:	2200      	movs	r2, #0
+    1a58:	701a      	strb	r2, [r3, #0]
+        enemyProjectiles[i][2] = 0;
+    1a5a:	493b      	ldr	r1, [pc, #236]	@ (1b48 <resetGame+0x118>)
+    1a5c:	68fa      	ldr	r2, [r7, #12]
+    1a5e:	4613      	mov	r3, r2
+    1a60:	005b      	lsls	r3, r3, #1
+    1a62:	4413      	add	r3, r2
+    1a64:	009b      	lsls	r3, r3, #2
+    1a66:	440b      	add	r3, r1
+    1a68:	3308      	adds	r3, #8
+    1a6a:	2200      	movs	r2, #0
+    1a6c:	601a      	str	r2, [r3, #0]
+        projectiles[i][2] = 0;
+    1a6e:	4937      	ldr	r1, [pc, #220]	@ (1b4c <resetGame+0x11c>)
+    1a70:	68fa      	ldr	r2, [r7, #12]
+    1a72:	4613      	mov	r3, r2
+    1a74:	005b      	lsls	r3, r3, #1
+    1a76:	4413      	add	r3, r2
+    1a78:	009b      	lsls	r3, r3, #2
+    1a7a:	440b      	add	r3, r1
+    1a7c:	3308      	adds	r3, #8
+    1a7e:	2200      	movs	r2, #0
+    1a80:	601a      	str	r2, [r3, #0]
+    for(int i = 0; i < ENEMY_COUNT; i++) {
+    1a82:	68fb      	ldr	r3, [r7, #12]
+    1a84:	3301      	adds	r3, #1
+    1a86:	60fb      	str	r3, [r7, #12]
+    1a88:	68fb      	ldr	r3, [r7, #12]
+    1a8a:	2b0b      	cmp	r3, #11
+    1a8c:	dddc      	ble.n	1a48 <resetGame+0x18>
+    }
+
+    for(int i = 0; i < PROJECTILE_NUM; i++) {
+    1a8e:	2300      	movs	r3, #0
+    1a90:	60bb      	str	r3, [r7, #8]
+    1a92:	e00c      	b.n	1aae <resetGame+0x7e>
+        projectiles[i][2] = 0;
+    1a94:	492d      	ldr	r1, [pc, #180]	@ (1b4c <resetGame+0x11c>)
+    1a96:	68ba      	ldr	r2, [r7, #8]
+    1a98:	4613      	mov	r3, r2
+    1a9a:	005b      	lsls	r3, r3, #1
+    1a9c:	4413      	add	r3, r2
+    1a9e:	009b      	lsls	r3, r3, #2
+    1aa0:	440b      	add	r3, r1
+    1aa2:	3308      	adds	r3, #8
+    1aa4:	2200      	movs	r2, #0
+    1aa6:	601a      	str	r2, [r3, #0]
+    for(int i = 0; i < PROJECTILE_NUM; i++) {
+    1aa8:	68bb      	ldr	r3, [r7, #8]
+    1aaa:	3301      	adds	r3, #1
+    1aac:	60bb      	str	r3, [r7, #8]
+    1aae:	68bb      	ldr	r3, [r7, #8]
+    1ab0:	2b0b      	cmp	r3, #11
+    1ab2:	ddef      	ble.n	1a94 <resetGame+0x64>
+    }
+    newEnemyProjectile = 0;
+    1ab4:	4b26      	ldr	r3, [pc, #152]	@ (1b50 <resetGame+0x120>)
+    1ab6:	2200      	movs	r2, #0
+    1ab8:	601a      	str	r2, [r3, #0]
+    newProjectileIndex = 0;
+    1aba:	4b26      	ldr	r3, [pc, #152]	@ (1b54 <resetGame+0x124>)
+    1abc:	2200      	movs	r2, #0
+    1abe:	601a      	str	r2, [r3, #0]
+    canAddEnemyProject = true;
+    1ac0:	4b25      	ldr	r3, [pc, #148]	@ (1b58 <resetGame+0x128>)
+    1ac2:	2201      	movs	r2, #1
+    1ac4:	701a      	strb	r2, [r3, #0]
+    canAddProject = true;
+    1ac6:	4b25      	ldr	r3, [pc, #148]	@ (1b5c <resetGame+0x12c>)
+    1ac8:	2201      	movs	r2, #1
+    1aca:	701a      	strb	r2, [r3, #0]
+    activeEnemyCount = 0;
+    1acc:	4b24      	ldr	r3, [pc, #144]	@ (1b60 <resetGame+0x130>)
+    1ace:	2200      	movs	r2, #0
+    1ad0:	701a      	strb	r2, [r3, #0]
+    gameOver = false;
+    1ad2:	4b24      	ldr	r3, [pc, #144]	@ (1b64 <resetGame+0x134>)
+    1ad4:	2200      	movs	r2, #0
+    1ad6:	701a      	strb	r2, [r3, #0]
+    display_update_needed = true;
+    1ad8:	4b23      	ldr	r3, [pc, #140]	@ (1b68 <resetGame+0x138>)
+    1ada:	2201      	movs	r2, #1
+    1adc:	701a      	strb	r2, [r3, #0]
+
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+    1ade:	2300      	movs	r3, #0
+    1ae0:	607b      	str	r3, [r7, #4]
+    1ae2:	e020      	b.n	1b26 <resetGame+0xf6>
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+    1ae4:	2300      	movs	r3, #0
+    1ae6:	603b      	str	r3, [r7, #0]
+    1ae8:	e017      	b.n	1b1a <resetGame+0xea>
+        screen[i][j] = background[i][j];
+    1aea:	4920      	ldr	r1, [pc, #128]	@ (1b6c <resetGame+0x13c>)
+    1aec:	687a      	ldr	r2, [r7, #4]
+    1aee:	4613      	mov	r3, r2
+    1af0:	005b      	lsls	r3, r3, #1
+    1af2:	4413      	add	r3, r2
+    1af4:	015b      	lsls	r3, r3, #5
+    1af6:	683a      	ldr	r2, [r7, #0]
+    1af8:	4413      	add	r3, r2
+    1afa:	f831 0013 	ldrh.w	r0, [r1, r3, lsl #1]
+    1afe:	491c      	ldr	r1, [pc, #112]	@ (1b70 <resetGame+0x140>)
+    1b00:	687a      	ldr	r2, [r7, #4]
+    1b02:	4613      	mov	r3, r2
+    1b04:	005b      	lsls	r3, r3, #1
+    1b06:	4413      	add	r3, r2
+    1b08:	015b      	lsls	r3, r3, #5
+    1b0a:	683a      	ldr	r2, [r7, #0]
+    1b0c:	4413      	add	r3, r2
+    1b0e:	4602      	mov	r2, r0
+    1b10:	f821 2013 	strh.w	r2, [r1, r3, lsl #1]
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+    1b14:	683b      	ldr	r3, [r7, #0]
+    1b16:	3301      	adds	r3, #1
+    1b18:	603b      	str	r3, [r7, #0]
+    1b1a:	683b      	ldr	r3, [r7, #0]
+    1b1c:	2b5f      	cmp	r3, #95	@ 0x5f
+    1b1e:	dde4      	ble.n	1aea <resetGame+0xba>
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+    1b20:	687b      	ldr	r3, [r7, #4]
+    1b22:	3301      	adds	r3, #1
+    1b24:	607b      	str	r3, [r7, #4]
+    1b26:	687b      	ldr	r3, [r7, #4]
+    1b28:	2b5f      	cmp	r3, #95	@ 0x5f
+    1b2a:	dddb      	ble.n	1ae4 <resetGame+0xb4>
+        }
+    }
+
+    addSpaceship();
+    1b2c:	f7ff f968 	bl	e00 <addSpaceship>
+    addEnemies();
+    1b30:	f7ff fa60 	bl	ff4 <addEnemies>
+    1b34:	bf00      	nop
+    1b36:	3710      	adds	r7, #16
+    1b38:	46bd      	mov	sp, r7
+    1b3a:	bd80      	pop	{r7, pc}
+    1b3c:	20000001 	.word	0x20000001
+    1b40:	20000002 	.word	0x20000002
+    1b44:	2000aa5c 	.word	0x2000aa5c
+    1b48:	2000ab18 	.word	0x2000ab18
+    1b4c:	2000aa84 	.word	0x2000aa84
+    1b50:	2000aba8 	.word	0x2000aba8
+    1b54:	2000ab14 	.word	0x2000ab14
+    1b58:	20000024 	.word	0x20000024
+    1b5c:	20000003 	.word	0x20000003
+    1b60:	2000aa80 	.word	0x2000aa80
+    1b64:	20000254 	.word	0x20000254
+    1b68:	20000000 	.word	0x20000000
+    1b6c:	20000258 	.word	0x20000258
+    1b70:	2000625c 	.word	0x2000625c
+
+00001b74 <rand>:
+    1b74:	4b0a      	ldr	r3, [pc, #40]	@ (1ba0 <rand+0x2c>)
+    1b76:	480b      	ldr	r0, [pc, #44]	@ (1ba4 <rand+0x30>)
+    1b78:	6819      	ldr	r1, [r3, #0]
+    1b7a:	4a0b      	ldr	r2, [pc, #44]	@ (1ba8 <rand+0x34>)
+    1b7c:	f8d1 3098 	ldr.w	r3, [r1, #152]	@ 0x98
+    1b80:	f8d1 c09c 	ldr.w	ip, [r1, #156]	@ 0x9c
+    1b84:	fb03 f000 	mul.w	r0, r3, r0
+    1b88:	fb02 000c 	mla	r0, r2, ip, r0
+    1b8c:	fba3 3202 	umull	r3, r2, r3, r2
+    1b90:	3301      	adds	r3, #1
+    1b92:	eb40 0002 	adc.w	r0, r0, r2
+    1b96:	e9c1 3026 	strd	r3, r0, [r1, #152]	@ 0x98
+    1b9a:	f020 4000 	bic.w	r0, r0, #2147483648	@ 0x80000000
+    1b9e:	4770      	bx	lr
+    1ba0:	20000028 	.word	0x20000028
+    1ba4:	5851f42d 	.word	0x5851f42d
+    1ba8:	4c957f2d 	.word	0x4c957f2d
+
+00001bac <__libc_init_array>:
+    1bac:	b570      	push	{r4, r5, r6, lr}
+    1bae:	4b0f      	ldr	r3, [pc, #60]	@ (1bec <__libc_init_array+0x40>)
+    1bb0:	4d0f      	ldr	r5, [pc, #60]	@ (1bf0 <__libc_init_array+0x44>)
+    1bb2:	42ab      	cmp	r3, r5
+    1bb4:	eba3 0605 	sub.w	r6, r3, r5
+    1bb8:	d007      	beq.n	1bca <__libc_init_array+0x1e>
+    1bba:	10b6      	asrs	r6, r6, #2
+    1bbc:	2400      	movs	r4, #0
+    1bbe:	f855 3b04 	ldr.w	r3, [r5], #4
+    1bc2:	3401      	adds	r4, #1
+    1bc4:	4798      	blx	r3
+    1bc6:	42a6      	cmp	r6, r4
+    1bc8:	d8f9      	bhi.n	1bbe <__libc_init_array+0x12>
+    1bca:	f000 f927 	bl	1e1c <_init>
+    1bce:	4d09      	ldr	r5, [pc, #36]	@ (1bf4 <__libc_init_array+0x48>)
+    1bd0:	4b09      	ldr	r3, [pc, #36]	@ (1bf8 <__libc_init_array+0x4c>)
+    1bd2:	1b5e      	subs	r6, r3, r5
+    1bd4:	42ab      	cmp	r3, r5
+    1bd6:	ea4f 06a6 	mov.w	r6, r6, asr #2
+    1bda:	d006      	beq.n	1bea <__libc_init_array+0x3e>
+    1bdc:	2400      	movs	r4, #0
+    1bde:	f855 3b04 	ldr.w	r3, [r5], #4
+    1be2:	3401      	adds	r4, #1
+    1be4:	4798      	blx	r3
+    1be6:	42a6      	cmp	r6, r4
+    1be8:	d8f9      	bhi.n	1bde <__libc_init_array+0x32>
+    1bea:	bd70      	pop	{r4, r5, r6, pc}
+    1bec:	00001e28 	.word	0x00001e28
+    1bf0:	00001e28 	.word	0x00001e28
+    1bf4:	00001e28 	.word	0x00001e28
+    1bf8:	00001e30 	.word	0x00001e30
+
+00001bfc <__retarget_lock_acquire_recursive>:
+    1bfc:	4770      	bx	lr
+    1bfe:	bf00      	nop
+
+00001c00 <__retarget_lock_release_recursive>:
+    1c00:	4770      	bx	lr
+    1c02:	bf00      	nop
+
+00001c04 <register_fini>:
+    1c04:	4b02      	ldr	r3, [pc, #8]	@ (1c10 <register_fini+0xc>)
+    1c06:	b113      	cbz	r3, 1c0e <register_fini+0xa>
+    1c08:	4802      	ldr	r0, [pc, #8]	@ (1c14 <register_fini+0x10>)
+    1c0a:	f000 b805 	b.w	1c18 <atexit>
+    1c0e:	4770      	bx	lr
+    1c10:	00000000 	.word	0x00000000
+    1c14:	00001c25 	.word	0x00001c25
+
+00001c18 <atexit>:
+    1c18:	2300      	movs	r3, #0
+    1c1a:	4601      	mov	r1, r0
+    1c1c:	461a      	mov	r2, r3
+    1c1e:	4618      	mov	r0, r3
+    1c20:	f000 b814 	b.w	1c4c <__register_exitproc>
+
+00001c24 <__libc_fini_array>:
+    1c24:	b538      	push	{r3, r4, r5, lr}
+    1c26:	4d07      	ldr	r5, [pc, #28]	@ (1c44 <__libc_fini_array+0x20>)
+    1c28:	4c07      	ldr	r4, [pc, #28]	@ (1c48 <__libc_fini_array+0x24>)
+    1c2a:	1b2c      	subs	r4, r5, r4
+    1c2c:	10a4      	asrs	r4, r4, #2
+    1c2e:	d005      	beq.n	1c3c <__libc_fini_array+0x18>
+    1c30:	3c01      	subs	r4, #1
+    1c32:	f855 3d04 	ldr.w	r3, [r5, #-4]!
+    1c36:	4798      	blx	r3
+    1c38:	2c00      	cmp	r4, #0
+    1c3a:	d1f9      	bne.n	1c30 <__libc_fini_array+0xc>
+    1c3c:	e8bd 4038 	ldmia.w	sp!, {r3, r4, r5, lr}
+    1c40:	f000 b8f6 	b.w	1e30 <_fini>
+    1c44:	00001e40 	.word	0x00001e40
+    1c48:	00001e3c 	.word	0x00001e3c
+
+00001c4c <__register_exitproc>:
+    1c4c:	e92d 43f8 	stmdb	sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
+    1c50:	4d1b      	ldr	r5, [pc, #108]	@ (1cc0 <__register_exitproc+0x74>)
+    1c52:	4606      	mov	r6, r0
+    1c54:	6828      	ldr	r0, [r5, #0]
+    1c56:	4698      	mov	r8, r3
+    1c58:	460f      	mov	r7, r1
+    1c5a:	4691      	mov	r9, r2
+    1c5c:	f7ff ffce 	bl	1bfc <__retarget_lock_acquire_recursive>
+    1c60:	4b18      	ldr	r3, [pc, #96]	@ (1cc4 <__register_exitproc+0x78>)
+    1c62:	681c      	ldr	r4, [r3, #0]
+    1c64:	b31c      	cbz	r4, 1cae <__register_exitproc+0x62>
+    1c66:	6828      	ldr	r0, [r5, #0]
+    1c68:	6865      	ldr	r5, [r4, #4]
+    1c6a:	2d1f      	cmp	r5, #31
+    1c6c:	dc22      	bgt.n	1cb4 <__register_exitproc+0x68>
+    1c6e:	b94e      	cbnz	r6, 1c84 <__register_exitproc+0x38>
+    1c70:	1c6b      	adds	r3, r5, #1
+    1c72:	3502      	adds	r5, #2
+    1c74:	6063      	str	r3, [r4, #4]
+    1c76:	f844 7025 	str.w	r7, [r4, r5, lsl #2]
+    1c7a:	f7ff ffc1 	bl	1c00 <__retarget_lock_release_recursive>
+    1c7e:	2000      	movs	r0, #0
+    1c80:	e8bd 83f8 	ldmia.w	sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
+    1c84:	eb04 0185 	add.w	r1, r4, r5, lsl #2
+    1c88:	2301      	movs	r3, #1
+    1c8a:	f8c1 9088 	str.w	r9, [r1, #136]	@ 0x88
+    1c8e:	f8d4 2188 	ldr.w	r2, [r4, #392]	@ 0x188
+    1c92:	40ab      	lsls	r3, r5
+    1c94:	431a      	orrs	r2, r3
+    1c96:	2e02      	cmp	r6, #2
+    1c98:	f8c4 2188 	str.w	r2, [r4, #392]	@ 0x188
+    1c9c:	f8c1 8108 	str.w	r8, [r1, #264]	@ 0x108
+    1ca0:	d1e6      	bne.n	1c70 <__register_exitproc+0x24>
+    1ca2:	f8d4 218c 	ldr.w	r2, [r4, #396]	@ 0x18c
+    1ca6:	431a      	orrs	r2, r3
+    1ca8:	f8c4 218c 	str.w	r2, [r4, #396]	@ 0x18c
+    1cac:	e7e0      	b.n	1c70 <__register_exitproc+0x24>
+    1cae:	4c06      	ldr	r4, [pc, #24]	@ (1cc8 <__register_exitproc+0x7c>)
+    1cb0:	601c      	str	r4, [r3, #0]
+    1cb2:	e7d8      	b.n	1c66 <__register_exitproc+0x1a>
+    1cb4:	f7ff ffa4 	bl	1c00 <__retarget_lock_release_recursive>
+    1cb8:	f04f 30ff 	mov.w	r0, #4294967295	@ 0xffffffff
+    1cbc:	e7e0      	b.n	1c80 <__register_exitproc+0x34>
+    1cbe:	bf00      	nop
+    1cc0:	20000230 	.word	0x20000230
+    1cc4:	2000ace8 	.word	0x2000ace8
+    1cc8:	2000acec 	.word	0x2000acec
+
+00001ccc <spaceship>:
+    1ccc:	00000000 c6180000 0000c618 00000000     ................
+    1cdc:	00000000 ffffc618 c618ffff 00000000     ................
+    1cec:	c6180000 07ffffff ffff07ff 0000c618     ................
+    1cfc:	ffff0000 001f07ff 07ff001f 0000ffff     ................
+    1d0c:	ffff8410 001f07ff 07ff001f 8410ffff     ................
+    1d1c:	ffffc618 07ff07ff 07ff07ff c618ffff     ................
+    1d2c:	ffffffff 07ffffff ffff07ff ffffffff     ................
+    1d3c:	c618ffff 07e0ffff ffff07e0 ffffc618     ................
+    1d4c:	c618c618 07e007e0 07e007e0 c618c618     ................
+    1d5c:	07e08410 f100ffff fffff100 841007e0     ................
+    1d6c:	07e007e0 f1000000 0000f100 07e007e0     ................
+    1d7c:	000007e0 f1000000 0000f100 07e00000     ................
+    1d8c:	00000000 f1000000 0000f100 00000000     ................
+
+00001d9c <enemyShip>:
+    1d9c:	00000000 ffe0ffe0 ffe0ffe0 00000000     ................
+    1dac:	ffe00000 ffe0ffe0 ffe0ffe0 0000ffe0     ................
+    1dbc:	ffe0ffe0 fd80fd80 fd80fd80 ffe0ffe0     ................
+    1dcc:	fd80ffe0 0000fd80 fd800000 ffe0fd80     ................
+    1ddc:	fd80ffe0 00000000 00000000 ffe0fd80     ................
+    1dec:	fd80ffe0 fd80fd80 fd80fd80 ffe0fd80     ................
+    1dfc:	ffe00000 ffe0ffe0 ffe0ffe0 0000ffe0     ................
+    1e0c:	00000000 0000ffe0 ffe00000 00000000     ................
+
+00001e1c <_init>:
+    1e1c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    1e1e:	bf00      	nop
+    1e20:	bcf8      	pop	{r3, r4, r5, r6, r7}
+    1e22:	bc08      	pop	{r3}
+    1e24:	469e      	mov	lr, r3
+    1e26:	4770      	bx	lr
+
+00001e28 <__init_array_start>:
+    1e28:	00001c05 	.word	0x00001c05
+
+00001e2c <__frame_dummy_init_array_entry>:
+    1e2c:	000002c9                                ....
+
+00001e30 <_fini>:
+    1e30:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+    1e32:	bf00      	nop
+    1e34:	bcf8      	pop	{r3, r4, r5, r6, r7}
+    1e36:	bc08      	pop	{r3}
+    1e38:	469e      	mov	lr, r3
+    1e3a:	4770      	bx	lr
+
+00001e3c <__do_global_dtors_aux_fini_array_entry>:
+    1e3c:	02a1 0000                                   ....

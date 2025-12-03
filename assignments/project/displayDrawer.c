@@ -3,87 +3,49 @@
 
 
 //display variables
+#define MEMORY_SIZE 128
+
+bool gameOver = false;
+
 bool display_update_needed = true;
-uint16_t background[DISPLAY_SIZE][DISPLAY_SIZE] = {0};
+uint16_t background[MEMORY_SIZE][DISPLAY_SIZE] = {0};
+uint8_t backgroundStart = 0;
 uint16_t screen[DISPLAY_SIZE][DISPLAY_SIZE];
 
+
+int randRange(int min, int max) {
+    return min + (rand() % (max - min + 1));
+}
+
 void generateSpaceBackground() {
-    static const uint8_t sin8[256] = {
-        128, 130, 133, 136, 139, 143, 146, 149, 152, 155, 158, 161, 164, 167, 170, 173,
-        176, 178, 181, 184, 187, 190, 192, 195, 198, 200, 203, 205, 208, 210, 212, 215,
-        217, 219, 221, 223, 225, 227, 229, 231, 232, 234, 236, 237, 238, 240, 241, 242,
-        243, 244, 245, 246, 247, 247, 248, 248, 249, 249, 249, 250, 250, 250, 250, 250,
-        250, 250, 250, 250, 250, 249, 249, 249, 248, 248, 247, 247, 246, 245, 244, 243,
-        242, 241, 240, 238, 237, 236, 234, 232, 231, 229, 227, 225, 223, 221, 219, 217,
-        215, 212, 210, 208, 205, 203, 200, 198, 195, 192, 190, 187, 184, 181, 178, 176,
-        173, 170, 167, 164, 161, 158, 155, 152, 149, 146, 143, 139, 136, 133, 130, 128,
-        125, 122, 119, 116, 112, 109, 106, 103, 100, 97, 94, 91, 88, 85, 82, 79,
-        76, 73, 71, 68, 65, 62, 60, 57, 55, 52, 49, 47, 45, 43, 41, 39,
-        37, 35, 33, 31, 29, 28, 26, 24, 23, 21, 20, 18, 17, 15, 14, 13,
-        12, 11, 10, 9, 8, 8, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5,
-        5, 5, 5, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 10, 11, 12,
-        13, 14, 15, 17, 18, 20, 21, 23, 24, 26, 28, 29, 31, 33, 35, 37,
-        39, 41, 43, 45, 47, 49, 52, 55, 57, 60, 62, 65, 68, 71, 73, 76,
-        79, 82, 85, 88, 91, 94, 97, 100, 103, 106, 109, 112, 116, 119, 122, 125};
-
-    for (int y = 0; y < 96; y++) {
-        for (int x = 0; x < 96; x++) {
-            // Base dark space (deep blue-purple)
-            uint8_t r = 8 + (x >> 4); // subtle red gradient
-            uint8_t g = 4 + (y >> 5);
-            uint8_t b = 20 + ((95 - y) >> 2); // brighter blue at top
-
-            // Soft nebula using integer noise
-            uint32_t n1 = (x * 13 + y * 37) & 255;
-            uint32_t n2 = (x * 27 + y * 71) & 255;
-            uint32_t n3 = (x * 51 + y * 19) & 255;
-            uint32_t nebula = (sin8[n1] + sin8[n2] + sin8[n3]) >> 4; // 0..48
-
-            // Add some purple glow
-            r += nebula >> 1;
-            g += nebula >> 2;
-            b += nebula >> 1;
-
-            // Stars — fixed positions using magic numbers (looks random)
-            uint32_t star_hash = (x * 9631 + y * 8977);
-            if ((star_hash & 0xFF) < 3) { // ~1.2% chance → bright star
-                r = g = b = 255;
-            }
-            else if ((star_hash & 0x1FF) < 5) { // medium stars
-                r += 120;
-                g += 120;
-                b += 140;
-            }
-            else if ((star_hash & 0x3FF) < 8) { // tiny twinkles
-                r += 80;
-                g += 80;
-                b += 100;
-            }
-
-            // Clamp
-            if (r > 255)
-                r = 255;
-            if (g > 255)
-                g = 255;
-            if (b > 255)
-                b = 255;
-
-            // Convert to RGB565
-            background[y][x] = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
-            screen[y][x] = background[y][x];
+    for (int i = 0; i < MEMORY_SIZE; i++) {
+        for (int j = 0; j < DISPLAY_SIZE; j++) {
+            if(randRange(0, DISPLAY_SIZE) > 95)   background[i][j] = WHITE;
+            else            background[i][j] = BLACK;
         }
     }
-
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+            screen[i][j] = background[i][j];
+        }
+    }
 }
 
 void updateDisplay() {
-    if (display_update_needed) {
+    if (display_update_needed && !gameOver) {
         drawArray(0, DISPLAY_SIZE, 0, DISPLAY_SIZE, *screen);
         display_update_needed = false;
     }
 }
 
-
+void moveBackground() {
+    backgroundStart = (backgroundStart - 1) % MEMORY_SIZE;
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+            screen[i][j] = background[(i+backgroundStart)%MEMORY_SIZE][j];
+        }
+    }
+}
 
 
 //---------------------------------Collision detection---------------------------------
@@ -96,44 +58,40 @@ bool intersects(int c, int d, int cs, int ds, int a, int b, int as, int bs) {
 
 
 //---------------------------------Everything related to spaceship---------------------------------
-#define SHIP_SIZE_X       16
+#define SHIP_SIZE_X       13
 #define SHIP_SIZE_Y       8
 #define MAX_SHIP_POS_X    (DISPLAY_SIZE - SHIP_SIZE_X)
 #define MAX_SHIP_POS_Y    (DISPLAY_SIZE - SHIP_SIZE_Y)
+#define DEFAULT_SHIP_X    DISPLAY_SIZE - SHIP_SIZE_X * 1.5
+#define DEFAULT_SHIP_Y    DISPLAY_SIZE / 2 - SHIP_SIZE_Y / 2
 
-uint8_t spaceX = DISPLAY_SIZE - SHIP_SIZE_X * 1.5;
-uint8_t prevSpaceX = 0;
-uint8_t spaceY = DISPLAY_SIZE / 2 - SHIP_SIZE_Y / 2;
-uint8_t prevSpaceY = 0;
-bool spaceship_update_needed = true;
+uint8_t spaceX = DEFAULT_SHIP_X;
+uint8_t spaceY = DEFAULT_SHIP_Y;
 const uint16_t spaceship[SHIP_SIZE_X][SHIP_SIZE_Y] = {
-    {BLACK,BLACK,GRAY,LIGHT_GRAY,LIGHT_GRAY,GRAY,BLACK,BLACK},
+    {BLACK,BLACK,BLACK,LIGHT_GRAY,LIGHT_GRAY,BLACK,BLACK,BLACK},
     {BLACK,BLACK,LIGHT_GRAY,WHITE,WHITE,LIGHT_GRAY,BLACK,BLACK},
     {BLACK,LIGHT_GRAY,WHITE,CYAN,CYAN,WHITE,LIGHT_GRAY,BLACK},
     {BLACK,WHITE,CYAN,BLUE,BLUE,CYAN,WHITE,BLACK},
     {GRAY,WHITE,CYAN,BLUE,BLUE,CYAN,WHITE,GRAY},
     {LIGHT_GRAY,WHITE,CYAN,CYAN,CYAN,CYAN,WHITE,LIGHT_GRAY},
     {WHITE,WHITE,WHITE,CYAN,CYAN,WHITE,WHITE,WHITE},
-    {WHITE,LIGHT_GRAY,WHITE,WHITE,WHITE,WHITE,LIGHT_GRAY,WHITE},
-    {LIGHT_GRAY,LIGHT_GRAY,WHITE,WHITE,WHITE,WHITE,LIGHT_GRAY,LIGHT_GRAY},
-    {GRAY,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,GRAY},
-    {GREEN,GREEN,WHITE,WHITE,WHITE,WHITE,GREEN,GREEN},
-    {GREEN,YELLOW,YELLOW,WHITE,WHITE,YELLOW,YELLOW,GREEN},
-    {BLACK,GREEN,BLUE,BLUE,BLUE,BLUE,GREEN,BLACK},
-    {BLACK,BLACK,GREEN,GREEN,GREEN,GREEN,BLACK,BLACK},
+    {WHITE,LIGHT_GRAY,WHITE,GREEN,GREEN,WHITE,LIGHT_GRAY,WHITE},
+    {LIGHT_GRAY,LIGHT_GRAY,GREEN,GREEN,GREEN,GREEN,LIGHT_GRAY,LIGHT_GRAY},
+    {GRAY,GREEN,WHITE,RED,RED,WHITE,GREEN,GRAY},
+    {GREEN,GREEN,BLACK,RED,RED,BLACK,GREEN,GREEN},
+    {GREEN,BLACK,BLACK,RED,RED,BLACK,BLACK,GREEN},
     {BLACK,BLACK,BLACK,RED,RED,BLACK,BLACK,BLACK},
-    {BLACK,BLACK,BLACK,RED,RED,BLACK,BLACK,BLACK}
 };
 
 
 void addSpaceship() {
-        for (int i = 0; i < SHIP_SIZE_X; i++) {
-            for (int j = 0; j < SHIP_SIZE_Y; j++) {
-                if (spaceship[i][j] != 0)
-                    screen[spaceX + i][spaceY + j] = spaceship[i][j];
-            }
+    for (int i = 0; i < SHIP_SIZE_X; i++) {
+        for (int j = 0; j < SHIP_SIZE_Y; j++) {
+            if (spaceship[i][j] != 0)
+                screen[spaceX + i][spaceY + j] = spaceship[i][j];
         }
-        display_update_needed = true;
+    }
+    display_update_needed = true;
 }
 
 void removeSpaceship() {
@@ -191,10 +149,6 @@ const uint16_t enemyShip[ENEMY_SIZE][ENEMY_SIZE] = {
 uint8_t activeEnemyCount = 0;
 
 
-int randRange(int min, int max) {
-    return min + (rand() % (max - min + 1));
-}
-
 void addEnemies() {
     activeEnemyCount = ENEMY_COUNT;
 
@@ -202,6 +156,7 @@ void addEnemies() {
         if(!enemyPositions[i][2]) {
             enemyPositions[i][0] = randRange(0, ENEMY_BORDER);
             enemyPositions[i][1] = randRange(i*ENEMY_BLOCKS, i*ENEMY_BLOCKS);
+            enemyPositions[i][2] = true;
         }
     }
 
@@ -211,7 +166,7 @@ void addEnemies() {
 void spawnEnemies() {
     for (int enemy = 0; enemy < activeEnemyCount; enemy++) {
 
-        if(!enemyPositions[enemy][2]) {
+        if(enemyPositions[enemy][2]) {
             uint8_t enemyX = enemyPositions[enemy][0];
             uint8_t enemyY = enemyPositions[enemy][1];
 
@@ -246,11 +201,9 @@ void removeEnemy(int i) {
 
 
 //---------------------------------Everything related to projectile---------------------------------
-#define PROJECTILE_SIZE 4
-#define PROJECTILE_NUM  12
-
-#define ENEMY_DIRECTION   1
-#define PLAYER_DIRECTION -5
+#define PROJECTILE_SIZE     4
+#define PROJECTILE_NUM      12
+#define PLAYER_DIRECTION    -5
 
 int projectiles[PROJECTILE_NUM][3];
 int newProjectileIndex = 0;
@@ -258,9 +211,9 @@ bool canAddProject = true;
 
 uint16_t projectileDesign[PROJECTILE_SIZE][PROJECTILE_SIZE] = {
     {BLACK,  CYAN, CYAN,  BLACK},
-    {BLUE,  CYAN, CYAN,  BLUE},
-    {BLUE,  CYAN, CYAN,  BLUE},
-    {BLUE,  CYAN, CYAN,  BLUE},
+    {CYAN,  CYAN, CYAN,  CYAN},
+    {CYAN,  CYAN, CYAN,  CYAN},
+    {BLACK,  CYAN, CYAN,  BLACK},
 };
 
 void addProjectile() {
@@ -332,8 +285,8 @@ void updateProjectile() {
                 if(projectX+PROJECTILE_SIZE > 0) {
                     for(int k = 0; k < PROJECTILE_SIZE; k++) {
                         for(int j = 0; j < PROJECTILE_SIZE; j++) {
-                                if (projectileDesign[k][j] != 0 && projectX+k >= 0)
-                                    screen[projectX + k][projectY + j] = projectileDesign[k][j];
+                            if (projectileDesign[k][j] != 0 && projectX+k >= 0)
+                                screen[projectX + k][projectY + j] = projectileDesign[k][j];
                         }
                     }
                     projectiles[i][0] = projectX;
@@ -346,4 +299,128 @@ void updateProjectile() {
         }
     }
     display_update_needed = true;
+}
+
+//--------------------------------------------------------------------------------------------------
+
+#define ENEMY_PROJECTILE_NUM  6
+#define ENEMY_DIRECTION       3
+
+int enemyProjectiles[ENEMY_COUNT][3];
+int newEnemyProjectile = 0;
+bool canAddEnemyProject = true;
+
+void addEnemyProjectile() {
+    for(int i = 0; i < ENEMY_PROJECTILE_NUM && canAddEnemyProject; i++) {
+        int enemy = -1;
+        for(int i = 0; i < ENEMY_PROJECTILE_NUM; i++) {
+            enemy = randRange(0,ENEMY_COUNT-1);
+            if(!enemyProjectiles[enemy][2]) break;
+        }
+        if(!enemyProjectiles[enemy][2]) {
+            int projectX = enemyPositions[enemy][0]+ENEMY_SIZE;
+            int projectY = enemyPositions[enemy][1]+PROJECTILE_SIZE/2;
+            
+            for(int i = 0; i < PROJECTILE_SIZE; i++) {
+                for(int j = 0; j < PROJECTILE_SIZE; j++) {
+                        if (projectileDesign[i][j] != 0 && projectX+i >= 0)
+                            screen[projectX + i][projectY + j] = projectileDesign[i][j];
+                }
+            }
+            enemyProjectiles[enemy][0] = projectX;
+            enemyProjectiles[enemy][1] = projectY;
+            enemyProjectiles[enemy][2] = true;
+
+            newEnemyProjectile = newEnemyProjectile + 1;
+            if(newEnemyProjectile == ENEMY_PROJECTILE_NUM) {
+                canAddEnemyProject = false;
+            }
+            
+            display_update_needed = true;
+        }
+    }
+}
+
+void removeEnemyProjectile(int projectX, int projectY) {
+    for(int i = 0; i < PROJECTILE_SIZE; i++) {
+        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+                if (projectileDesign[i][j] != 0 && projectX+i >= 0)
+                    screen[projectX + i][projectY + j] = background[projectX + i][projectY + j];
+        }
+    }
+}
+
+void updateEnemyProjectile() {
+    for(int i = 0; i < ENEMY_COUNT; i++) {
+        if(enemyProjectiles[i][2]) {
+            int projectX = enemyProjectiles[i][0];
+            int projectY = enemyProjectiles[i][1];
+
+            removeEnemyProjectile(projectX, projectY);
+
+            bool process = true;
+
+            if (intersects(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE)) {
+                removeSpaceship();
+
+                enemyProjectiles[i][2] = false;
+                canAddEnemyProject = false;
+                newEnemyProjectile--;
+                gameOver = true;
+
+                process = false;
+            }
+
+            if(process) {
+                projectX += ENEMY_DIRECTION;
+                if(projectX+PROJECTILE_SIZE < DISPLAY_SIZE) {
+                    for(int k = 0; k < PROJECTILE_SIZE; k++) {
+                        for(int j = 0; j < PROJECTILE_SIZE; j++) {
+                            if (projectileDesign[k][j] != 0 && projectX+k < DISPLAY_SIZE)
+                                screen[projectX + k][projectY + j] = projectileDesign[k][j];
+                        }
+                    }
+                    enemyProjectiles[i][0] = projectX;
+                }
+                else {
+                    enemyProjectiles[i][2] = false;
+                    canAddEnemyProject = true;
+                    newEnemyProjectile--;
+                }
+            }
+        }
+    }
+    display_update_needed = true;
+}
+
+
+void resetGame() {
+    spaceX = DEFAULT_SHIP_X;
+    spaceY = DEFAULT_SHIP_Y;
+
+    for(int i = 0; i < ENEMY_COUNT; i++) {
+        enemyPositions[i][2] = 0;
+        enemyProjectiles[i][2] = 0;
+        projectiles[i][2] = 0;
+    }
+
+    for(int i = 0; i < PROJECTILE_NUM; i++) {
+        projectiles[i][2] = 0;
+    }
+    newEnemyProjectile = 0;
+    newProjectileIndex = 0;
+    canAddEnemyProject = true;
+    canAddProject = true;
+    activeEnemyCount = 0;
+    gameOver = false;
+    display_update_needed = true;
+
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+        screen[i][j] = background[i][j];
+        }
+    }
+
+    addSpaceship();
+    addEnemies();
 }
