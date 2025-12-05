@@ -15,4 +15,4 @@
 
 void displayInit();
 void drawPixel(uint8_t x, uint8_t y, uint16_t color);
-void drawArray(uint8_t x, uint8_t X_size, uint8_t y, uint8_t Y_size, uint16_t *color);
+void drawArray(uint8_t x, uint8_t y, uint8_t X_size, uint8_t Y_size, uint16_t color[DISPLAY_SIZE][DISPLAY_SIZE]);

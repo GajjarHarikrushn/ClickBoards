@@ -4,8 +4,11 @@
 #include "stdlib.h"
 #include <math.h>
 
-#define ENEMY_COUNT 12
+#define ENEMY_COUNT             12
+#define PROJECTILE_NUM          12
+#define ENEMY_PROJECTILE_NUM    6
 
+bool game_over();
 void resetGame();
 
 void generateSpaceBackground();

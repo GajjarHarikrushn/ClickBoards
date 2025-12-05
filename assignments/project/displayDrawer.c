@@ -10,7 +10,6 @@ bool gameOver = false;
 uint16_t background[MEMORY_SIZE][DISPLAY_SIZE] = {0};
 uint8_t backgroundStart = 0;
 uint16_t screen[DISPLAY_SIZE][DISPLAY_SIZE];
-uint16_t gameover[DISPLAY_SIZE][DISPLAY_SIZE];
 
 int randRange(int min, int max) {
     return min + (rand() % (max - min + 1));
@@ -26,26 +25,25 @@ void generateSpaceBackground() {
     for(int i = 0; i < DISPLAY_SIZE*DISPLAY_SIZE; i++) {
         screen[0][i] = background[0][i];
     }
-
-    for(int i = 0; i < DISPLAY_SIZE*DISPLAY_SIZE; i++) {
-        gameover[0][i] = randRange(0x0000,0xFFFF);
-    }
 }
 
 void updateDisplay() {
-    if(gameOver) {
+    if(gameOver)
         for(int i = 0; i < DISPLAY_SIZE*DISPLAY_SIZE; i++) {
-            screen[0][i] = gameover[0][i];
+            screen[0][i] = 0x0000;
         }
-    }
-    drawArray(0, DISPLAY_SIZE, 0, DISPLAY_SIZE, *screen);
+    drawArray(0, 0, DISPLAY_SIZE, DISPLAY_SIZE, screen);
 }
 
 void moveBackground() {
+    uint16_t oldStart = backgroundStart;
     backgroundStart = (backgroundStart - 1) % MEMORY_SIZE;
     for(int i = 0; i < DISPLAY_SIZE; i++) {
         for(int j = 0; j < DISPLAY_SIZE; j++) {
-            screen[i][j] = background[(i+backgroundStart)%MEMORY_SIZE][j];
+            if(background[(i+oldStart)%MEMORY_SIZE][j] != background[(i+backgroundStart)%MEMORY_SIZE][j]) {//only change the pixels that change in colors
+                // screen[i][j] = background[(i+backgroundStart)%MEMORY_SIZE][j];
+                drawPixel(i,j,background[(i+backgroundStart)%MEMORY_SIZE][j]);
+            }
         }
     }
 }
@@ -56,76 +54,6 @@ bool intersects(int c, int d, int cs, int ds, int a, int b, int as, int bs) {
     bool x_axis = (c >= a) && (c <= a+as);
     bool y_axis = ((d >= b) && (d <= b+bs)) || ((d+ds >= b) && (d+ds <= b+bs));
     return x_axis && y_axis;
-}
-
-
-
-//---------------------------------Everything related to spaceship---------------------------------
-#define SHIP_SIZE_X       13
-#define SHIP_SIZE_Y       8
-#define MAX_SHIP_POS_X    (DISPLAY_SIZE - SHIP_SIZE_X)
-#define MAX_SHIP_POS_Y    (DISPLAY_SIZE - SHIP_SIZE_Y)
-#define DEFAULT_SHIP_X    DISPLAY_SIZE - SHIP_SIZE_X * 1.5
-#define DEFAULT_SHIP_Y    DISPLAY_SIZE / 2 - SHIP_SIZE_Y / 2
-
-uint8_t spaceX = DEFAULT_SHIP_X;
-uint8_t spaceY = DEFAULT_SHIP_Y;
-const uint16_t spaceship[SHIP_SIZE_X][SHIP_SIZE_Y] = {
-    {BLACK,BLACK,BLACK,LIGHT_GRAY,LIGHT_GRAY,BLACK,BLACK,BLACK},
-    {BLACK,BLACK,LIGHT_GRAY,WHITE,WHITE,LIGHT_GRAY,BLACK,BLACK},
-    {BLACK,LIGHT_GRAY,WHITE,CYAN,CYAN,WHITE,LIGHT_GRAY,BLACK},
-    {BLACK,WHITE,CYAN,BLUE,BLUE,CYAN,WHITE,BLACK},
-    {GRAY,WHITE,CYAN,BLUE,BLUE,CYAN,WHITE,GRAY},
-    {LIGHT_GRAY,WHITE,CYAN,CYAN,CYAN,CYAN,WHITE,LIGHT_GRAY},
-    {WHITE,WHITE,WHITE,CYAN,CYAN,WHITE,WHITE,WHITE},
-    {WHITE,LIGHT_GRAY,WHITE,GREEN,GREEN,WHITE,LIGHT_GRAY,WHITE},
-    {LIGHT_GRAY,LIGHT_GRAY,GREEN,GREEN,GREEN,GREEN,LIGHT_GRAY,LIGHT_GRAY},
-    {GRAY,GREEN,WHITE,RED,RED,WHITE,GREEN,GRAY},
-    {GREEN,GREEN,BLACK,RED,RED,BLACK,GREEN,GREEN},
-    {GREEN,BLACK,BLACK,RED,RED,BLACK,BLACK,GREEN},
-    {BLACK,BLACK,BLACK,RED,RED,BLACK,BLACK,BLACK},
-};
-
-
-void addSpaceship() {
-    for (int i = 0; i < SHIP_SIZE_X; i++) {
-        for (int j = 0; j < SHIP_SIZE_Y; j++) {
-            if (spaceship[i][j] != 0)
-                screen[spaceX + i][spaceY + j] = spaceship[i][j];
-        }
-    }
-}
-
-void removeSpaceship() {
-    for (int i = 0; i < SHIP_SIZE_X; i++) {
-        for (int j = 0; j < SHIP_SIZE_Y; j++) {
-            if (spaceship[i][j] != 0)
-                screen[spaceX + i][spaceY + j] = background[spaceX + i][spaceY + j];
-        }
-    }
-}
-
-void updateSpacePos(uint8_t joyX, uint8_t joyY) {
-    int x = 3 - joyX;
-    int y = joyY - 3;
-
-    if (x || y) {
-        x = (int)spaceX + x;
-        y = (int)spaceY + y;
-
-        if (x < 0)              x = 0;
-        else if (x > MAX_SHIP_POS_X)     x = MAX_SHIP_POS_X;
-
-        if (y < 0)              y = 0;
-        else if (y > MAX_SHIP_POS_Y)     y = MAX_SHIP_POS_Y;
-
-        if (x != spaceX || y != spaceY) {
-            removeSpaceship();
-            spaceX = (uint8_t)x;
-            spaceY = (uint8_t)y;
-            addSpaceship();
-        }
-    }
 }
 
 
@@ -182,6 +110,7 @@ void spawnEnemies() {
                     }
                 }
             }
+            drawArray(enemyX, enemyY, ENEMY_SIZE, ENEMY_SIZE, screen);
             enemyPositions[enemy][2] = true;
         }
     }
@@ -192,10 +121,12 @@ void removeEnemy(int index) {
     uint8_t enemyY = enemyPositions[index][1];
     for(int i = 0; i < ENEMY_SIZE; i++) {
         for (int j = 0; j < ENEMY_SIZE; j++) {
-            if (enemyShip[i][j] != 0)
+            if (enemyShip[i][j] != 0) {
                 screen[enemyX + i][enemyY + j] = background[enemyX + i][enemyY + j];
+            }
         }
     }
+    drawArray(enemyX, enemyY, ENEMY_SIZE, ENEMY_SIZE, screen);
     activeEnemyCount--;
     enemyPositions[index][2] = false;
     if(activeEnemyCount < 8) {
@@ -205,10 +136,90 @@ void removeEnemy(int index) {
 
 
 
+//---------------------------------Everything related to spaceship---------------------------------
+#define SHIP_SIZE_X       13
+#define SHIP_SIZE_Y       8
+#define MAX_SHIP_POS_X    (DISPLAY_SIZE - SHIP_SIZE_X)
+#define MAX_SHIP_POS_Y    (DISPLAY_SIZE - SHIP_SIZE_Y)
+#define DEFAULT_SHIP_X    DISPLAY_SIZE - SHIP_SIZE_X * 1.5
+#define DEFAULT_SHIP_Y    DISPLAY_SIZE / 2 - SHIP_SIZE_Y / 2
+
+uint8_t spaceX = DEFAULT_SHIP_X;
+uint8_t spaceY = DEFAULT_SHIP_Y;
+const uint16_t spaceship[SHIP_SIZE_X][SHIP_SIZE_Y] = {
+    {BLACK,BLACK,BLACK,LIGHT_GRAY,LIGHT_GRAY,BLACK,BLACK,BLACK},
+    {BLACK,BLACK,LIGHT_GRAY,WHITE,WHITE,LIGHT_GRAY,BLACK,BLACK},
+    {BLACK,LIGHT_GRAY,WHITE,CYAN,CYAN,WHITE,LIGHT_GRAY,BLACK},
+    {BLACK,WHITE,CYAN,BLUE,BLUE,CYAN,WHITE,BLACK},
+    {GRAY,WHITE,CYAN,BLUE,BLUE,CYAN,WHITE,GRAY},
+    {LIGHT_GRAY,WHITE,CYAN,CYAN,CYAN,CYAN,WHITE,LIGHT_GRAY},
+    {WHITE,WHITE,WHITE,CYAN,CYAN,WHITE,WHITE,WHITE},
+    {WHITE,LIGHT_GRAY,WHITE,GREEN,GREEN,WHITE,LIGHT_GRAY,WHITE},
+    {LIGHT_GRAY,LIGHT_GRAY,GREEN,GREEN,GREEN,GREEN,LIGHT_GRAY,LIGHT_GRAY},
+    {GRAY,GREEN,WHITE,RED,RED,WHITE,GREEN,GRAY},
+    {GREEN,GREEN,BLACK,RED,RED,BLACK,GREEN,GREEN},
+    {GREEN,BLACK,BLACK,RED,RED,BLACK,BLACK,GREEN},
+    {BLACK,BLACK,BLACK,RED,RED,BLACK,BLACK,BLACK},
+};
+
+
+void addSpaceship() {
+    for (int i = 0; i < SHIP_SIZE_X; i++) {
+        for (int j = 0; j < SHIP_SIZE_Y; j++) {
+            if (spaceship[i][j] != 0)
+                screen[spaceX + i][spaceY + j] = spaceship[i][j];
+        }
+    }
+    drawArray(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, screen);
+}
+
+void removeSpaceship() {
+    for (int i = 0; i < SHIP_SIZE_X; i++) {
+        for (int j = 0; j < SHIP_SIZE_Y; j++) {
+            if (spaceship[i][j] != 0)
+                screen[spaceX + i][spaceY + j] = background[spaceX + i][spaceY + j];
+        }
+    }
+    drawArray(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, screen);
+}
+
+void updateSpacePos(uint8_t joyX, uint8_t joyY) {
+    int x = 3 - joyX;
+    int y = joyY - 3;
+
+    if (x || y) {
+        x = (int)spaceX + x;
+        y = (int)spaceY + y;
+
+        if (x < 0)              x = 0;
+        else if (x > MAX_SHIP_POS_X)     x = MAX_SHIP_POS_X;
+
+        if (y < 0)              y = 0;
+        else if (y > MAX_SHIP_POS_Y)     y = MAX_SHIP_POS_Y;
+
+        if (x != spaceX || y != spaceY) {
+            removeSpaceship();
+            spaceX = (uint8_t)x;
+            spaceY = (uint8_t)y;
+            for(int i = 0; i < ENEMY_COUNT; i++) {
+                if(enemyPositions[i][2]) {
+                    if(intersects(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, enemyPositions[i][0], enemyPositions[i][1], ENEMY_SIZE, ENEMY_SIZE)) {
+                        gameOver = true;
+                        return;
+                    }
+                }
+            }
+            addSpaceship();
+        }
+    }
+}
+
+
+
 //---------------------------------Everything related to projectile---------------------------------
 #define PROJECTILE_SIZE     4
 #define PROJECTILE_NUM      12
-#define PLAYER_DIRECTION    -5
+#define PLAYER_DIRECTION    -2
 
 int projectiles[PROJECTILE_NUM][3];
 int newProjectileIndex = 0;
@@ -228,10 +239,11 @@ void addProjectile() {
         
         for(int i = 0; i < PROJECTILE_SIZE; i++) {
             for(int j = 0; j < PROJECTILE_SIZE; j++) {
-                    if (projectileDesign[i][j] != 0 && projectX+i >= 0)
-                        screen[projectX + i][projectY + j] = projectileDesign[i][j];
+                if (projectileDesign[i][j] != 0 && projectX+i >= 0)
+                    screen[projectX + i][projectY + j] = projectileDesign[i][j];
             }
         }
+        drawArray(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, screen);
         projectiles[newProjectileIndex][0] = projectX;
         projectiles[newProjectileIndex][1] = projectY;
         projectiles[newProjectileIndex][2] = true;
@@ -246,10 +258,12 @@ void addProjectile() {
 void removeProjectile(int index, int projectX, int projectY) {
     for(int i = 0; i < PROJECTILE_SIZE; i++) {
         for(int j = 0; j < PROJECTILE_SIZE; j++) {
-                if (projectileDesign[i][j] != 0 && projectX+i >= 0)
-                    screen[projectX + i][projectY + j] = background[projectX + i][projectY + j];
+            if (projectileDesign[i][j] != 0 && projectX+i >= 0) {
+                screen[projectX + i][projectY + j] = background[projectX + i][projectY + j];
+            }
         }
     }
+    drawArray(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, screen);
 }
 
 void updateProjectile() {
@@ -270,9 +284,12 @@ void updateProjectile() {
                         enemyPositions[j][2] = false;
                         removeEnemy(j);
 
-                        for (int k = 0; k < ENEMY_SIZE; k++)
-                            for (int l = 0; l < ENEMY_SIZE; l++)
-                                screen[ey + k][ex + l] = background[ey + k][ex + l];
+                        for (int k = 0; k < ENEMY_SIZE; k++) {
+                            for (int l = 0; l < ENEMY_SIZE; l++) {
+                                screen[ex + k][ey + l] = background[ex + k][ey + l];
+                            }
+                        }
+                        drawArray(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, screen);
 
                         projectiles[i][2] = false;
                         canAddProject = true;
@@ -288,10 +305,12 @@ void updateProjectile() {
                 if(projectX+PROJECTILE_SIZE > 0) {
                     for(int k = 0; k < PROJECTILE_SIZE; k++) {
                         for(int j = 0; j < PROJECTILE_SIZE; j++) {
-                            if (projectileDesign[k][j] != 0 && projectX+k >= 0)
+                            if (projectileDesign[k][j] != 0 && projectX+k >= 0) {
                                 screen[projectX + k][projectY + j] = projectileDesign[k][j];
+                            }
                         }
                     }
+                    drawArray(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, screen);
                     projectiles[i][0] = projectX;
                 }
                 else {
@@ -305,7 +324,7 @@ void updateProjectile() {
 
 
 #define ENEMY_PROJECTILE_NUM  6
-#define ENEMY_DIRECTION       3
+#define ENEMY_DIRECTION       2
 
 int newEnemyProjectile = 0;
 bool canAddEnemyProject = true;
@@ -329,10 +348,12 @@ void addEnemyProjectile() {
             
             for(int i = 0; i < PROJECTILE_SIZE; i++) {
                 for(int j = 0; j < PROJECTILE_SIZE; j++) {
-                        if (projectileDesign[i][j] != 0 && projectX+i >= 0)
-                            screen[projectX + i][projectY + j] = projectileDesign[i][j];
+                    if (projectileDesign[i][j] != 0 && projectX+i >= 0) {
+                        screen[projectX + i][projectY + j] = projectileDesign[i][j];
+                    }
                 }
             }
+            drawArray(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, screen);
             enemyProjectiles[enemy][0] = projectX;
             enemyProjectiles[enemy][1] = projectY;
             enemyProjectiles[enemy][2] = true;
@@ -348,10 +369,12 @@ void addEnemyProjectile() {
 void removeEnemyProjectile(int projectX, int projectY) {
     for(int i = 0; i < PROJECTILE_SIZE; i++) {
         for(int j = 0; j < PROJECTILE_SIZE; j++) {
-                if (projectileDesign[i][j] != 0 && projectX+i >= 0)
-                    screen[projectX + i][projectY + j] = background[projectX + i][projectY + j];
+            if (projectileDesign[i][j] != 0 && projectX+i >= 0) {
+                screen[projectX + i][projectY + j] = background[projectX + i][projectY + j];
+            }
         }
     }
+    drawArray(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, screen);
 }
 
 void updateEnemyProjectile() {
@@ -381,11 +404,13 @@ void updateEnemyProjectile() {
                 if(projectX+PROJECTILE_SIZE < DISPLAY_SIZE) {
                     for(int k = 0; k < PROJECTILE_SIZE; k++) {
                         for(int j = 0; j < PROJECTILE_SIZE; j++) {
-                            if (projectileDesign[k][j] != 0 && projectX+k < DISPLAY_SIZE)
+                            if (projectileDesign[k][j] != 0 && projectX+k < DISPLAY_SIZE) {
                                 screen[projectX + k][projectY + j] = projectileDesign[k][j];
+                            }
                         }
                     }
                     enemyProjectiles[i][0] = projectX;
+                    drawArray(projectX, projectY, PROJECTILE_SIZE, PROJECTILE_SIZE, screen);
                 }
                 else {
                     enemyProjectiles[i][2] = false;
@@ -397,6 +422,7 @@ void updateEnemyProjectile() {
     }
 }
 
+bool game_over() { return gameOver; }
 
 void resetGame() {
     spaceX = DEFAULT_SHIP_X;
@@ -405,7 +431,6 @@ void resetGame() {
     for(int i = 0; i < ENEMY_COUNT; i++) {
         enemyPositions[i][2] = 0;
         enemyProjectiles[i][2] = 0;
-        projectiles[i][2] = 0;
     }
 
     for(int i = 0; i < PROJECTILE_NUM; i++) {
@@ -417,14 +442,15 @@ void resetGame() {
     canAddProject = true;
     activeEnemyCount = 0;
     gameOver = false;
-
-    for(int i = 0; i < DISPLAY_SIZE; i++) {
-        for(int j = 0; j < DISPLAY_SIZE; j++) {
-        screen[i][j] = background[i][j];
-        }
-    }
+    backgroundStart = 0;
 
     generateSpaceBackground();
+    for(int i = 0; i < DISPLAY_SIZE; i++) {
+        for(int j = 0; j < DISPLAY_SIZE; j++) {
+            screen[i][j] = background[i][j];
+        }
+    }
     addSpaceship();
     addEnemies(ENEMY_COUNT);
+    updateDisplay();
 }
