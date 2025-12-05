@@ -70,7 +70,7 @@ int main() {
         {50, 0, addEnemyProjectile},
         {100, 0, moveBackground},
         {100, 0, spawnEnemies},
-        {100, 0, shoot}  // runs every 200ms
+        {100, 0, shoot}
     };
     
     while(1) {
