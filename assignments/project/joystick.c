@@ -14,6 +14,8 @@ void deactivateJoy() {
     SET_CS_HIGH;
 }
 
+
+//read the given channel which sets the axis
 uint8_t readAxis(uint8_t ch) {
     uint8_t cmd = 0x6 | (ch >> 2);
     uint8_t cmd2 = (ch & 0x3) << 6;
@@ -22,7 +24,7 @@ uint8_t readAxis(uint8_t ch) {
 
     spiWriteByte(cmd);
     spiWriteByte(cmd2);
-    uint8_t empty = spiReadByte();//these bits are read to remove them since they are not needed
+    spiReadByte();//these bits are read to remove them since they are not needed at all
     uint8_t result = spiReadByte() & 0x7;//these bits are read since they are needed but only the last three bits are required. others are too jumpy and not needed
 
     deactivateJoy();

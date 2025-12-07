@@ -3,8 +3,10 @@
 
 #define wait(x) for(int i = 0; i < x; i++)
 
+//X axis offset needed in calculation
 #define X_OFFSET 16
 
+//all the commands used for display setup and data transfer
 #define CMD_COL                 0x15
 #define CMD_ROW                 0x75
 #define CMD_RAM                 0x5C
@@ -16,6 +18,7 @@
 #define CMD_DISPLAYON           0xAF
 #define CMD_DISPLAYENHANCE      0xB2
 
+//definitions used for pins, and setup of pins for transfer
 #define DC_PIN      PORT_PB09
 #define RST_PIN     PORT_PB06
 #define CS_PIN      PORT_PB04
@@ -24,38 +27,44 @@
 #define low(pin)    PORT_REGS->GROUP[1].PORT_OUTCLR = pin
 #define high(pin)   PORT_REGS->GROUP[1].PORT_OUTSET = pin
 
+//this function is used to setup spi and CS pin before sending data
 void activate() {
     spiActivate(1,0,0,1);
     low(CS_PIN);
 }
 
+//this function is used to disable spi and CS to stop display from picking up data that it shouldn't while spi is used by something else
 void deactivate() {
     spiDeactivate();
     high(CS_PIN);
 }
 
+//used to send command
 void cmd(uint8_t c) {
     low(DC_PIN);
     spiWriteByte(c);
     high(DC_PIN);
 }
 
+//used to send data
 void data(uint8_t d) {
-    high(DC_PIN);
     spiWriteByte(d);
 }
 
-void displayInit(void) {
+//this function initialized the display to its default state using commands and data
+void displayInit() {
     spiInit();
 
+    //setup the pins needed
     PORT_REGS->GROUP[1].PORT_DIRSET = DC_PIN | RST_PIN | CS_PIN | EN_PIN;
     high(DC_PIN | RST_PIN | EN_PIN);
     low(CS_PIN);
     activate();
 
+    //setting up the display
     cmd(CMD_DISPLAYON);
     cmd(CMD_DISPLAYMODE);
-    cmd(CMD_STARTLINE);         data(0x00);
+    cmd(CMD_STARTLINE);         data(0x00);//data needed to send after the commands
     cmd(CMD_DISPLAYUNLOCK);     data(0x12);
     cmd(CMD_DISPLAYUNLOCK);     data(0xB1);
     cmd(CMD_OFFSET);            data(0x00);
@@ -74,19 +83,23 @@ void displayInit(void) {
     wait(1000000);
 }
 
+//this function draws a single pixel
 void drawPixel(uint8_t x, uint8_t y, uint16_t color) {
     activate();
     
+    //tell the display to right to given x and y pixel
     cmd(CMD_COL); data(x+X_OFFSET); data(x+X_OFFSET);
     cmd(CMD_ROW); data(y); data(y);
     cmd(CMD_RAM);
 
+    //send the data of that pixel
     data(color >> 8);
     data(color & 0xFF);
 
     deactivate();
 }
 
+//this function draws a given array from x to X_size and y to Y_Size. Due to it always getting a fixed array, the argument is also set that way
 void drawArray(uint8_t x, uint8_t y, uint8_t X_size, uint8_t Y_size, uint16_t color[DISPLAY_SIZE][DISPLAY_SIZE]) {
     activate();
 

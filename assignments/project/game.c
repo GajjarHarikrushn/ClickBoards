@@ -17,6 +17,7 @@ volatile uint32_t msCount = 0;
 void EIC_EXTINT_14_Handler() {
     EIC_REGS->EIC_INTFLAG = PORT_PB14;
     resetGame();
+    msCount = 0;
 }
 
 void buttonInit() {
@@ -62,19 +63,22 @@ int main() {
     addEnemies(ENEMY_COUNT);
     spawnEnemies();
     buttonInit();
+
+    //these are the tasks that will be used
+    //{period, last executed at, function to run}
     Task tasks[NUM_TASKS] = {
         {20, 0, updateProjectile},
-        {50, 0, updateSpacePosition},
         {50, 0, addSpaceship},
-        {50, 0, updateEnemyProjectile},
+        {50, 0, updateSpacePosition},
         {50, 0, addEnemyProjectile},
+        {50, 0, updateEnemyProjectile},
         {100, 0, moveBackground},
         {100, 0, spawnEnemies},
         {100, 0, shoot}
     };
     
     while(1) {
-        EIC_REGS->EIC_INTENCLR = PORT_PB14;//disable the interrupt to stop reset during the execution
+        EIC_REGS->EIC_INTENCLR = PORT_PB14;//disable the reset button interrupt to stop reset during the execution
         if(!game_over()) {
             for(int i = 0; i < NUM_TASKS; i++) {
                 if(msCount - tasks[i].last_run >= tasks[i].period) {
@@ -86,6 +90,6 @@ int main() {
         else {
             updateDisplay();
         }
-        EIC_REGS->EIC_INTENSET = PORT_PB14;//enable the interrupt to allow for reset after the execution
+        EIC_REGS->EIC_INTENSET = PORT_PB14;//enable the reset button interrupt to allow for reset after the execution
     }
 }
