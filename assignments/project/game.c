@@ -84,6 +84,9 @@ int main() {
                 if(msCount - tasks[i].last_run >= tasks[i].period) {
                     tasks[i].last_run = msCount;
                     tasks[i].func();
+                    //this is used to reset the i to 0 so that it starts looking for the highest priority task that is ready.
+                    //this one setup of i is required otherwise it is just a sequencial loop
+                    i = 0;
                 }
             }
         }

@@ -224,7 +224,8 @@ void updateSpacePos(uint8_t joyX, uint8_t joyY) {
             spaceY = (uint8_t)y;
             for(int i = 0; i < ENEMY_COUNT; i++) {//see if the spaceship its an enemy. (spaceship and projectile collision taken care in projectile section)
                 if(enemyPositions[i][2]) {
-                    if(intersects(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, enemyPositions[i][0], enemyPositions[i][1], ENEMY_SIZE, ENEMY_SIZE)) {//if spaceship is hit than game is over
+                    if(intersects(spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y, enemyPositions[i][0], enemyPositions[i][1], ENEMY_SIZE, ENEMY_SIZE) ||
+                        intersects(enemyPositions[i][0], enemyPositions[i][1], ENEMY_SIZE, ENEMY_SIZE, spaceX, spaceY, SHIP_SIZE_X, SHIP_SIZE_Y)) {//if spaceship is hit than game is over
                         gameOver = true;
                         return;
                     }
