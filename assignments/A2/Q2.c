@@ -201,7 +201,7 @@ int main(void)
 
         logic(&button1, &button2);
 
-        int rpm = readFanRPM();
+        // int rpm = readFanRPM();
         if(BUTTON_PRESSED(PORT_REGS->GROUP[0].PORT_IN,PORT_PB14)) {
             displayDrawDigit(0,0,PINK,0);
         }

@@ -2,7 +2,7 @@
 # WARNING: assumes that each question solution is a SINGLE source file with the same name as the target .elf
 
 # default target when "make" is run w/o arguments, update to include all targets for a given assignment
-all: i.elf
+all: game.elf
 
 # device specific naming and paths
 DEVICE=same51j20a
@@ -19,7 +19,7 @@ ASFLAGS=-mthumb -mcpu=$(CPU) -D__$(DEVICE_UPPER)__ -O0 -ffunction-sections -Wall
 CFLAGS=-x c -mthumb -mcpu=$(CPU) -D__$(DEVICE_UPPER)__ -O0 -ffunction-sections -Wall -c -std=gnu99
 LDFLAGS=-Wl,--start-group -lm  -Wl,--end-group -Wl,--gc-sections -mthumb -mcpu=$(CPU) -T../../$(PACK)/gcc/gcc/$(DEVICE)_flash.ld 
 
-SYS_OBJS=../../$(PACK)/gcc/gcc/startup_$(DEVICE).o ../display.o ../dcc_stdio.o ../logger.o
+SYS_OBJS=../../$(PACK)/gcc/gcc/startup_$(DEVICE).o ../dcc_stdio.o ../logger.o ./spi.o ./display.o ./joystick.o ./displayDrawer.o
 
 HDRS = $(wildcard *.h)
 SRCS = $(wildcard *.c)
