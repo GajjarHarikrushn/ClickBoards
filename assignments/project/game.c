@@ -3,21 +3,46 @@
 #include "joystick.h"
 
 
-#define NUM_TASKS 8
+#define NUM_TASKS 7
 typedef void (*task_func)(void);
+
+volatile uint32_t msCount = 0;
 
 typedef struct {
     uint32_t period;
-    uint32_t last_run; 
+    uint32_t nextRelease; 
     task_func func;
 } Task;
 
-volatile uint32_t msCount = 0;
+void updateSpacePosition() {
+    updateSpacePos(readAxis(X_AXIS),readAxis(Y_AXIS));
+}
+
+void shoot() {
+    if(!(PORT_REGS->GROUP[0].PORT_IN & PORT_PA15)) {
+        addProjectile();
+    }
+}
+
+//these are the tasks that will be used
+//{period, next execution should start at, function to run}
+Task tasks[NUM_TASKS] = {
+    {20, 0, updateProjectile},
+    {50, 0, updateSpacePosition},
+    {50, 0, addEnemyProjectile},
+    {50, 0, updateEnemyProjectile},
+    {100, 0, moveBackground},
+    {100, 0, shoot},
+    {100, 0, spawnEnemies}
+};
 
 void EIC_EXTINT_14_Handler() {
     EIC_REGS->EIC_INTFLAG = PORT_PB14;
     resetGame();
     msCount = 0;
+    for(int i = 0; i < NUM_TASKS; i++) {
+        tasks[i].nextRelease = 0;
+    }
 }
 
 void buttonInit() {
@@ -44,16 +69,6 @@ void SysTick_Handler() {
     msCount++;
 }
 
-void updateSpacePosition() {
-    updateSpacePos(readAxis(X_AXIS),readAxis(Y_AXIS));
-}
-
-void shoot() {
-    if(!(PORT_REGS->GROUP[0].PORT_IN & PORT_PA15)) {
-        addProjectile();
-    }
-}
-
 int main() {
     SysTick_Config(48000);
     NVIC_EnableIRQ(SysTick_IRQn);
@@ -62,27 +77,15 @@ int main() {
     generateSpaceBackground();
     addEnemies(ENEMY_COUNT);
     spawnEnemies();
+    addSpaceship();
     buttonInit();
-
-    //these are the tasks that will be used
-    //{period, last executed at, function to run}
-    Task tasks[NUM_TASKS] = {
-        {20, 0, updateProjectile},
-        {50, 0, addSpaceship},
-        {50, 0, updateSpacePosition},
-        {50, 0, addEnemyProjectile},
-        {50, 0, updateEnemyProjectile},
-        {100, 0, moveBackground},
-        {100, 0, spawnEnemies},
-        {100, 0, shoot}
-    };
     
     while(1) {
         EIC_REGS->EIC_INTENCLR = PORT_PB14;//disable the reset button interrupt to stop reset during the execution
         if(!game_over()) {
             for(int i = 0; i < NUM_TASKS; i++) {
-                if(msCount - tasks[i].last_run >= tasks[i].period) {
-                    tasks[i].last_run = msCount;
+                if(msCount - tasks[i].nextRelease >= tasks[i].period) {
+                    tasks[i].nextRelease += tasks[i].period;
                     tasks[i].func();
                     //this is used to reset the i to 0 so that it starts looking for the highest priority task that is ready.
                     //this one setup of i is required otherwise it is just a sequencial loop

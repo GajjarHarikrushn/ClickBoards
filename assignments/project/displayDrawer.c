@@ -49,7 +49,6 @@ void moveBackground() {
     for(int i = 0; i < DISPLAY_SIZE; i++) {
         for(int j = 0; j < DISPLAY_SIZE; j++) {
             if(background[(i+oldStart)%MEMORY_SIZE][j] != background[(i+backgroundStart)%MEMORY_SIZE][j]) {//only change the pixels that change in colors
-                // screen[i][j] = background[(i+backgroundStart)%MEMORY_SIZE][j];
                 drawPixel(i,j,background[(i+backgroundStart)%MEMORY_SIZE][j]);
             }
         }
@@ -231,9 +230,9 @@ void updateSpacePos(uint8_t joyX, uint8_t joyY) {
                     }
                 }
             }
-            addSpaceship();
         }
     }
+    addSpaceship();
 }
 
 
